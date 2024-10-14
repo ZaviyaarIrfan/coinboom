@@ -129,10 +129,10 @@ export default function Home() {
                     }`}
                 >
                     <h2 className="text-2xl font-bold mb-3">Promoted Coins</h2>
-                    <CoinsTable coinsData={coinsData} />
-                    <h2 className="text-2xl font-bold my-4">Trending Coins</h2>
+                    <CoinsTable coinsData={coinsData}/>
+                    <h2 className="text-2xl font-bold my-4">Hot Coins</h2>
                     <TrendingNavigation />
-                    <CoinsTable coinsData={coinsData} />
+                    <CoinsTable coinsData={coinsData}/>
                 </div>
             </main>
             <div
