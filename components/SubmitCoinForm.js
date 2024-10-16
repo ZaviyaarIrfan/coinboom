@@ -50,6 +50,34 @@ const SubmitCoinForm = () => {
         setSelectedOption(e.target.value);
     };
 
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const formDataToSubmit = new FormData();
+
+        Object.keys(formData).forEach((key) => {
+            formDataToSubmit.append(key, formData[key]);
+        });
+
+        if (selectedFile) {
+            formDataToSubmit.append('image', selectedFile);
+        }
+
+        const res = await fetch('/api/submit-coin', {
+            method: 'POST',
+            body: formDataToSubmit,
+        });
+
+        const data = await res.json();
+        if (res.ok) {
+            console.log('Form submitted successfully:', data);
+        } else {
+            console.error('Error submitting form:', data.error);
+        }
+    };
+
+
+
     const renderFieldStatus = (fieldName) => {
         if (formData[fieldName]) {
             return (
