@@ -16,12 +16,7 @@ async function getCryptoStatsByNames(coinNames) {
 
         // Process the response to extract key stats for each coin
         const statsArray = data.map(coin => ({
-            name: coin.name,
-            symbol: coin.symbol,
-            current_price: coin.current_price,
-            market_cap: coin.market_cap,
-            total_volume: coin.total_volume,
-            price_change_24h: coin.price_change_percentage_24h,
+           ...coin
         }));
 
         return statsArray;
@@ -44,8 +39,9 @@ export default async function handler(req, res) {
         try {
             // Query the database for coins related to the specified blockchain
             const coins = await Coin.find({ blockchain }).select('name'); // Adjust the fields as needed
-            const coinNames = coins.map(coin => coin.name); // Extract the coin names
+            const coinNames = coins.map(coin => coin.name.toLowerCase().replace(/\s+/g, '-')); // Extract the coin names
 
+           
             if (coinNames.length === 0) {
                 return res.status(404).json({ message: 'No coins found for the specified blockchain' });
             }

@@ -10,9 +10,10 @@ import {
     Button,
 } from "@mui/material";
 import Image from "next/image";
+import Link from "next/link";
 
 const getChangeColor = (change) => {
-    if (change.includes("-")) {
+    if (change.includes && change.includes("-")) {
         return "text-red-500";
     } else if (change === "--") {
         return "text-gray-500";
@@ -79,6 +80,8 @@ export default function CoinsTable({ coinsData }) {
                     <TableBody>
                         {currentCoins.map((coin, index) => (
                             <TableRow
+                           
+                            
                                 key={index}
                                 className={`hover:bg-blue-900 transition-all ${
                                     index % 2 === 0
@@ -86,18 +89,20 @@ export default function CoinsTable({ coinsData }) {
                                         : "bg-[#2a2a2a]"
                                 }`}
                             >
+                               
                                 <TableCell className="text-white font-semibold py-1">
+                                <Link href={`/coin/${coin.id}`}>
                                     <div className="flex space-x-2 items-center">
                                         <Image
                                             src={coin.image}
                                             height={25}
                                             width={25}
-                                            alt="binance"
+                                            alt={coin.name}
                                         />
                                         <div className="flex flex-col space-y-1">
                                             <span>{coin.name}</span>
                                             <div className="flex space-x-1">
-                                                {coin.networks.map(
+                                                {coin.networks?.map(
                                                     (icon, idx) => (
                                                         <span key={idx}>
                                                             {icon}
@@ -107,45 +112,46 @@ export default function CoinsTable({ coinsData }) {
                                             </div>
                                         </div>
                                     </div>
+                                    </Link>
                                 </TableCell>
                                 <TableCell className="text-white">
-                                    {coin.price}
+                                    {coin.current_price || '--'}
                                 </TableCell>
                                 <TableCell className="text-white">
-                                    {coin.age}
+                                    {"--"} {/* Age not provided */}
                                 </TableCell>
                                 <TableCell className="text-white">
-                                    {coin.txn}
+                                    {"--"} {/* TXN not provided */}
                                 </TableCell>
                                 <TableCell className="text-white">
-                                    {coin.volume}
+                                    {coin.total_volume || '--'}
+                                </TableCell>
+                                <TableCell className="text-white">
+                                    {"--"} {/* 5m not provided */}
+                                </TableCell>
+                                <TableCell className="text-white">
+                                    {"--"} {/* 1h not provided */}
+                                </TableCell>
+                                <TableCell className="text-white">
+                                    {"--"} {/* 6h not provided */}
                                 </TableCell>
                                 <TableCell
-                                    className={getChangeColor(coin.change5m)}
+                                    className={getChangeColor(
+                                        coin.price_change_percentage_24h?.toString() || "--"
+                                    )}
                                 >
-                                    {coin.change5m}
-                                </TableCell>
-                                <TableCell
-                                    className={getChangeColor(coin.change1h)}
-                                >
-                                    {coin.change1h}
-                                </TableCell>
-                                <TableCell
-                                    className={getChangeColor(coin.change6h)}
-                                >
-                                    {coin.change6h}
-                                </TableCell>
-                                <TableCell
-                                    className={getChangeColor(coin.change24h)}
-                                >
-                                    {coin.change24h}
+                                    {coin.price_change_percentage_24h
+                                        ? `${coin.price_change_percentage_24h}%`
+                                        : "--"}
                                 </TableCell>
                                 <TableCell className="text-white">
-                                    {coin.lp}
+                                    {"--"} {/* LP not provided */}
                                 </TableCell>
                                 <TableCell className="text-white">
-                                    {coin.mcap}
+                                    {coin.market_cap || '--'}
                                 </TableCell>
+
+                             
                             </TableRow>
                         ))}
                     </TableBody>

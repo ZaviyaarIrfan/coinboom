@@ -1,11 +1,12 @@
 import Head from "next/head";
 import Navbar from "../../components/Navbar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CoinsTable from "../../components/Table";
 import TrendingNavigation from "../../components/TrendingNavigation";
 import binanceIcon from "../../images/binance.png";
 import etheruemIcon from "../../images/ethereum.png";
 import solanaIcon from "../../images/solana.png";
+
 import Image from "next/image";
 import Footer from "../../components/Footer";
 
@@ -98,6 +99,7 @@ const coinsData = [
 ];
 
 export default function Home() {
+    const [cryptoStats, setCryptoStats] = useState([]);
 
     const fetchCryptoStats = async () => {
         try {
@@ -105,6 +107,7 @@ export default function Home() {
             const data = await response.json();
     
             if (response.ok) {
+                setCryptoStats(data);
                 console.log('Crypto Stats:', data);
             } else {
                 console.error('Error fetching crypto stats:', data.error);
@@ -123,6 +126,10 @@ export default function Home() {
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
     };
+
+    useEffect(() => {
+        fetchCryptoStats();
+    }, []);
 
     return (
         <>
@@ -149,12 +156,12 @@ export default function Home() {
                     }`}
                 >
                     <h2 className="text-2xl font-bold mb-3">Promoted Coins</h2>
-                    <CoinsTable coinsData={coinsData} />
+                    <CoinsTable coinsData={cryptoStats} />
                     <h2 className="text-2xl font-bold my-4">
                         Latest Crypto Coins on BSC
                     </h2>
                     <TrendingNavigation />
-                    <CoinsTable coinsData={coinsData} />
+                    <CoinsTable coinsData={cryptoStats} />
                 </div>
             </main>
             <div

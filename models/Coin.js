@@ -10,6 +10,7 @@ const CoinSchema = new mongoose.Schema({
     launchDate: String,
     presaleUrl: String,
     imageUrl: String,
+    slug: String,
 });
 
 export default mongoose.models.Coin || mongoose.model('Coin', CoinSchema);

@@ -13,7 +13,7 @@ export default async function handler(req, res) {
 
         try {
             // Query the database for the coin by name
-            const coin = await Coin.findOne({ name: { $regex: new RegExp(name, 'i') } }); // Case-insensitive search
+            const coin = await Coin.findOne({ slug: { $regex: new RegExp(name, 'i') } }); // Case-insensitive search
 
             if (!coin) {
                 return res.status(404).json({ message: 'Coin not found' });

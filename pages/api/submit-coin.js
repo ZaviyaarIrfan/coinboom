@@ -48,6 +48,9 @@ export default async function handler(req, res) {
             await uploadBytes(storageRef, file.buffer);
             const imageUrl = await getDownloadURL(storageRef);
 
+            // Generate slug from the name
+            const slug = name.toLowerCase().replace(/\s+/g, '-');
+
             // Save data in MongoDB
             const newCoin = new Coin({
                 blockchain,
@@ -59,6 +62,7 @@ export default async function handler(req, res) {
                 launchDate,
                 presaleUrl,
                 imageUrl,
+                slug:slug,  // Adding slug
             });
             await newCoin.save();
 

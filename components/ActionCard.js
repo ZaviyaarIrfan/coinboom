@@ -26,10 +26,10 @@ const ActionsCard = () => {
   };
 
   return (
-    <Box mb={4}>
+    <Box >
       {/* Boost Button */}
       <Button
-        className="mb-2"
+        className="!mb-2"
         variant="outlined"
         color="primary"
         fullWidth
@@ -49,7 +49,9 @@ const ActionsCard = () => {
       </Button>
 
       {/* Promote Button */}
+
       <Button
+      className='my-3'
         variant="outlined"
         color="secondary"
         fullWidth

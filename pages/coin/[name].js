@@ -7,6 +7,7 @@ import Catson from '../../images/catson.png';
 import { Box, Grid, Typography, IconButton, Tooltip } from '@mui/material';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'; // For copy icon
 import Image from 'next/image'; // For handling images/icons
+import ActionsCard from "../../components/ActionCard";
 
 export default function Home() {
   const [coinData, setCoinData] = useState(null);
@@ -15,7 +16,12 @@ export default function Home() {
   const router = useRouter();
   const { name } = router.query; // Get the coin name from the URL
 
-   
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
 
   const handleCopyAddress = () => {
     navigator.clipboard.writeText(coinData.contractAddress);
@@ -64,11 +70,12 @@ export default function Home() {
         <div className="min-h-screen bg-gray-800 py-16 text-white">
           <div className="mx-auto pt-16 pb-8 px-4">
             <Grid container spacing={4}>
+            <Navbar isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
               {/* Left Sidebar / Main Chart Section */}
               <Grid item xs={12} md={8}>
-                <Box className="p-4 rounded-lg shadow-lg">
+                <Box className="p-4 rounded-lg ">
                   {/* Coin Header Section */}
-                  <Box className="flex items-center mb-4">
+                  <Box className="flex items-center ">
                     {/* Coin Icon */}
                     <Box className="mr-2">
                       <Image 
@@ -101,6 +108,8 @@ export default function Home() {
               </Grid>
               {/* Right Sidebar */}
               <Grid item xs={12} md={4}>
+              <ActionsCard />
+
                 {/* Other components like ActionsCard, TokenStats, LinksCard, etc. */}
               </Grid>
             </Grid>
