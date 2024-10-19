@@ -12,6 +12,7 @@ import {
     Radio,
     RadioGroup,
     Typography,
+    Input,
 } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import tronIcon from "../images/tron.png";
@@ -22,6 +23,8 @@ const steps = ["Project Information", "Links", "Listing"];
 const SubmitCoinForm = () => {
     const [activeStep, setActiveStep] = useState(0);
     const [selectedOption, setSelectedOption] = useState("");
+    const [selectedFile, setSelectedFile]=useState(null)
+
     const [formData, setFormData] = useState({
         blockchain: "BSC",
         contractAddress: "0xB8c76482f45A0F44dE1545F52C73426C621bDC52",
@@ -33,9 +36,17 @@ const SubmitCoinForm = () => {
         presaleUrl: "",
     });
 
-    const handleNext = () => {
+    const handleNext = async() => {
+        if (activeStep === 2) {
+           await handleSubmit()
+            return;
+        }
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
     };
+
+    const handleImageChange =(e)=>{
+        setSelectedFile(e.target.files[0]);
+    }
 
     const handleBack = () => {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
@@ -51,35 +62,60 @@ const SubmitCoinForm = () => {
     };
 
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const handleSubmit = async () => {
+        // Create a new FormData object
         const formDataToSubmit = new FormData();
-
+    
+        // Append all fields from the formData object
         Object.keys(formData).forEach((key) => {
             formDataToSubmit.append(key, formData[key]);
         });
-
+    
+        // Check if a file is selected and append it
         if (selectedFile) {
             formDataToSubmit.append('image', selectedFile);
-        }
-
-        const res = await fetch('/api/submit-coin', {
-            method: 'POST',
-            body: formDataToSubmit,
-        });
-
-        const data = await res.json();
-        if (res.ok) {
-            console.log('Form submitted successfully:', data);
         } else {
-            console.error('Error submitting form:', data.error);
+            console.warn('No image file selected'); // Warning if no file is selected
+        }
+    
+        try {
+            // Make a POST request to the API endpoint
+            const res = await fetch('/api/submit-coin', {
+                method: 'POST',
+                body: formDataToSubmit,
+            });
+    
+            // Parse the JSON response
+            const data = await res.json();
+    
+            if (res.ok) {
+                console.log('Form submitted successfully:', data);
+                // Optionally, reset form fields or provide user feedback
+            } else {
+                console.error('Error submitting form:', data.error || 'Unknown error');
+                // Optionally, display an error message to the user
+            }
+        } catch (error) {
+            console.error('Network error:', error); // Catch network errors
         }
     };
-
+    
 
 
     const renderFieldStatus = (fieldName) => {
         if (formData[fieldName]) {
+            return (
+                <CheckCircleIcon
+                    className="text-green-500 ml-2"
+                    fontSize="small"
+                />
+            );
+        }
+        return <span className="text-red-500 ml-2 text-sm">Required</span>;
+    };
+
+    const renderFileStatus = () => {
+        if (selectedFile) {
             return (
                 <CheckCircleIcon
                     className="text-green-500 ml-2"
@@ -123,22 +159,35 @@ const SubmitCoinForm = () => {
                                 >
                                     Upload logo{" "}
                                     <span className="text-blue-500">*</span>
-                                    {renderFieldStatus("logo")}
+                                    {renderFileStatus()}
                                 </Typography>
                                 <div className="w-full aspect-square flex items-center justify-center border-2 border-dashed border-gray-600 rounded-lg mb-4">
+                                   {selectedFile ? (
+                                   <Image
+                                   alt="logo"
+                                   width={512}
+                                   height={512}
+                                    src={URL.createObjectURL(selectedFile)}
+                                    />
+                                   ) :( 
                                     <Typography
                                         variant="h2"
                                         className="text-gray-400"
                                     >
                                         ?
-                                    </Typography>
+                                    </Typography>)}
                                 </div>
-                                <Button
+                                <Input
+                                accept="image/*"
+                                id="logo-upload"
+                                type="file"
+                                
+                                    onChange={handleImageChange.bind(this)}
                                     variant="contained"
                                     className="bg-blue-600 hover:bg-blue-700 text-white mb-4"
                                 >
                                     Upload
-                                </Button>
+                                </Input>
                                 <Typography
                                     variant="caption"
                                     className="text-gray-400 text-center"

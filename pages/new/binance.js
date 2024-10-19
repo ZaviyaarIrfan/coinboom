@@ -98,6 +98,26 @@ const coinsData = [
 ];
 
 export default function Home() {
+
+    const fetchCryptoStats = async () => {
+        try {
+            const response = await fetch('/api/get-crypto-stats?blockchain=BSC');
+            const data = await response.json();
+    
+            if (response.ok) {
+                console.log('Crypto Stats:', data);
+            } else {
+                console.error('Error fetching crypto stats:', data.error);
+            }
+        } catch (error) {
+            console.error('Network error:', error);
+        }
+    };
+    
+    
+    
+
+
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
     const toggleSidebar = () => {
