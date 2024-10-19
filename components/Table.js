@@ -61,13 +61,13 @@ export default function CoinsTable({ coinsData }) {
                                 5m
                             </TableCell>
                             <TableCell className="text-white font-bold text-[0.95rem] py-1">
-                                1h
+                                low
                             </TableCell>
                             <TableCell className="text-white font-bold text-[0.95rem] py-1">
-                                6h
+                                high
                             </TableCell>
                             <TableCell className="text-white font-bold text-[0.95rem] py-1">
-                                24h
+                                24h %
                             </TableCell>
                             <TableCell className="text-white font-bold text-[0.95rem] py-1">
                                 LP
@@ -130,10 +130,10 @@ export default function CoinsTable({ coinsData }) {
                                     {"--"} {/* 5m not provided */}
                                 </TableCell>
                                 <TableCell className="text-white">
-                                    {"--"} {/* 1h not provided */}
+                                    {coin.low_24h} {/* 1h not provided */}
                                 </TableCell>
                                 <TableCell className="text-white">
-                                    {"--"} {/* 6h not provided */}
+                                {coin.high_24h}
                                 </TableCell>
                                 <TableCell
                                     className={getChangeColor(

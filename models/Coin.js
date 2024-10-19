@@ -11,6 +11,14 @@ const CoinSchema = new mongoose.Schema({
     presaleUrl: String,
     imageUrl: String,
     slug: String,
+    isPromote: {
+        type: Boolean,
+        default: false,
+    },
+    isBoost: {
+        type: Boolean,
+        default: false,
+    },
 });
 
 export default mongoose.models.Coin || mongoose.model('Coin', CoinSchema);

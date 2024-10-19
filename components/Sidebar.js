@@ -172,6 +172,9 @@ const Sidebar = ({ isSidebarOpen }) => {
                 </div>
                 <div className="px-4 flex justify-center">
                     <button
+                    onClick={() => {
+                        window.location.href ="/submit"
+                    }}
                         style={{
                             backgroundColor: "rgb(58, 131, 245, 0.8)",
                             border: "1px solid ",
