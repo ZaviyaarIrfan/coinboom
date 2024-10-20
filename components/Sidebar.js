@@ -163,18 +163,18 @@ const Sidebar = ({ isSidebarOpen }) => {
                     </Link>
                 </div>
                 <div className="space-y-2">
-                    <div className="flex items-center space-x-2 mt-4 px-4">
+                    <div className="flex items-center space-x-2 mt-4 px-4 mb-2">
                         <FaBullhorn className="text-blue-500" size={"22"} />
                         <span>Advertise</span>
                     </div>
 
-                    <div className="ml-4 text-gray-300 px-6">Promote Coin</div>
+                    <Link href="/promote" className="ml-4 text-gray-300 px-6">
+                        Promote Coin
+                    </Link>
                 </div>
                 <div className="px-4 flex justify-center">
-                    <button
-                    onClick={() => {
-                        window.location.href ="/submit"
-                    }}
+                    <Link
+                        href="/submit"
                         style={{
                             backgroundColor: "rgb(58, 131, 245, 0.8)",
                             border: "1px solid ",
@@ -184,15 +184,29 @@ const Sidebar = ({ isSidebarOpen }) => {
                             fontWeight: "bold",
                             borderRadius: "5px",
                         }}
-                        className=" font-bold p-2 mt-4 rounded w-full"
+                        className=" font-bold p-2 mt-4 rounded w-full flex justify-center"
                     >
                         Submit Coin
-                    </button>
+                    </Link>
                 </div>
             </div>
             <div className="flex justify-center space-x-4  text-gray-400">
-                <Image src={telegramIcon} height={25} width={25} alt="tron" />
-                <Image src={twitterIcon} height={25} width={25} alt="tron" />
+                <Link href={"https://x.com/Boban_token"} target="_blank">
+                    <Image
+                        src={twitterIcon}
+                        height={25}
+                        width={25}
+                        alt="tron"
+                    />
+                </Link>
+                <Link href={"https://t.me/BobanBBToken"} target="_blank">
+                    <Image
+                        src={telegramIcon}
+                        height={25}
+                        width={25}
+                        alt="telegram"
+                    />
+                </Link>
             </div>
         </div>
     );

@@ -19,6 +19,8 @@ const CoinSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
+}, {
+    timestamps: true, 
 });
 
 export default mongoose.models.Coin || mongoose.model('Coin', CoinSchema);

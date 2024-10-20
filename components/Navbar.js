@@ -15,7 +15,7 @@ export default function Navbar({isSidebarOpen, toggleSidebar}) {
                         onClick={toggleSidebar}
                     />
                     <h1 className="text-blue-500 text-2xl font-bold">
-                        Coin<span className="text-white">boom</span>
+                        Bob<span className="text-white">an</span>
                     </h1>
                 </div>
 

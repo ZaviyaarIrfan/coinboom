@@ -12,6 +12,16 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 
+// Function to format the volume
+const formatVolume = (volume) => {
+    if (!volume || volume === "--") {
+        return "--";
+    }
+    const num = Number(volume);
+    return num > 1000 ? `${(num / 1000).toFixed(1)}k` : num.toString();
+};
+
+// Function to get the color for change percentage
 const getChangeColor = (change) => {
     if (change.includes && change.includes("-")) {
         return "text-red-500";
@@ -61,10 +71,10 @@ export default function CoinsTable({ coinsData }) {
                                 5m
                             </TableCell>
                             <TableCell className="text-white font-bold text-[0.95rem] py-1">
-                                low
+                                low 24h
                             </TableCell>
                             <TableCell className="text-white font-bold text-[0.95rem] py-1">
-                                high
+                                high 24h
                             </TableCell>
                             <TableCell className="text-white font-bold text-[0.95rem] py-1">
                                 24h %
@@ -80,8 +90,6 @@ export default function CoinsTable({ coinsData }) {
                     <TableBody>
                         {currentCoins.map((coin, index) => (
                             <TableRow
-                           
-                            
                                 key={index}
                                 className={`hover:bg-blue-900 transition-all ${
                                     index % 2 === 0
@@ -89,55 +97,55 @@ export default function CoinsTable({ coinsData }) {
                                         : "bg-[#2a2a2a]"
                                 }`}
                             >
-                               
                                 <TableCell className="text-white font-semibold py-1">
-                                <Link href={`/coin/${coin.id}`}>
-                                    <div className="flex space-x-2 items-center">
-                                        <Image
-                                            src={coin.image}
-                                            height={25}
-                                            width={25}
-                                            alt={coin.name}
-                                        />
-                                        <div className="flex flex-col space-y-1">
-                                            <span>{coin.name}</span>
-                                            <div className="flex space-x-1">
-                                                {coin.networks?.map(
-                                                    (icon, idx) => (
-                                                        <span key={idx}>
-                                                            {icon}
-                                                        </span>
-                                                    )
-                                                )}
+                                    <Link href={`/coin/${coin.id}`}>
+                                        <div className="flex space-x-2 items-center">
+                                            <Image
+                                                src={coin.image}
+                                                height={25}
+                                                width={25}
+                                                alt={coin.name}
+                                            />
+                                            <div className="flex flex-col space-y-1">
+                                                <span>{coin.name}</span>
+                                                <div className="flex space-x-1">
+                                                    {coin.networks?.map(
+                                                        (icon, idx) => (
+                                                            <span key={idx}>
+                                                                {icon}
+                                                            </span>
+                                                        )
+                                                    )}
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
                                     </Link>
                                 </TableCell>
                                 <TableCell className="text-white">
-                                    {coin.current_price || '--'}
+                                    {coin.current_price || "--"}
                                 </TableCell>
                                 <TableCell className="text-white">
-                                    {"--"} {/* Age not provided */}
+                                    {coin.age || "--"}
                                 </TableCell>
                                 <TableCell className="text-white">
                                     {"--"} {/* TXN not provided */}
                                 </TableCell>
                                 <TableCell className="text-white">
-                                    {coin.total_volume || '--'}
+                                    {formatVolume(coin.total_volume)}
                                 </TableCell>
                                 <TableCell className="text-white">
                                     {"--"} {/* 5m not provided */}
                                 </TableCell>
                                 <TableCell className="text-white">
-                                    {coin.low_24h} {/* 1h not provided */}
+                                    {coin.low_24h + '%' || "--"}
                                 </TableCell>
                                 <TableCell className="text-white">
-                                {coin.high_24h}
+                                    {coin.high_24h + '%' || "--"}
                                 </TableCell>
                                 <TableCell
                                     className={getChangeColor(
-                                        coin.price_change_percentage_24h?.toString() || "--"
+                                        coin.price_change_percentage_24h?.toString() ||
+                                            "--"
                                     )}
                                 >
                                     {coin.price_change_percentage_24h
@@ -148,17 +156,15 @@ export default function CoinsTable({ coinsData }) {
                                     {"--"} {/* LP not provided */}
                                 </TableCell>
                                 <TableCell className="text-white">
-                                    {coin.market_cap || '--'}
+                                    {coin.market_cap || "--"}
                                 </TableCell>
-
-                             
                             </TableRow>
                         ))}
                     </TableBody>
                 </Table>
             </TableContainer>
 
-            {coinsData.length > 100 && (
+            {coinsData.length > itemsPerPage && (
                 <div className="flex justify-center py-4">
                     <Button
                         onClick={() => handlePageChange(currentPage + 1)}

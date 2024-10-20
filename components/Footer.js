@@ -1,6 +1,7 @@
 import React from "react";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import TelegramIcon from "@mui/icons-material/Telegram";
+import Link from "next/link";
 
 const Footer = () => {
     return (
@@ -14,19 +15,19 @@ const Footer = () => {
                         </h3>
                         <ul className="space-y-2">
                             <li>
-                                <a href="#" className="hover:text-blue-500">
+                                <Link href="/trending" className="hover:text-blue-500">
                                     Hot
-                                </a>
+                                </Link>
                             </li>
                             <li>
-                                <a href="#" className="hover:text-blue-500">
+                                <Link href="/new" className="hover:text-blue-500">
                                     New
-                                </a>
+                                </Link>
                             </li>
                             <li>
-                                <a href="#" className="hover:text-blue-500">
+                                <Link href="/trade" className="hover:text-blue-500">
                                     Most Traded
-                                </a>
+                                </Link>
                             </li>
                         </ul>
                     </div>
@@ -36,29 +37,34 @@ const Footer = () => {
                         <h3 className="text-lg font-semibold mb-4">By EVM</h3>
                         <ul className="space-y-2">
                             <li>
-                                <a href="#" className="hover:text-blue-500">
+                                <Link href="/new/binance" className="hover:text-blue-500">
                                     Binance Coins
-                                </a>
+                                </Link>
                             </li>
                             <li>
-                                <a href="#" className="hover:text-blue-500">
+                                <Link href="/new/etheruem" className="hover:text-blue-500">
                                     Ethereum Coins
-                                </a>
+                                </Link>
                             </li>
                             <li>
-                                <a href="#" className="hover:text-blue-500">
-                                    Cronos Coins
-                                </a>
+                                <Link href="/new/arbitrum" className="hover:text-blue-500">
+                                    Arbitrum Coins
+                                </Link>
                             </li>
                             <li>
-                                <a href="#" className="hover:text-blue-500">
+                                <Link href="/new/solana" className="hover:text-blue-500">
+                                    Solana Coins
+                                </Link>
+                            </li>
+                            <li>
+                                <Link href="/new/polygon" className="hover:text-blue-500">
                                     Polygon Coins
-                                </a>
+                                </Link>
                             </li>
                             <li>
-                                <a href="#" className="hover:text-blue-500">
-                                    Avax Coins
-                                </a>
+                                <Link href="/new/tron" className="hover:text-blue-500">
+                                    Tron Coins
+                                </Link>
                             </li>
                         </ul>
                     </div>
@@ -68,14 +74,14 @@ const Footer = () => {
                         <h3 className="text-lg font-semibold mb-4">Services</h3>
                         <ul className="space-y-2">
                             <li>
-                                <a href="#" className="hover:text-blue-500">
+                                <Link href="/promote" className="hover:text-blue-500">
                                     Promote
-                                </a>
+                                </Link>
                             </li>
                             <li>
-                                <a href="#" className="hover:text-blue-500">
+                                <Link href="/submit" className="hover:text-blue-500">
                                     Submit Coin
-                                </a>
+                                </Link>
                             </li>
                         </ul>
                     </div>
@@ -85,19 +91,14 @@ const Footer = () => {
                         <h3 className="text-lg font-semibold mb-4">Contact</h3>
                         <ul className="space-y-2">
                             <li>
-                                <a href="#" className="hover:text-blue-500">
+                                <Link href="mailto:admin@bobantoken.com" className="hover:text-blue-500">
                                     Email
-                                </a>
+                                </Link>
                             </li>
                             <li>
-                                <a href="#" className="hover:text-blue-500">
+                                <Link href="https://t.me/BobanBBToken" className="hover:text-blue-500">
                                     Telegram
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" className="hover:text-blue-500">
-                                    Discord
-                                </a>
+                                </Link>
                             </li>
                         </ul>
                     </div>
@@ -111,18 +112,20 @@ const Footer = () => {
                         <p className="text-lg font-semibold mr-4">
                             Join the community
                         </p>
-                        <a
-                            href="#"
+                        <Link
+                            href="https://x.com/Boban_token"
+                            target="_blank"
                             className="text-blue-500 hover:text-blue-400"
                         >
                             <TwitterIcon />
-                        </a>
-                        <a
-                            href="#"
+                        </Link>
+                        <Link
+                            href="https://t.me/BobanBBToken"
+                            target="_blank"
                             className="text-blue-500 hover:text-blue-400"
                         >
                             <TelegramIcon />
-                        </a>
+                        </Link>
                     </div>
                 </div>
             </div>

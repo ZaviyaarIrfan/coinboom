@@ -3,100 +3,7 @@ import Navbar from "../../components/Navbar";
 import { useEffect, useState } from "react";
 import CoinsTable from "../../components/Table";
 import TrendingNavigation from "../../components/TrendingNavigation";
-import binanceIcon from "../../images/binance.png";
-import etheruemIcon from "../../images/ethereum.png";
-import solanaIcon from "../../images/solana.png";
-
-import Image from "next/image";
 import Footer from "../../components/Footer";
-
-const coinsData = [
-    {
-        name: "Catson",
-        image: solanaIcon,
-        networks: [
-            <Image src={binanceIcon} height={17} width={17} alt="binance" />,
-            <Image src={etheruemIcon} height={17} width={17} alt="binance" />,
-        ],
-        price: "$0.000396",
-        age: "3mo",
-        txn: 69,
-        volume: "$12.5k",
-        change5m: "--",
-        change1h: "1.66%",
-        change6h: "--",
-        change24h: "-0.92%",
-        lp: "$61,809",
-        mcap: "$396k",
-    },
-    {
-        name: "Roxy",
-        image: solanaIcon,
-        networks: [
-            <Image src={solanaIcon} height={17} width={17} alt="binance" />,
-        ],
-        price: "$0.030488",
-        age: "13d",
-        txn: 914,
-        volume: "$15.8k",
-        change5m: "-1.52%",
-        change1h: "-1.61%",
-        change6h: "7.01%",
-        change24h: "-24.66%",
-        lp: "$22,732",
-        mcap: "$49k",
-    },
-    {
-        name: "Pet Rock",
-        image: solanaIcon,
-        networks: [],
-        price: "$0.060361",
-        age: "5d",
-        txn: 5,
-        volume: "$4",
-        change5m: "--",
-        change1h: "--",
-        change6h: "--",
-        change24h: "-61.40%",
-        lp: "$11",
-        mcap: "$36",
-    },
-    {
-        name: "MOO DENG",
-        image: solanaIcon,
-        networks: [
-            <Image src={etheruemIcon} height={17} width={17} alt="binance" />,
-            <Image src={binanceIcon} height={17} width={17} alt="binance" />,
-        ],
-        price: "$0.000103",
-        age: "24d",
-        txn: 3235,
-        volume: "$10454.4k",
-        change5m: "--",
-        change1h: "1.27%",
-        change6h: "--",
-        change24h: "-24.88%",
-        lp: "$1,368,060",
-        mcap: "$43.26M",
-    },
-    {
-        name: "Book of Degen",
-        image: solanaIcon,
-        networks: [
-            <Image src={solanaIcon} height={17} width={17} alt="binance" />,
-        ],
-        price: "$0.030488",
-        age: "30m",
-        txn: 1246,
-        volume: "$35.6k",
-        change5m: "--",
-        change1h: "328.63%",
-        change6h: "--",
-        change24h: "328.63%",
-        lp: "$43,509",
-        mcap: "$46k",
-    },
-];
 
 export default function Home() {
     const [cryptoStats, setCryptoStats] = useState([]);
@@ -116,10 +23,6 @@ export default function Home() {
             console.error('Network error:', error);
         }
     };
-    
-    
-    
-
 
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
