@@ -19,6 +19,22 @@ const CoinSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
+    websiteLink: {
+        type: String,
+        default: '',
+    },
+    twitterLink: {
+        type: String,
+        default: '',
+    },
+    telegramLink:{
+        type: String,
+        default: '',
+    },
+    discordLink:{
+        type: String,
+        default: '',
+    },
 }, {
     timestamps: true, 
 });

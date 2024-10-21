@@ -15,8 +15,8 @@ import {
 import ContentCopyIcon from "@mui/icons-material/ContentCopy"; // For copy icon
 import Image from "next/image"; // For handling images/icons
 import ActionsCard from "../../components/ActionCard";
-// import { storage } from '../firebase/config';
-// import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { storage } from '../../firebaseConfig';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 export default function Home() {
     const [coinData, setCoinData] = useState(null);
@@ -102,7 +102,7 @@ export default function Home() {
 
             // Prepare data for API
             const submitData = {
-                image: logoUrl,
+                imageUrl: logoUrl,
                 description: formData.description,
                 websiteLink: formData.websiteLink,
                 telegramLink: formData.telegramLink,
@@ -111,7 +111,7 @@ export default function Home() {
             };
 
             // Make API call
-            const response = await fetch("/api/coins", {
+            const response = await fetch(`/api/coins?id=${coinData._id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -366,12 +366,20 @@ export default function Home() {
                                 <p className="text-sm text-gray-400 mb-2">
                                     Optimal dimensions 512×512px, size up to 1MB
                                 </p>
-                                <button
+                                <label
+                                htmlFor="logo-upload"
                                     type="button"
-                                    className="w-full py-2 px-4 border border-blue-500 text-blue-500 rounded hover:bg-blue-500 hover:text-black transition-colors duration-200"
+                                    className="w-full py-2 px-4 border border-blue-500 text-blue-500 rounded hover:bg-blue-500 hover:text-black transition-colors duration-200"       
                                 >
                                     Upload
-                                </button>
+                                </label>
+                                <input
+                                type="file"
+                                accept="image/*"
+                                onChange={handleLogoUpload}
+                                className="hidden"
+                                id="logo-upload"
+                                />
                             </div>
 
                             {/* Description */}
@@ -382,6 +390,7 @@ export default function Home() {
                                 <textarea
                                     className="w-full bg-[#2a2a2a] text-white rounded p-3 min-h-[100px]"
                                     placeholder="Describe your Token/NFT here. What is the goal, plans, why is this project unique?"
+                                    onChange={handleInputChange}
                                 />
                             </div>
 
@@ -394,6 +403,8 @@ export default function Home() {
                                     type="url"
                                     className="w-full bg-[#2a2a2a] text-white rounded p-3"
                                     placeholder="https://yourwebsite.com/"
+                                    onChange={handleInputChange}
+
                                 />
                             </div>
 
@@ -406,6 +417,8 @@ export default function Home() {
                                     type="text"
                                     className="w-full bg-[#2a2a2a] text-white rounded p-3"
                                     placeholder="Telegram"
+                                    onChange={handleInputChange}
+
                                 />
                             </div>
 
@@ -418,6 +431,8 @@ export default function Home() {
                                     type="text"
                                     className="w-full bg-[#2a2a2a] text-white rounded p-3"
                                     placeholder="Twitter"
+                                    onChange={handleInputChange}
+
                                 />
                             </div>
 
@@ -430,6 +445,8 @@ export default function Home() {
                                     type="text"
                                     className="w-full bg-[#2a2a2a] text-white rounded p-3"
                                     placeholder="Discord"
+                                    onChange={handleInputChange}
+
                                 />
                             </div>
 
