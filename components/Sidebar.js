@@ -1,7 +1,7 @@
 import { FaTrophy, FaNetworkWired, FaBullhorn } from "react-icons/fa";
 import Image from "next/image";
 import binanceIcon from "../images/binance.png";
-import etheruemIcon from "../images/ethereum.png";
+import ethereumIcon from "../images/ethereum.png";
 import arbitrumIcon from "../images/arbitrum.png";
 import solanaIcon from "../images/solana.png";
 import polygonIcon from "../images/polygon.png";
@@ -98,7 +98,7 @@ const Sidebar = ({ isSidebarOpen }) => {
                         }`}
                     >
                         <Image
-                            src={etheruemIcon}
+                            src={ethereumIcon}
                             height={18}
                             width={18}
                             alt="ethereum"

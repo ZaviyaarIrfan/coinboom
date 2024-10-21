@@ -47,13 +47,15 @@ const SubmitCoinForm = () => {
                 return;
             }
 
-            // Validate contract address on the selected blockchain
-            const isValidContract = await validateContractAddress();
-            if (!isValidContract) {
-                setLoading(false);
-                alert("Invalid contract address for the selected blockchain.");
-                return;
-            }
+            if(!formData.isPresale) {
+                // Validate contract address on the selected blockchain
+                const isValidContract = await validateContractAddress();
+                if (!isValidContract) {
+                    setLoading(false);
+                    alert("Invalid contract address for the selected blockchain.");
+                    return;
+                }
+            } 
 
             // Check if the coin already exists in the database
             const isCoinExists = await checkCoinExists();
@@ -65,6 +67,7 @@ const SubmitCoinForm = () => {
 
             setLoading(false);
         }
+        
         // Proceed to the next step if validations pass
         if (activeStep === 2) {
             await handleSubmit();

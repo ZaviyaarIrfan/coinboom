@@ -4,27 +4,28 @@ import { useEffect, useState } from "react";
 import CoinsTable from "../../components/Table";
 import TrendingNavigation from "../../components/TrendingNavigation";
 import Footer from "../../components/Footer";
+import PromoteTable from "../../components/PromoteTable";
 
 export default function Home() {
+    const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
     const [cryptoStats, setCryptoStats] = useState([]);
 
     const fetchCryptoStats = async () => {
         try {
-            const response = await fetch('/api/get-crypto-stats?blockchain=BSC');
+            const response = await fetch("/api/new/binance");
             const data = await response.json();
-    
+
             if (response.ok) {
                 setCryptoStats(data);
-                console.log('Crypto Stats:', data);
+                console.log("Crypto Stats:", data);
             } else {
-                console.error('Error fetching crypto stats:', data.error);
+                console.error("Error fetching crypto stats:", data.error);
             }
         } catch (error) {
-            console.error('Network error:', error);
+            console.error("Network error:", error);
         }
     };
-
-    const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
@@ -59,9 +60,9 @@ export default function Home() {
                     }`}
                 >
                     <h2 className="text-2xl font-bold mb-3">Promoted Coins</h2>
-                    <CoinsTable coinsData={cryptoStats} />
+                    <PromoteTable />
                     <h2 className="text-2xl font-bold my-4">
-                        Latest Crypto Coins on BSC
+                        Latest Coins on BSC
                     </h2>
                     <TrendingNavigation />
                     <CoinsTable coinsData={cryptoStats} />

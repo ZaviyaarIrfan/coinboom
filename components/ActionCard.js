@@ -1,34 +1,46 @@
-import React, { useState } from 'react';
-import { Box, Button, Dialog, DialogTitle, DialogContent, DialogActions, Typography, IconButton } from '@mui/material';
-import FlashOnIcon from '@mui/icons-material/FlashOn'; // Lightning icon for boost
-import CloseIcon from '@mui/icons-material/Close'; // Close icon for modal
-import Image from 'next/image';
-import catsonImage from '../images/catson.png'; // Image for the icon
+import React, { useState } from "react";
+import {
+    Box,
+    Button,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
+    Typography,
+    IconButton,
+} from "@mui/material";
+import FlashOnIcon from "@mui/icons-material/FlashOn"; // Lightning icon for boost
+import CloseIcon from "@mui/icons-material/Close"; // Close icon for modal
+import Image from "next/image";
+import catsonImage from "../images/catson.png"; // Image for the icon
+import { useRouter } from "next/navigation";
 
 const ActionsCard = () => {
-  const [openPromote, setOpenPromote] = useState(false);
-  const [openBoost, setOpenBoost] = useState(false);
+    const [openPromote, setOpenPromote] = useState(false);
+    const [openBoost, setOpenBoost] = useState(false);
+    const router = useRouter();
 
-  // Function to open/close the Promote modal
-  const handleOpenPromote = () => {
-    setOpenPromote(true);
-  };
-  const handleClosePromote = () => {
-    setOpenPromote(false);
-  };
+    // Function to open/close the Promote modal
+    const handleOpenPromote = () => {
+        // setOpenPromote(true);
+        router.push("/promote");
+    };
+    const handleClosePromote = () => {
+        setOpenPromote(false);
+    };
 
-  // Function to open/close the Boost modal
-  const handleOpenBoost = () => {
-    setOpenBoost(true);
-  };
-  const handleCloseBoost = () => {
-    setOpenBoost(false);
-  };
+    // Function to open/close the Boost modal
+    const handleOpenBoost = () => {
+        setOpenBoost(true);
+    };
+    const handleCloseBoost = () => {
+        setOpenBoost(false);
+    };
 
-  return (
-    <Box >
-      {/* Boost Button */}
-      <Button
+    return (
+        <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+            {/* Boost Button */}
+            {/* <Button
         className="!mb-2"
         variant="outlined"
         color="primary"
@@ -46,32 +58,34 @@ const ActionsCard = () => {
         }}
       >
         Boost
-      </Button>
+      </Button> */}
 
-      {/* Promote Button */}
+            {/* Promote Button */}
 
-      <Button
-      className='my-3'
-        variant="outlined"
-        color="secondary"
-        fullWidth
-        startIcon={<FlashOnIcon />}
-        onClick={handleOpenPromote} // Open the Promote modal when clicked
-        sx={{
-          transition: 'all 0.3s ease',
-          borderColor: 'secondary.main',
-          '&:hover': {
-            backgroundColor: 'secondary.main',
-            color: 'white',
-            borderColor: 'secondary.main',
-          },
-        }}
-      >
-        Promote
-      </Button>
+            <Button
+                className="mt-6"
+                variant="contained"
+                color="primary"
+                fullWidth
+                startIcon={<FlashOnIcon />}
+                onClick={handleOpenPromote} // Open the Promote modal when clicked
+                sx={{
+                    transition: "all 0.3s ease",
+                    borderColor: "primary.main",
+                    "&:hover": {
+                        backgroundColor: "primary.main",
+                        color: "white",
+                        borderColor: "primary.main",
+                    },
+                    marginTop: '40px',
+                    marginRight: '30px'
+                }}
+            >
+                Promote
+            </Button>
 
-      {/* Boost Modal */}
-      <Dialog open={openBoost} onClose={handleCloseBoost} maxWidth="sm" fullWidth>
+            {/* Boost Modal */}
+            {/* <Dialog open={openBoost} onClose={handleCloseBoost} maxWidth="sm" fullWidth>
         <DialogTitle
           sx={{
             backgroundColor: '#222',
@@ -113,9 +127,7 @@ const ActionsCard = () => {
             <div className='border-b-2 w-1/4 items-center border-[#FFD700]'></div>
           </div>
 
-          {/* Boost Packages */}
           <Box display="flex" justifyContent="space-between" mt={2}>
-            {/* 1 Day Boost */}
             <Box
               textAlign="center"
               sx={{
@@ -131,7 +143,6 @@ const ActionsCard = () => {
               <Typography color="#FFD700">0.05 BNB</Typography>
             </Box>
 
-            {/* 3 Days Boost */}
             <Box
               textAlign="center"
               sx={{
@@ -147,7 +158,6 @@ const ActionsCard = () => {
               <Typography color="#FFD700">0.1 BNB</Typography>
             </Box>
 
-            {/* 7 Days Boost */}
             <Box
               textAlign="center"
               sx={{
@@ -174,10 +184,10 @@ const ActionsCard = () => {
             Close
           </Button>
         </DialogActions>
-      </Dialog>
+      </Dialog> */}
 
-      {/* Promote Modal */}
-      <Dialog open={openPromote} onClose={handleClosePromote} maxWidth="sm" fullWidth>
+            {/* Promote Modal */}
+            {/* <Dialog open={openPromote} onClose={handleClosePromote} maxWidth="sm" fullWidth>
         <DialogTitle
           sx={{
             backgroundColor: '#222',
@@ -219,7 +229,6 @@ const ActionsCard = () => {
             <div className='border-b-2 w-1/4 items-center border-[#FFD700]'></div>
           </div>
 
-          {/* Promotion Packages */}
           <Box display="flex" justifyContent="space-between" mt={2}>
             <Box textAlign="center" sx={{ backgroundColor: '#444', padding: 2, borderRadius: '8px', width: '30%' }}>
               <FlashOnIcon sx={{ color: '#FFD700', fontSize: '40px' }} />
@@ -247,9 +256,9 @@ const ActionsCard = () => {
             Close
           </Button>
         </DialogActions>
-      </Dialog>
-    </Box>
-  );
+      </Dialog> */}
+        </Box>
+    );
 };
 
 export default ActionsCard;

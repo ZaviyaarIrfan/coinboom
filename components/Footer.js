@@ -42,7 +42,7 @@ const Footer = () => {
                                 </Link>
                             </li>
                             <li>
-                                <Link href="/new/etheruem" className="hover:text-blue-500">
+                                <Link href="/new/ethereum" className="hover:text-blue-500">
                                     Ethereum Coins
                                 </Link>
                             </li>

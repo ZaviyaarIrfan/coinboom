@@ -1,13 +1,6 @@
 import Head from "next/head";
 import Navbar from "../components/Navbar";
 import { useState } from "react";
-import CoinsTable from "../components/Table";
-import TrendingNavigation from "../components/TrendingNavigation";
-import binanceIcon from "../images/binance.png";
-import etheruemIcon from "../images/ethereum.png";
-import solanaIcon from "../images/solana.png";
-import Image from "next/image";
-import SubmitCoinForm from "../components/SubmitCoinForm";
 import Footer from "../components/Footer";
 import PromoteCoinForm from "../components/CoinPromoteForm";
 

@@ -14,7 +14,7 @@ async function getCryptoStatsByNames(coinNames) {
         // Fetch the data
         const response = await axios.get(url);
         const data = response.data;
-
+      
         // Process the response to extract key stats for each coin
         const statsArray = data.map((coin) => ({
             ...coin,
@@ -50,7 +50,7 @@ export default async function handler(req, res) {
     if (req.method === "GET") {
         try {
             // Query the database for coins and select the required fields
-            const coins = await Coin.find({}).select("name createdAt");
+            const coins = await Coin.find({});
 
             const coinNames = coins.map((coin) =>
                 coin.name.toLowerCase().replace(/\s+/g, "-")
@@ -78,6 +78,7 @@ export default async function handler(req, res) {
 
                     return {
                         ...stat,
+                        isPromote: coin.isPromote,
                         age: coin ? calculateCoinAge(coin.createdAt) : "--",
                     };
                 });

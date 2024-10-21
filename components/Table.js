@@ -11,9 +11,14 @@ import {
 } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
+import clsx from "clsx";
 
 // Function to format the volume
 const formatVolume = (volume) => {
+    if (volume == 0) {
+        const num = Number(volume);
+        return num > 1000 ? `${(num / 1000).toFixed(1)}k` : num.toString();
+    }
     if (!volume || volume === "--") {
         return "--";
     }
@@ -51,7 +56,10 @@ export default function CoinsTable({ coinsData }) {
             <TableContainer component={Paper} className="bg-black text-white">
                 <Table>
                     <TableHead>
-                        <TableRow className="bg-[#404040]">
+                        <TableRow
+                            className="bg-[#404040]"
+                            sx={{ color: "white" }}
+                        >
                             <TableCell className="text-white font-bold text-[0.95rem] py-[0.6rem]">
                                 Coin
                             </TableCell>
@@ -68,16 +76,13 @@ export default function CoinsTable({ coinsData }) {
                                 Volume
                             </TableCell>
                             <TableCell className="text-white font-bold text-[0.95rem] py-1">
-                                5m
+                                1h
                             </TableCell>
                             <TableCell className="text-white font-bold text-[0.95rem] py-1">
-                                low 24h
+                                24h
                             </TableCell>
                             <TableCell className="text-white font-bold text-[0.95rem] py-1">
-                                high 24h
-                            </TableCell>
-                            <TableCell className="text-white font-bold text-[0.95rem] py-1">
-                                24h %
+                                7d
                             </TableCell>
                             <TableCell className="text-white font-bold text-[0.95rem] py-1">
                                 LP
@@ -98,7 +103,7 @@ export default function CoinsTable({ coinsData }) {
                                 }`}
                             >
                                 <TableCell className="text-white font-semibold py-1">
-                                    <Link href={`/coin/${coin.id}`}>
+                                    <Link href={`/coin/${coin.slug}`}>
                                         <div className="flex space-x-2 items-center">
                                             <Image
                                                 src={coin.image}
@@ -122,7 +127,12 @@ export default function CoinsTable({ coinsData }) {
                                     </Link>
                                 </TableCell>
                                 <TableCell className="text-white">
-                                    {coin.current_price || "--"}
+                                    {coin?.quote?.USD?.price
+                                        ? "$" +
+                                          parseFloat(coin.quote.USD.price)
+                                              .toFixed(5)
+                                              .replace(/\.?0+$/, "")
+                                        : "--"}
                                 </TableCell>
                                 <TableCell className="text-white">
                                     {coin.age || "--"}
@@ -131,32 +141,65 @@ export default function CoinsTable({ coinsData }) {
                                     {"--"} {/* TXN not provided */}
                                 </TableCell>
                                 <TableCell className="text-white">
-                                    {formatVolume(coin.total_volume)}
-                                </TableCell>
-                                <TableCell className="text-white">
-                                    {"--"} {/* 5m not provided */}
-                                </TableCell>
-                                <TableCell className="text-white">
-                                    {coin.low_24h + '%' || "--"}
-                                </TableCell>
-                                <TableCell className="text-white">
-                                    {coin.high_24h + '%' || "--"}
+                                    {coin?.quote?.USD?.volume_24h
+                                        ? "$" +
+                                          formatVolume(
+                                              coin?.quote?.USD?.volume_24h
+                                          )
+                                        : "--"}
                                 </TableCell>
                                 <TableCell
-                                    className={getChangeColor(
-                                        coin.price_change_percentage_24h?.toString() ||
-                                            "--"
+                                    className={clsx(
+                                        coin?.quote?.USD?.percent_change_1h >= 0
+                                            ? "text-green-500"
+                                            : "text-red-500"
                                     )}
                                 >
-                                    {coin.price_change_percentage_24h
-                                        ? `${coin.price_change_percentage_24h}%`
+                                    {coin?.quote?.USD?.percent_change_1h
+                                        ? coin?.quote?.USD?.percent_change_1h.toFixed(
+                                              2
+                                          ) + "%"
+                                        : "--"}
+                                </TableCell>
+
+                                <TableCell
+                                    className={clsx(
+                                        coin?.quote?.USD?.percent_change_1h >= 0
+                                            ? "text-green-500"
+                                            : "text-red-500"
+                                    )}
+                                >
+                                    {coin?.quote?.USD?.percent_change_24h
+                                        ? coin?.quote?.USD?.percent_change_24h.toFixed(
+                                              2
+                                          ) + "%"
+                                        : "--"}
+                                </TableCell>
+
+                                <TableCell
+                                    className={clsx(
+                                        coin?.quote?.USD?.percent_change_1h >= 0
+                                            ? "text-green-500"
+                                            : "text-red-500"
+                                    )}
+                                >
+                                    {coin?.quote?.USD?.percent_change_7d
+                                        ? coin?.quote?.USD?.percent_change_7d.toFixed(
+                                              2
+                                          ) + "%"
                                         : "--"}
                                 </TableCell>
                                 <TableCell className="text-white">
-                                    {"--"} {/* LP not provided */}
+                                    {"--"}
                                 </TableCell>
                                 <TableCell className="text-white">
-                                    {coin.market_cap || "--"}
+                                    {coin?.quote?.USD?.market_cap ||
+                                    coin?.quote?.USD?.market_cap == 0
+                                        ? "$" +
+                                          formatVolume(
+                                              coin?.quote?.USD?.market_cap
+                                          )
+                                        : "--"}
                                 </TableCell>
                             </TableRow>
                         ))}

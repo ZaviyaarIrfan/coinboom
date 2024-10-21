@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import PaymentIcon from "@mui/icons-material/Payment";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
-import { Radio, RadioGroup, FormControlLabel } from "@mui/material";
+import { Radio, RadioGroup, FormControlLabel, Autocomplete, TextField } from "@mui/material";
 import { QRCodeCanvas } from "qrcode.react";
 import { ethers } from "ethers";
+import axios from "axios";
 
 // Move constants outside component
 const PACKAGE_OPTIONS = {
@@ -25,6 +26,7 @@ const InfoCard = ({ icon: Icon, title, description }) => (
 );
 
 const PromoteCoinForm = () => {
+    const [selectedToken, setSelectedToken] = useState();
     const [selectedPackage, setSelectedPackage] = useState(
         PACKAGE_OPTIONS.BB[0]
     );
@@ -32,6 +34,15 @@ const PromoteCoinForm = () => {
     const [isPaymentVisible, setIsPaymentVisible] = useState(false);
     const [qrLoaded, setQrLoaded] = useState(false);
     const [isPaymentVerified, setIsPaymentVerified] = useState(false);
+    const [availableTokens, setAvailableTokens] = useState([]);
+    
+
+    useEffect(() => {
+        (async () => {
+            const res = await axios.get('/api/coins');
+            setAvailableTokens(res.data)
+        })() 
+    }, [])
 
     const walletAddress = "0x19fF7458B9cF2A576a6f42cD40f59c1Ad3A24354";
 
@@ -76,7 +87,7 @@ const PromoteCoinForm = () => {
                 if (receipt && receipt.status === 1) {
                     console.log("Payment verified successfully!");
                     setIsPaymentVerified(true);
-                    promoteCoin();
+                    await promoteCoin();
                     return true; // Payment was successful
                 } else {
                     console.log("Transaction is not confirmed yet.");
@@ -90,9 +101,16 @@ const PromoteCoinForm = () => {
         return false; // Payment verification failed
     };
 
-    const promoteCoin = () => {
-        // Add logic here to promote the coin (e.g., updating the backend or state)
-        console.log("Promoting the coin:", selectedPackage);
+    const promoteCoin = async () => {
+        try {
+            const updatedToken = {
+                ...selectedToken,
+                isPromote: true
+            }
+            await axios.put(`/api/coins?id=${selectedToken._id}`, updatedToken);
+        } catch (error) {
+            console.log(error)
+        }
         alert("Coin has been successfully promoted!");
     };
 
@@ -156,6 +174,51 @@ const PromoteCoinForm = () => {
                         Copy
                     </button>
                 </div>
+            </div>
+
+            {/* Select Token (Searchable Dropdown) */}
+            <div className="mb-4">
+                <label className="block text-sm mb-2">
+                    1. Select Your Token
+                </label>
+                <Autocomplete
+                    options={availableTokens}
+                    getOptionLabel={(option) => `${option.name} (${option.symbol})`}
+                    renderInput={(params) => (
+                        <TextField
+                            {...params}
+                            placeholder="Search coin by name"
+                            variant="outlined"
+                            fullWidth
+                            sx={{
+                                bgcolor: "gray.700",
+                                color: "white",
+                                "& .MuiOutlinedInput-root": {
+                                    "& input": {
+                                        color: "white", // Input text color
+                                    },
+                                    "& fieldset": {
+                                        borderColor: "#555", // Customize border color
+                                    },
+                                    "&:hover fieldset": {
+                                        borderColor: "#777",
+                                    },
+                                    "&.Mui-focused fieldset": {
+                                        borderColor: "#FFD700", // Focus border color (yellow)
+                                    },
+                                },
+                                "& .MuiInputLabel-root": {
+                                    color: "white", // Label color
+                                },
+                                "& .MuiAutocomplete-endAdornment svg": {
+                                    color: "white", // Arrow icon color
+                                },
+                            }}
+                        />
+                    )}
+                    value={selectedToken}
+                    onChange={(e, value) => setSelectedToken(value)}
+                />
             </div>
 
             {/* Package Selection */}
@@ -244,7 +307,6 @@ const PromoteCoinForm = () => {
                             size={150}
                             onClick={() => setQrLoaded(true)}
                         />
-                        {!qrLoaded && <p>Loading QR Code...</p>}
                     </div>
 
                     {/* Payment Verification */}
