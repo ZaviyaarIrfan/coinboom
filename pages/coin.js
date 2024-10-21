@@ -25,6 +25,8 @@ import {
 } from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy"; // For copy icon
 import Image from "next/image"; // For handling images/icons
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Home() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -36,7 +38,7 @@ export default function Home() {
 
     const handleCopyAddress = () => {
         navigator.clipboard.writeText(tokenAddress);
-        alert("Token address copied!");
+        toast.success("Token address copied!");
     };
 
     return (
@@ -55,6 +57,7 @@ export default function Home() {
             </Head>
             <main>
                 {/* Navbar */}
+                <ToastContainer />
                 <Navbar
                     isSidebarOpen={isSidebarOpen}
                     toggleSidebar={toggleSidebar}
@@ -141,7 +144,7 @@ export default function Home() {
 
                 <div
                     className={`transition-all duration-300 ${
-                        isSidebarOpen ? "ml-64" : "ml-0"
+                        isSidebarOpen ? "md:ml-64" : "ml-0"
                     }`}
                 >
                     <Footer />

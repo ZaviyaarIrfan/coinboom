@@ -17,6 +17,8 @@ import {
 } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import Image from "next/image";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const steps = ["Project Information", "Links", "Listing"];
 
@@ -43,7 +45,7 @@ const SubmitCoinForm = () => {
             // Ensure all required fields are filled
             if (!validateForm()) {
                 setLoading(false);
-                alert("Please fill all required fields.");
+                toast.warning("Please fill all required fields.");
                 return;
             }
 
@@ -52,7 +54,7 @@ const SubmitCoinForm = () => {
                 const isValidContract = await validateContractAddress();
                 if (!isValidContract) {
                     setLoading(false);
-                    alert(
+                    toast.error(
                         "Invalid contract address for the selected blockchain."
                     );
                     return;
@@ -63,7 +65,7 @@ const SubmitCoinForm = () => {
             const isCoinExists = await checkCoinExists();
             if (isCoinExists) {
                 setLoading(false);
-                alert("This coin already exists in the database.");
+                toast.error("This coin already exists in the database.");
                 return;
             }
 
@@ -255,6 +257,7 @@ const SubmitCoinForm = () => {
 
     return (
         <div className="bg-gray-900 text-white p-4 md:p-8 rounded-lg shadow-lg">
+            <ToastContainer/>
             <Typography
                 variant="h4"
                 className="text-blue-500 font-bold text-center mb-6 md:mb-8"

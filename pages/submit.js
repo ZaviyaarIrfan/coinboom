@@ -32,7 +32,7 @@ export default function Home() {
                 />
                 <div
                     className={`min-h-screen bg-black text-white p-4 md:p-6 pt-16 md:pt-20 transition-all duration-300 ${
-                        isSidebarOpen ? "ml-64" : "ml-0"
+                        isSidebarOpen ? "md:ml-64" : "ml-0"
                     } md:ml-0`}
                 >
                     <SubmitCoinForm />
@@ -40,7 +40,7 @@ export default function Home() {
             </main>
             <div
                 className={`transition-all duration-300 ${
-                    isSidebarOpen ? "ml-64" : "ml-0"
+                    isSidebarOpen ? "md:ml-64" : "ml-0"
                 } md:ml-0`}
             >
                 <Footer />

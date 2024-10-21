@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
-import PaymentIcon from "@mui/icons-material/Payment";
-import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import {
     Radio,
     RadioGroup,
@@ -12,13 +10,15 @@ import {
 import { QRCodeCanvas } from "qrcode.react";
 import { ethers } from "ethers";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // Move constants outside component
 const PACKAGE_OPTIONS = {
     BB: [
-        { value: "200000 BB", label: "1 day promoted", day: 1 },
-        { value: "350000 BB", label: "3 days promoted", day: 3 },
-        { value: "500000 BB", label: "7 days promoted", day: 7 },
+        { value: "200000", label: "1 day promoted", day: 1 },
+        { value: "350000", label: "3 days promoted", day: 3 },
+        { value: "500000", label: "7 days promoted", day: 7 },
     ],
 };
 
@@ -72,42 +72,56 @@ const PromoteCoinForm = () => {
     const copyToClipboard = async () => {
         try {
             await navigator.clipboard.writeText(walletAddress);
-            alert("Wallet address copied to clipboard!");
+            toast.success("Wallet address copied to clipboard!");
         } catch (err) {
             console.error("Failed to copy:", err);
-            alert("Failed to copy the wallet address.");
+            toast.error("Failed to copy the wallet address.");
         }
     };
 
     const verifyPayment = async (txHash) => {
         try {
-            // Connect to BSC mainnet
-            const provider = new ethers.providers.JsonRpcProvider(
+            const provider = new ethers.JsonRpcProvider(
                 "https://bsc-dataseed.binance.org/"
             );
 
-            // Get the transaction details
             const tx = await provider.getTransaction(txHash);
 
             // Check if the transaction was sent to the correct address and matches the amount
             if (tx && tx.to.toLowerCase() === walletAddress.toLowerCase()) {
-                // Verify that the transaction is confirmed
-                const receipt = await provider.getTransactionReceipt(txHash);
-                if (receipt && receipt.status === 1) {
-                    console.log("Payment verified successfully!");
-                    setIsPaymentVerified(true);
-                    await promoteCoin();
-                    return true; // Payment was successful
+                const expectedAmountInWei = selectedPackage.value;
+
+                // Check if the amount matches
+                if (ethers.formatEther(tx.value) == expectedAmountInWei) {
+                    // Verify that the transaction is confirmed
+                    const receipt = await provider.getTransactionReceipt(
+                        txHash
+                    );
+                    if (receipt && receipt.status === 1) {
+                        console.log("Payment verified successfully!");
+                        setIsPaymentVerified(true);
+                        await promoteCoin();
+                        return true; // Payment was successful
+                    } else {
+                        toast.error("Transaction is not confirmed yet.")
+                        console.log("Transaction is not confirmed yet.");
+                    }
                 } else {
-                    console.log("Transaction is not confirmed yet.");
+                    toast.error(
+                        "Transaction amount does not match the expected amount."
+                    );
+                    console.log(
+                        "Transaction amount does not match the expected amount."
+                    );
                 }
             } else {
                 console.log("Transaction details do not match.");
             }
         } catch (error) {
+            toast.error("Error verifying payment", error);
             console.error("Error verifying payment:", error);
         }
-        return false; // Payment verification failed
+        return false;
     };
 
     const promoteCoin = async () => {
@@ -118,9 +132,10 @@ const PromoteCoinForm = () => {
             };
             await axios.put(`/api/coins?id=${selectedToken._id}`, updatedToken);
         } catch (error) {
+            toast.error(error);
             console.log(error);
         }
-        alert("Coin has been successfully promoted!");
+        toast.success("Coin has been successfully promoted!");
     };
 
     const handleVerifyPayment = async () => {
@@ -134,6 +149,7 @@ const PromoteCoinForm = () => {
 
     return (
         <div className="max-w-full sm:max-w-3xl mx-auto p-4 sm:p-6 bg-gray-800 text-white rounded-lg shadow-lg">
+            <ToastContainer />
             {/* Info Section */}
             <div className="flex flex-col sm:flex-row justify-between items-center mb-6 space-y-4 sm:space-y-0">
                 <InfoCard
@@ -254,7 +270,7 @@ const PromoteCoinForm = () => {
                                     }}
                                 />
                             }
-                            label={`${pkg.value} - ${pkg.label}`}
+                            label={`${pkg.value} BB - ${pkg.label}`}
                             sx={{
                                 "& .MuiFormControlLabel-label": {
                                     fontWeight: "bold",
@@ -277,7 +293,7 @@ const PromoteCoinForm = () => {
                         Days: <strong>{selectedPackage.day}</strong>
                     </p>
                     <p>
-                        Price: <strong>{selectedPackage.value}</strong>
+                        Price: <strong>{selectedPackage.value} BB</strong>
                     </p>
                 </div>
             </div>
@@ -299,8 +315,8 @@ const PromoteCoinForm = () => {
                         Payment Instructions
                     </h3>
                     <p>
-                        Please send <strong>{selectedPackage.value}</strong> to
-                        the following BEP-20 wallet address:
+                        Please send <strong>{selectedPackage.value} BB</strong>{" "}
+                        to the following BEP-20 wallet address:
                     </p>
                     <div className="flex flex-col sm:flex-row items-center justify-between bg-gray-600 p-2 rounded mt-2">
                         <span className="text-sm">{walletAddress}</span>

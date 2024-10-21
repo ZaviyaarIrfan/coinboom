@@ -56,7 +56,7 @@ export default function Home() {
                 />
                 <div
                     className={`min-h-screen bg-black text-white p-4 sm:p-6 pt-16 sm:pt-20 transition-all duration-300 ${
-                        isSidebarOpen ? "ml-64" : "ml-0"
+                        isSidebarOpen ? "md:ml-64" : "ml-0"
                     }`}
                 >
                     <Banner />
@@ -73,7 +73,7 @@ export default function Home() {
             </main>
             <div
                 className={`transition-all duration-300 ${
-                    isSidebarOpen ? "ml-64" : "ml-0"
+                    isSidebarOpen ? "md:ml-64" : "ml-0"
                 }`}
             >
                 <Footer />

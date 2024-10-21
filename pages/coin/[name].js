@@ -16,6 +16,8 @@ import Image from "next/image"; // For handling images/icons
 import ActionsCard from "../../components/ActionCard";
 import { storage } from "../../firebaseConfig";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Home() {
     const [coinData, setCoinData] = useState(null);
@@ -153,7 +155,7 @@ export default function Home() {
 
     const handleCopyAddress = () => {
         navigator.clipboard.writeText(coinData.contractAddress);
-        alert("Token address copied!");
+        toast.success("Token address copied!");
     };
 
     useEffect(() => {
@@ -181,7 +183,17 @@ export default function Home() {
         fetchCoinData();
     }, [name]);
 
-    if (loading) return <p>Loading...</p>;
+    if (loading)
+        return (
+            <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-white dark:bg-gray-900 z-50">
+                <div className="flex flex-col items-center">
+                    <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-primary"></div>
+                    <p className="mt-4 text-lg text-gray-700 dark:text-gray-300">
+                        Loading...
+                    </p>
+                </div>
+            </div>
+        );
     if (error) return <p>Error: {error}</p>;
 
     return (
@@ -199,6 +211,7 @@ export default function Home() {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <main>
+                <ToastContainer />
                 {/* Navbar */}
                 <Navbar
                     isSidebarOpen={isSidebarOpen}
@@ -207,7 +220,7 @@ export default function Home() {
 
                 <div
                     className={`min-h-screen bg-gray-800 py-16 text-white transition-all duration-300 ${
-                        isSidebarOpen ? "ml-64" : "ml-0"
+                        isSidebarOpen ? "md:ml-64" : "ml-0"
                     }`}
                 >
                     <div className="container mx-auto pt-16 pb-8 px-4">
@@ -338,80 +351,82 @@ export default function Home() {
                 </div>
 
                 <Modal
-                open={isUpdateModalOpen}
-                onClose={() => setIsUpdateModalOpen(false)}
-                className="flex items-center justify-center"
-            >
-                <div className="bg-[#1a1a1a] text-white rounded-lg p-6 max-w-2xl w-[90%] max-h-[90vh] overflow-y-auto">
-                    <div className="flex justify-between items-center mb-4">
-                        <h2 className="text-2xl font-bold">Update Token</h2>
-                        <button
-                            onClick={() => setIsUpdateModalOpen(false)}
-                            className="text-gray-400 hover:text-white"
-                        >
-                            ✕
-                        </button>
-                    </div>
-
-                    <p className="text-gray-300 mb-6">
-                        Important! ONLY fill the data you want to change.
-                    </p>
-
-                    <form
-                        onSubmit={handleUpdateSubmit}
-                        className="space-y-6"
-                    >
-                        {/* Logo Upload Section */}
-                        <div>
-                            <h3 className="text-xl font-semibold mb-2">
-                                Change logo
-                            </h3>
-                            <p className="text-sm text-gray-400 mb-2">
-                                Optimal dimensions 512×512px, size up to 1MB
-                            </p>
-                            <label
-                                htmlFor="logo-upload"
-                                type="button"
-                                className="w-full py-2 px-4 border border-blue-500 text-blue-500 rounded hover:bg-blue-500 hover:text-black transition-colors duration-200"
+                    open={isUpdateModalOpen}
+                    onClose={() => setIsUpdateModalOpen(false)}
+                    className="flex items-center justify-center"
+                >
+                    <div className="bg-[#1a1a1a] text-white rounded-lg p-6 max-w-2xl w-[90%] max-h-[90vh] overflow-y-auto">
+                        <div className="flex justify-between items-center mb-4">
+                            <h2 className="text-2xl font-bold">Update Token</h2>
+                            <button
+                                onClick={() => setIsUpdateModalOpen(false)}
+                                className="text-gray-400 hover:text-white"
                             >
-                                Upload
-                            </label>
-                            <input
-                                type="file"
-                                accept="image/*"
-                                onChange={handleLogoUpload}
-                                className="hidden"
-                                id="logo-upload"
-                            />
+                                ✕
+                            </button>
                         </div>
 
-                        {/* Image preview */}
-                        {logoPreview && (
-                            <div className="mb-4">
-                                <Image
-                                    src={logoPreview}
-                                    alt="Logo Preview"
-                                    width={100}
-                                    height={100}
-                                    className="rounded"
+                        <p className="text-gray-300 mb-6">
+                            Important! ONLY fill the data you want to change.
+                        </p>
+
+                        <form
+                            onSubmit={handleUpdateSubmit}
+                            className="space-y-6"
+                        >
+                            {/* Logo Upload Section */}
+                            <div>
+                                <h3 className="text-xl font-semibold mb-2">
+                                    Change logo
+                                </h3>
+                                <p className="text-sm text-gray-400 mb-2">
+                                    Optimal dimensions 512×512px, size up to 1MB
+                                </p>
+                                <label
+                                    htmlFor="logo-upload"
+                                    type="button"
+                                    className="w-full py-2 px-4 border border-blue-500 text-blue-500 rounded hover:bg-blue-500 hover:text-black transition-colors duration-200"
+                                >
+                                    Upload
+                                </label>
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleLogoUpload}
+                                    className="hidden"
+                                    id="logo-upload"
                                 />
                             </div>
-                        )}
 
-                        {/* Other form fields */}
-                        <div>
-                            <label className="block mb-2">Description</label>
-                            <textarea
-                                className="w-full bg-[#2a2a2a] text-white rounded p-3 min-h-[100px]"
-                                placeholder="Describe your Token/NFT here. What is the goal, plans, why is this project unique?"
-                                onChange={handleInputChange}
-                            />
-                        </div>
-                        
-                        {/* Add other fields (Website Link, Telegram Link, etc.) */}
+                            {/* Image preview */}
+                            {logoPreview && (
+                                <div className="mb-4">
+                                    <Image
+                                        src={logoPreview}
+                                        alt="Logo Preview"
+                                        width={100}
+                                        height={100}
+                                        className="rounded"
+                                    />
+                                </div>
+                            )}
 
-                              {/* Website Link */}
-                              <div>
+                            {/* Other form fields */}
+                            <div>
+                                <label className="block mb-2">
+                                    Description
+                                </label>
+                                <textarea
+                                    className="w-full bg-[#2a2a2a] text-white rounded p-3 min-h-[100px]"
+                                    placeholder="Describe your Token/NFT here. What is the goal, plans, why is this project unique?"
+                                    onChange={handleInputChange}
+                                />
+                            </div>
+
+                            {/* Add other fields (Website Link, Telegram Link, etc.) */}
+
+                            {/* Website Link */}
+                            <div>
                                 <label className="block mb-2">
                                     Website link
                                 </label>
@@ -462,17 +477,17 @@ export default function Home() {
                                 />
                             </div>
 
-                        {/* Submit Button with loading state */}
-                        <button
-                            type="submit"
-                            className="w-full bg-blue-500 hover:bg-blue-600 font-bold py-3 px-6 rounded-lg transition-colors duration-200"
-                            disabled={isSubmitting} // Disable button while submitting
-                        >
-                            {isSubmitting ? "Loading..." : "Submit Update"}
-                        </button>
-                    </form>
-                </div>
-            </Modal>
+                            {/* Submit Button with loading state */}
+                            <button
+                                type="submit"
+                                className="w-full bg-blue-500 hover:bg-blue-600 font-bold py-3 px-6 rounded-lg transition-colors duration-200"
+                                disabled={isSubmitting} // Disable button while submitting
+                            >
+                                {isSubmitting ? "Loading..." : "Submit Update"}
+                            </button>
+                        </form>
+                    </div>
+                </Modal>
                 <Footer />
             </main>
         </>

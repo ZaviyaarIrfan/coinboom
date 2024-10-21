@@ -1,7 +1,7 @@
-// components/Banner.js
 import React from "react";
 import Slider from "react-slick";
 import Image from "next/image";
+import Link from "next/link";
 
 const Banner = () => {
     const settings = {
@@ -24,29 +24,21 @@ const Banner = () => {
         ],
     };
 
-    const desktopBanners = [
-        {
-            src: "https://betfury.io/images/pages/main/slider/slide-1@2x.webp",
-            alt: "Desktop Banner 1",
-        },
-        {
-            src: "https://designshifu.com/wp-content/uploads/2022/11/Ad-banner-design-ideas-examples-that-get-the-maximum-clicks-1536x768.jpg",
-            alt: "Desktop Banner 2",
-        },
-    ];
-
-    const mobileBanners = [
+    const banners = [
         {
             src: "/betfury.png",
             alt: "Mobile Banner 1",
+            link: "https://betfury.io/?r=LUCKYUser447840",
         },
         {
             src: "/faucetPay.png",
             alt: "Mobile Banner 2",
+            link: "https://faucetpay.io/?r=68645",
         },
         {
             src: "/freeBitcoin.jpeg",
             alt: "Mobile Banner 3",
+            link: "https://freebitco.in/?r=4588595",
         },
     ];
 
@@ -55,20 +47,21 @@ const Banner = () => {
             {/* Desktop Slider */}
             <div className="hidden md:block">
                 <Slider {...settings} className="mx-2 sm:mx-4">
-                    {desktopBanners.map((banner, index) => (
-                        <div
+                    {banners.map((banner, index) => (
+                        <Link
+                            href={banner.link}
                             key={index}
-                            className="relative w-full h-[400px] sm:h-[500px] overflow-hidden"
+                            className="relative w-full h-[300px] overflow-hidden"
                         >
                             <Image
                                 src={banner.src}
                                 alt={banner.alt}
                                 layout="fill"
-                                objectFit="cover"
+                                objectFit="contain"  
                                 className="rounded-lg"
                                 priority={index === 0}
                             />
-                        </div>
+                        </Link>
                     ))}
                 </Slider>
             </div>
@@ -76,8 +69,10 @@ const Banner = () => {
             {/* Mobile Slider */}
             <div className="block md:hidden px-2">
                 <Slider {...settings}>
-                    {mobileBanners.map((banner, index) => (
-                        <div
+                    {banners.map((banner, index) => (
+                        <Link
+                            target="_blank"
+                            href={banner.link}
                             key={index}
                             className="relative w-full aspect-[16/9] overflow-hidden"
                         >
@@ -89,7 +84,7 @@ const Banner = () => {
                                 className="rounded-lg"
                                 priority={index === 0}
                             />
-                        </div>
+                        </Link>
                     ))}
                 </Slider>
             </div>
