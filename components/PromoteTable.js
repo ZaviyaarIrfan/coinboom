@@ -29,11 +29,30 @@ const formatVolume = (volume) => {
 export default function PromoteTable() {
     const [coinsData, setcoinsData] = useState([]);
 
+    function isFutureDate(dateString) {
+        if (!dateString) {
+          return false; // Return false if input is null or empty
+        }
+      
+        const inputDate = new Date(dateString);
+        const today = new Date();
+      
+        if (isNaN(inputDate)) {
+          return false; // Return false if the input is not a valid date
+        }
+      
+        // Set today's time to midnight to ignore time differences
+        today.setHours(0, 0, 0, 0);
+        
+        return inputDate > today; // Return true if input date is in the future, otherwise false
+      }
+      
+
     const fetchCryptoStats = async () => {
         try {
             const response = await fetch("/api/get-all-stats-1");
             const data = await response.json();
-            const filteredData = data.filter((coin) => coin.isPromote);
+            const filteredData = data.filter((coin) => coin.isPromote && isFutureDate(coin.promoteTime));
 
             if (response.ok) {
                 setcoinsData(filteredData);

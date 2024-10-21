@@ -35,6 +35,10 @@ const CoinSchema = new mongoose.Schema({
         type: String,
         default: '',
     },
+    promoteTime:{
+        type: Date,
+        default: null,
+    }
 }, {
     timestamps: true, 
 });
