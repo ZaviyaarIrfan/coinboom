@@ -4,7 +4,6 @@ import { useState } from "react";
 import SubmitCoinForm from "../components/SubmitCoinForm";
 import Footer from "../components/Footer";
 
-
 export default function Home() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
@@ -32,17 +31,17 @@ export default function Home() {
                     toggleSidebar={toggleSidebar}
                 />
                 <div
-                    className={`min-h-screen bg-black text-white p-6 pt-20 transition-all duration-300 ${
+                    className={`min-h-screen bg-black text-white p-4 md:p-6 pt-16 md:pt-20 transition-all duration-300 ${
                         isSidebarOpen ? "ml-64" : "ml-0"
-                    }`}
+                    } md:ml-0`}
                 >
-                    <SubmitCoinForm/>
+                    <SubmitCoinForm />
                 </div>
             </main>
             <div
-                className={` transition-all duration-300 ${
+                className={`transition-all duration-300 ${
                     isSidebarOpen ? "ml-64" : "ml-0"
-                }`}
+                } md:ml-0`}
             >
                 <Footer />
             </div>

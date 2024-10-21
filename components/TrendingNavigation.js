@@ -11,23 +11,24 @@ const TrendingNavigation = () => {
     const currentPath = router.pathname;
     const [isMounted, setIsMounted] = useState(false);
 
-    // Set the mounted state to true after the component mounts
     useEffect(() => {
         setIsMounted(true);
     }, []);
 
     const NetworkIcons = () => (
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-1 sm:space-x-2">
             {["binance", "ethereum", "solana"].map((network) => {
-                // If the current path contains any network, replace it with the clicked one
-                const basePath = currentPath.replace(/\/(binance|ethereum|solana)/, "");
+                const basePath = currentPath.replace(
+                    /\/(binance|ethereum|solana)/,
+                    ""
+                );
                 const href = `${basePath}/${network}`;
 
                 return (
                     <Link
                         key={network}
                         href={href}
-                        className="bg-gray-700 p-1 rounded"
+                        className="bg-gray-700 p-0.5 sm:p-1 rounded"
                     >
                         <Image
                             src={
@@ -37,9 +38,10 @@ const TrendingNavigation = () => {
                                     ? ethereumIcon
                                     : solanaIcon
                             }
-                            height={18}
-                            width={18}
+                            height={16}
+                            width={16}
                             alt={network}
+                            className="w-3 h-3 sm:w-4 sm:h-4"
                         />
                     </Link>
                 );
@@ -47,43 +49,65 @@ const TrendingNavigation = () => {
         </div>
     );
 
-    if (!isMounted) return null; // Prevent rendering on the server
+    if (!isMounted) return null;
+
+    const navigationTabs = [
+        { key: "trending", icon: "💎", label: "Trending" },
+        { key: "hot", icon: "🔥", label: "Hot" },
+        { key: "new", icon: "🏷️", label: "New" },
+        { key: "gainers", icon: "🚀", label: "Gainers" },
+    ];
 
     return (
-        <div className="bg-gray-900 text-white p-1 rounded-md mb-4">
-            <div className="flex space-x-4">
-                {["trending", "hot", "new", "gainers"].map(
-                    (tab) => (
-                        <Link
-                            key={tab}
-                            href={`/${tab == "hot" ? "trade" : tab}`}
+        <div className="bg-gray-900 text-white p-1 rounded-md mb-2 sm:mb-4 overflow-x-auto">
+            {/* Desktop View */}
+            <div className="hidden sm:flex space-x-4">
+                {navigationTabs.map(({ key, icon, label }) => (
+                    <Link key={key} href={`/${key === "hot" ? "trade" : key}`}>
+                        <div
+                            className={`flex items-center space-x-2 px-2 py-1 rounded-md whitespace-nowrap ${
+                                currentPath.includes(
+                                    `/${key === "hot" ? "trade" : key}`
+                                )
+                                    ? "bg-blue-500 text-black"
+                                    : ""
+                            }`}
                         >
-                            <div
-                                className={`flex items-center space-x-2 px-2 py-1 rounded-md ${
-                                    currentPath.includes(
-                                        `/${tab == "hot" ? "trade" : tab}`
-                                    )
-                                        ? "bg-blue-500 text-black"
-                                        : ""
-                                }`}
-                            >
-                                <span>
-                                    {tab === "trending" && "💎"}
-                                    {tab === "hot" && "🔥"}
-                                    {tab === "new" && "🏷️"}
-                                    {tab === "gainers" && "🚀"}
-                                    {tab === "watchlist" && "⭐"}
-                                </span>
-                                <span className="font-bold capitalize">
-                                    {tab}
-                                </span>
-                                {currentPath.includes(
-                                    `/${tab == "hot" ? "trade" : tab}`
-                                ) && <NetworkIcons />}
-                            </div>
-                        </Link>
-                    )
-                )}
+                            <span>{icon}</span>
+                            <span className="font-bold capitalize">
+                                {label}
+                            </span>
+                            {currentPath.includes(
+                                `/${key === "hot" ? "trade" : key}`
+                            ) && <NetworkIcons />}
+                        </div>
+                    </Link>
+                ))}
+            </div>
+
+            {/* Mobile View */}
+            <div className="flex sm:hidden space-x-2 min-w-max">
+                {navigationTabs.map(({ key, icon, label }) => (
+                    <Link key={key} href={`/${key === "hot" ? "trade" : key}`}>
+                        <div
+                            className={`flex items-center space-x-1 px-2 py-1 rounded-md ${
+                                currentPath.includes(
+                                    `/${key === "hot" ? "trade" : key}`
+                                )
+                                    ? "bg-blue-500 text-black"
+                                    : ""
+                            }`}
+                        >
+                            <span className="text-sm">{icon}</span>
+                            <span className="font-bold capitalize text-xs">
+                                {key}
+                            </span>
+                            {currentPath.includes(
+                                `/${key === "hot" ? "trade" : key}`
+                            ) && <NetworkIcons />}
+                        </div>
+                    </Link>
+                ))}
             </div>
         </div>
     );

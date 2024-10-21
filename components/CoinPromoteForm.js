@@ -2,7 +2,13 @@ import { useEffect, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import PaymentIcon from "@mui/icons-material/Payment";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
-import { Radio, RadioGroup, FormControlLabel, Autocomplete, TextField } from "@mui/material";
+import {
+    Radio,
+    RadioGroup,
+    FormControlLabel,
+    Autocomplete,
+    TextField,
+} from "@mui/material";
 import { QRCodeCanvas } from "qrcode.react";
 import { ethers } from "ethers";
 import axios from "axios";
@@ -18,10 +24,14 @@ const PACKAGE_OPTIONS = {
 
 // Create reusable InfoCard component
 const InfoCard = ({ icon: Icon, title, description }) => (
-    <div className="min-h-28 flex flex-wrap items-center justify-center space-x-2 border-white py-3 px-4 text-center rounded-lg w-[32%] border-2">
-        <Icon className="text-3xl font-semibold" />
-        <span className="text-xl font-semibold">{title}</span>
-        <span className="w-full text-sm opacity-65">{description}</span>
+    <div className="flex flex-col sm:flex-row items-center justify-center sm:space-x-2 space-y-3 sm:space-y-0 border-white py-4 px-6 text-center rounded-lg border-2 w-full sm:w-[48%] lg:w-[32%]">
+        <Icon className="text-4xl font-semibold" />
+        <div className="flex flex-col items-center sm:items-start text-center sm:text-left">
+            <span className="text-lg sm:text-xl font-semibold">{title}</span>
+            <span className="text-sm sm:text-base opacity-70">
+                {description}
+            </span>
+        </div>
     </div>
 );
 
@@ -35,14 +45,13 @@ const PromoteCoinForm = () => {
     const [qrLoaded, setQrLoaded] = useState(false);
     const [isPaymentVerified, setIsPaymentVerified] = useState(false);
     const [availableTokens, setAvailableTokens] = useState([]);
-    
 
     useEffect(() => {
         (async () => {
-            const res = await axios.get('/api/coins');
-            setAvailableTokens(res.data)
-        })() 
-    }, [])
+            const res = await axios.get("/api/coins");
+            setAvailableTokens(res.data);
+        })();
+    }, []);
 
     const walletAddress = "0x19fF7458B9cF2A576a6f42cD40f59c1Ad3A24354";
 
@@ -105,11 +114,11 @@ const PromoteCoinForm = () => {
         try {
             const updatedToken = {
                 ...selectedToken,
-                isPromote: true
-            }
+                isPromote: true,
+            };
             await axios.put(`/api/coins?id=${selectedToken._id}`, updatedToken);
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
         alert("Coin has been successfully promoted!");
     };
@@ -124,16 +133,18 @@ const PromoteCoinForm = () => {
     const packages = PACKAGE_OPTIONS[paymentCurrency];
 
     return (
-        <div className="max-w-3xl mx-auto p-6 bg-gray-800 text-white rounded-lg shadow-lg">
+        <div className="max-w-full sm:max-w-3xl mx-auto p-4 sm:p-6 bg-gray-800 text-white rounded-lg shadow-lg">
             {/* Info Section */}
-            <div className="flex justify-between items-center mb-6">
+            <div className="flex flex-col sm:flex-row justify-between items-center mb-6 space-y-4 sm:space-y-0">
                 <InfoCard
                     icon={SearchIcon}
                     title="Get Visitors"
                     description="More than 75,000 views daily"
                 />
-                <div className="min-h-28 flex flex-wrap items-center justify-center space-x-2 border-white py-3 px-4 text-center rounded-lg w-[32%] border-2">
-                    <span className="text-xl font-semibold">Buy Boban</span>
+                <div className="min-h-28 flex flex-wrap items-center justify-center space-x-2 border-white py-3 px-4 text-center rounded-lg w-full sm:w-[32%] border-2">
+                    <span className="text-lg sm:text-xl font-semibold">
+                        Buy Boban
+                    </span>
                     <a
                         href="https://pancakeswap.finance/swap?outputCurrency=0x183d66384b0f2C099E622403b9CCe4B52B524334"
                         target="_blank"
@@ -143,8 +154,8 @@ const PromoteCoinForm = () => {
                         Buy on PancakeSwap
                     </a>
                 </div>
-                <div className="min-h-28 flex flex-wrap items-center justify-center space-x-2 border-white py-3 px-4 text-center rounded-lg w-[32%] border-2">
-                    <span className="text-xl font-semibold">
+                <div className="min-h-28 flex flex-wrap items-center justify-center space-x-2 border-white py-3 px-4 text-center rounded-lg w-full sm:w-[32%] border-2">
+                    <span className="text-lg sm:text-xl font-semibold">
                         Contact BB on Telegram
                     </span>
                     <a
@@ -163,13 +174,13 @@ const PromoteCoinForm = () => {
                 <label className="block text-sm mb-2">
                     Contract Address (BNB Chain)
                 </label>
-                <div className="bg-gray-700 p-3 rounded-lg flex items-center justify-between">
+                <div className="bg-gray-700 p-3 rounded-lg flex flex-col sm:flex-row items-center justify-between">
                     <code className="text-sm break-all">
                         0x183d66384b0f2c099e622403b9cce4b52b524334
                     </code>
                     <button
                         onClick={copyToClipboard}
-                        className="ml-2 px-3 py-1 bg-gray-600 rounded-md hover:bg-gray-500 transition-colors"
+                        className="mt-2 sm:mt-0 ml-0 sm:ml-2 px-3 py-1 bg-gray-600 rounded-md hover:bg-gray-500 transition-colors"
                     >
                         Copy
                     </button>
@@ -183,7 +194,9 @@ const PromoteCoinForm = () => {
                 </label>
                 <Autocomplete
                     options={availableTokens}
-                    getOptionLabel={(option) => `${option.name} (${option.symbol})`}
+                    getOptionLabel={(option) =>
+                        `${option.name} (${option.symbol})`
+                    }
                     renderInput={(params) => (
                         <TextField
                             {...params}
@@ -195,23 +208,23 @@ const PromoteCoinForm = () => {
                                 color: "white",
                                 "& .MuiOutlinedInput-root": {
                                     "& input": {
-                                        color: "white", // Input text color
+                                        color: "white",
                                     },
                                     "& fieldset": {
-                                        borderColor: "#555", // Customize border color
+                                        borderColor: "#555",
                                     },
                                     "&:hover fieldset": {
                                         borderColor: "#777",
                                     },
                                     "&.Mui-focused fieldset": {
-                                        borderColor: "#FFD700", // Focus border color (yellow)
+                                        borderColor: "#FFD700",
                                     },
                                 },
                                 "& .MuiInputLabel-root": {
-                                    color: "white", // Label color
+                                    color: "white",
                                 },
                                 "& .MuiAutocomplete-endAdornment svg": {
-                                    color: "white", // Arrow icon color
+                                    color: "white",
                                 },
                             }}
                         />
@@ -236,7 +249,7 @@ const PromoteCoinForm = () => {
                                 <Radio
                                     sx={{
                                         "&.Mui-checked": {
-                                            color: "#3B82F6", // blue-500
+                                            color: "#3B82F6",
                                         },
                                     }}
                                 />
@@ -289,11 +302,11 @@ const PromoteCoinForm = () => {
                         Please send <strong>{selectedPackage.value}</strong> to
                         the following BEP-20 wallet address:
                     </p>
-                    <div className="flex items-center justify-between bg-gray-600 p-2 rounded mt-2">
+                    <div className="flex flex-col sm:flex-row items-center justify-between bg-gray-600 p-2 rounded mt-2">
                         <span className="text-sm">{walletAddress}</span>
                         <button
                             onClick={copyToClipboard}
-                            className="ml-2 px-3 py-1 bg-gray-500 rounded hover:bg-gray-400 transition-colors"
+                            className="mt-2 sm:mt-0 ml-0 sm:ml-2 px-3 py-1 bg-gray-500 rounded hover:bg-gray-400 transition-colors"
                         >
                             Copy
                         </button>

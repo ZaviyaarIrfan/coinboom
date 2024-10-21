@@ -45,7 +45,7 @@ export default async function handler(req, res) {
     if (req.method === "GET") {
         try {
             // Fetch all coins from the database
-            const coins = await Coin.find({blockchain: 'arbitrum'});
+            const coins = await Coin.find({ blockchain: "arbitrum" });
             const coinAddresses = coins.map((coin) => coin.contractAddress); // Assuming each coin has a contractAddress field
 
             if (coinAddresses.length === 0) {
@@ -72,7 +72,27 @@ export default async function handler(req, res) {
                 const coinDataFromDex =
                     dexData[coin.contractAddress.toLowerCase()];
 
-                console.log(coinDataFromDex)    
+                if (coin.isPresale && coin.isPresale.toLowerCase() != 'no') {
+                    return {
+                        symbol: coin.symbol,
+                        name: coin.name,
+                        slug: coin.slug,
+                        volume_24h: coinDataFromDex?.volume?.h24 || 0,
+                        price: "Presale",
+                        percent_change_1h: "Presale",
+                        percent_change_6h: "Presale",
+                        percent_change_24h: "Presale",
+                        market_cap: coinDataFromDex?.marketCap,
+                        age: calculateCoinAge(coinDataFromDex.pairCreatedAt),
+                        lp: coinDataFromDex.liquidity.usd,
+                        isPromote: coin.isPromote,
+                        txn:
+                            coinDataFromDex.txns.h24.buys +
+                            coinDataFromDex.txns.h24.sells,
+                        image:
+                            coinDataFromDex?.info?.imageUrl || coin?.imageUrl,
+                    };
+                }
 
                 // If data is found from Dexscreener, use it; otherwise, use the data from the database
                 return {
@@ -80,23 +100,20 @@ export default async function handler(req, res) {
                     name: coin.name,
                     slug: coin.slug,
                     volume_24h: coinDataFromDex?.volume?.h24 || 0,
-                    price: coinDataFromDex?.priceUsd || "Presale",
-                    percent_change_1h:
-                        coinDataFromDex?.priceChange?.h1 || "Presale",
-                    percent_change_6h:
-                        coinDataFromDex?.priceChange?.h6 || "Presale",
-                    percent_change_24h: coinDataFromDex?.priceChange?.h24
-                        ? (coinDataFromDex.priceChange.h24 / 7).toFixed(2)
-                        : "Presale", // Assuming 7-day change is not directly available
+                    price: coinDataFromDex?.priceUsd,
+                    percent_change_1h: coinDataFromDex?.priceChange?.h1,
+                    percent_change_6h: coinDataFromDex?.priceChange?.h6,
+                    percent_change_24h: coinDataFromDex?.priceChange?.h24,
                     market_cap: coinDataFromDex?.marketCap,
                     age: calculateCoinAge(coinDataFromDex.pairCreatedAt),
                     lp: coinDataFromDex.liquidity.usd,
                     isPromote: coin.isPromote,
-                    txn: coinDataFromDex.txns.h24.buys + coinDataFromDex.txns.h24.sells,
+                    txn:
+                        coinDataFromDex.txns.h24.buys +
+                        coinDataFromDex.txns.h24.sells,
                     image: coinDataFromDex?.info?.imageUrl || coin?.imageUrl,
                 };
             });
-
             // Filter for coins with age less than 30 days
             const newCoins = coinsData.filter((coin) => coin.age.endsWith("d"));
 

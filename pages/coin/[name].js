@@ -3,7 +3,6 @@ import Navbar from "../../components/Navbar";
 import { useState, useEffect } from "react";
 import Footer from "../../components/Footer";
 import { useRouter } from "next/router";
-import Catson from "../../images/catson.png";
 import {
     Box,
     Grid,
@@ -15,8 +14,8 @@ import {
 import ContentCopyIcon from "@mui/icons-material/ContentCopy"; // For copy icon
 import Image from "next/image"; // For handling images/icons
 import ActionsCard from "../../components/ActionCard";
-import { storage } from '../../firebaseConfig';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { storage } from "../../firebaseConfig";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 export default function Home() {
     const [coinData, setCoinData] = useState(null);
@@ -201,25 +200,25 @@ export default function Home() {
                 />
 
                 <div
-                    className={`min-h-screen bg-gray-800 py-16 text-white ${
+                    className={`min-h-screen bg-gray-800 py-16 text-white transition-all duration-300 ${
                         isSidebarOpen ? "ml-64" : "ml-0"
                     }`}
                 >
-                    <div className="mx-auto pt-16 pb-8 px-4">
+                    <div className="container mx-auto pt-16 pb-8 px-4">
                         <Grid container spacing={4}>
                             {/* Left Sidebar / Main Chart Section */}
                             <Grid item xs={12} md={8}>
-                                <Box className="p-4 rounded-lg ">
+                                <Box className="p-4 rounded-lg bg-gray-900">
                                     {/* Coin Header Section */}
-                                    <Box className="flex items-center ">
+                                    <Box className="flex flex-col md:flex-row items-start md:items-center mb-4">
                                         {/* Coin Icon */}
-                                        <Box className="mr-2">
+                                        <Box className="mr-0 md:mr-2 mb-4 md:mb-0">
                                             <Image
-                                                src={coinData.imageUrl} // Update this with the correct path to the coin icon
+                                                src={coinData.imageUrl}
                                                 alt="Coin Icon"
                                                 width={70}
                                                 height={70}
-                                                className="rounded-[50%] "
+                                                className="rounded-full"
                                             />
                                         </Box>
                                         {/* Coin Name and Contract */}
@@ -227,18 +226,17 @@ export default function Home() {
                                             <Typography
                                                 variant="h4"
                                                 gutterBottom
+                                                className="text-xl sm:text-2xl"
                                             >
                                                 {coinData.name} (
-                                                {coinData.symbol}){" "}
-                                                {/* Coin name and symbol */}
+                                                {coinData.symbol})
                                             </Typography>
-                                            <Box className="flex items-center">
+                                            <Box className="flex flex-col sm:flex-row items-start sm:items-center">
                                                 <Typography
                                                     variant="body1"
-                                                    className="mr-2"
+                                                    className="text-[0.7rem] sm:text-base mr-2"
                                                 >
-                                                    {coinData.contractAddress}{" "}
-                                                    {/* Token contract address */}
+                                                    {coinData.contractAddress}
                                                 </Typography>
                                                 <Tooltip title="Copy Address">
                                                     <IconButton
@@ -246,6 +244,7 @@ export default function Home() {
                                                             handleCopyAddress
                                                         }
                                                         color="primary"
+                                                        size="small"
                                                     >
                                                         <ContentCopyIcon />
                                                     </IconButton>
@@ -253,24 +252,20 @@ export default function Home() {
                                             </Box>
                                         </Box>
                                     </Box>
-                                    {/* You can add more sections for displaying transaction data, charts, etc. */}
                                 </Box>
                             </Grid>
                             {/* Right Sidebar */}
                             <Grid item xs={12} md={4}>
                                 <ActionsCard />
-
-                                {/* Other components like ActionsCard, TokenStats, LinksCard, etc. */}
                             </Grid>
                         </Grid>
                     </div>
-                    {/* Additional content or components */}
-                    {/* Replace the existing Box with DEX Screener with this conditional rendering */}
-                    <Box className="bg-gray-900 min-h-screen p-4 rounded-lg w-full">
+
+                    <Box className="bg-gray-900 p-4 rounded-lg w-full">
                         {coinData.isPresale &&
-                        coinData.isPresale.toLowerCase() != "no" ? (
+                        coinData.isPresale.toLowerCase() !== "no" ? (
                             <div className="flex flex-col items-center justify-center space-y-4 p-8 text-center">
-                                <h2 className="text-2xl font-bold mb-2">
+                                <h2 className="text-xl sm:text-2xl font-bold mb-2">
                                     Presale Live
                                 </h2>
                                 <p className="text-gray-300">
@@ -282,7 +277,7 @@ export default function Home() {
                                     href={coinData.presaleLink}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="bg-blue-500 cursor-pointer hover:bg-blue-600 text-black font-bold py-2 px-6 rounded-lg flex items-center space-x-2 transition-colors duration-200"
+                                    className="bg-blue-500 hover:bg-blue-600 text-black font-bold py-2 px-4 sm:px-6 rounded-lg flex items-center space-x-2 transition-colors duration-200"
                                 >
                                     <span>Presale Link</span>
                                     <svg
@@ -299,13 +294,13 @@ export default function Home() {
                                     </svg>
                                 </a>
 
-                                <div className="mt-8 w-full max-w-2xl pt-8">
-                                    <h3 className="text-xl font-semibold mb-4 text-left">
+                                <div className="mt-8 w-full max-w-2xl">
+                                    <h3 className="text-lg sm:text-xl font-semibold mb-4">
                                         About {coinData.name}
                                     </h3>
                                     <p className="text-gray-300 text-left">
                                         {coinData.description ||
-                                            `${coinData.name} is the ultimate sports memeverse for all you degens! Whether youe're hyped about football, basketball, MMA, Dota 2, CS, or just love to sit back and enjoy the show, ${coinData.name} is where you belong. Dive into the one and only ${coinData.name} and find your crew!`}
+                                            `${coinData.name} is the ultimate sports memeverse for all you degens!`}
                                     </p>
                                 </div>
                             </div>
@@ -325,15 +320,17 @@ export default function Home() {
                             ></iframe>
                         )}
                     </Box>
+
                     <div className="flex justify-center mt-8 mb-4">
                         <button
                             onClick={() => setIsUpdateModalOpen(true)}
-                            className="bg-blue-500 w-full mx-20 hover:bg-blue-600 font-bold py-3 px-6 rounded-lg transition-colors duration-200"
+                            className="bg-blue-500 w-full max-w-sm mx-4 hover:bg-blue-600 font-bold py-3 px-6 rounded-lg transition-colors duration-200"
                         >
                             Submit Token Information Update
                         </button>
                     </div>
                 </div>
+
                 <Modal
                     open={isUpdateModalOpen}
                     onClose={() => setIsUpdateModalOpen(false)}
@@ -367,18 +364,18 @@ export default function Home() {
                                     Optimal dimensions 512×512px, size up to 1MB
                                 </p>
                                 <label
-                                htmlFor="logo-upload"
+                                    htmlFor="logo-upload"
                                     type="button"
-                                    className="w-full py-2 px-4 border border-blue-500 text-blue-500 rounded hover:bg-blue-500 hover:text-black transition-colors duration-200"       
+                                    className="w-full py-2 px-4 border border-blue-500 text-blue-500 rounded hover:bg-blue-500 hover:text-black transition-colors duration-200"
                                 >
                                     Upload
                                 </label>
                                 <input
-                                type="file"
-                                accept="image/*"
-                                onChange={handleLogoUpload}
-                                className="hidden"
-                                id="logo-upload"
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleLogoUpload}
+                                    className="hidden"
+                                    id="logo-upload"
                                 />
                             </div>
 
@@ -404,7 +401,6 @@ export default function Home() {
                                     className="w-full bg-[#2a2a2a] text-white rounded p-3"
                                     placeholder="https://yourwebsite.com/"
                                     onChange={handleInputChange}
-
                                 />
                             </div>
 
@@ -418,7 +414,6 @@ export default function Home() {
                                     className="w-full bg-[#2a2a2a] text-white rounded p-3"
                                     placeholder="Telegram"
                                     onChange={handleInputChange}
-
                                 />
                             </div>
 
@@ -432,7 +427,6 @@ export default function Home() {
                                     className="w-full bg-[#2a2a2a] text-white rounded p-3"
                                     placeholder="Twitter"
                                     onChange={handleInputChange}
-
                                 />
                             </div>
 
@@ -446,7 +440,6 @@ export default function Home() {
                                     className="w-full bg-[#2a2a2a] text-white rounded p-3"
                                     placeholder="Discord"
                                     onChange={handleInputChange}
-
                                 />
                             </div>
 

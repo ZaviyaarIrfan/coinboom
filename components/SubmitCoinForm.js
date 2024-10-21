@@ -47,15 +47,17 @@ const SubmitCoinForm = () => {
                 return;
             }
 
-            if(!formData.isPresale) {
+            if (!formData.isPresale) {
                 // Validate contract address on the selected blockchain
                 const isValidContract = await validateContractAddress();
                 if (!isValidContract) {
                     setLoading(false);
-                    alert("Invalid contract address for the selected blockchain.");
+                    alert(
+                        "Invalid contract address for the selected blockchain."
+                    );
                     return;
                 }
-            } 
+            }
 
             // Check if the coin already exists in the database
             const isCoinExists = await checkCoinExists();
@@ -67,7 +69,7 @@ const SubmitCoinForm = () => {
 
             setLoading(false);
         }
-        
+
         // Proceed to the next step if validations pass
         if (activeStep === 2) {
             await handleSubmit();
@@ -252,32 +254,38 @@ const SubmitCoinForm = () => {
     };
 
     return (
-        <div className="bg-gray-900 text-white p-8 rounded-lg shadow-lg">
+        <div className="bg-gray-900 text-white p-4 md:p-8 rounded-lg shadow-lg">
             <Typography
                 variant="h4"
-                className="text-blue-500 font-bold text-center mb-8"
+                className="text-blue-500 font-bold text-center mb-6 md:mb-8"
             >
                 Submit Coin
             </Typography>
-            <Stepper activeStep={activeStep} alternativeLabel className="mb-12">
+            <Stepper
+                activeStep={activeStep}
+                alternativeLabel
+                className="mb-8 md:mb-12 flex flex-col md:flex-row items-center"
+            >
                 {steps.map((label, index) => (
-                    <Step key={index}>
+                    <Step key={index} className="w-full md:w-auto">
                         <StepLabel>
                             <span className="text-blue-500 font-bold">
                                 {index + 1}.
                             </span>{" "}
-                            <span className="text-white">{label}</span>
+                            <span className="text-white text-sm md:text-base">
+                                {label}
+                            </span>
                         </StepLabel>
                     </Step>
                 ))}
             </Stepper>
 
-            <div className="mt-8">
+            <div className="mt-6 md:mt-8">
                 {activeStep === 0 && (
                     <div
-                        className={`grid grid-cols-1 ${
-                            !loading && "md:grid-cols-3"
-                        } gap-8`}
+                        className={`grid grid-cols-1 gap-8 ${
+                            !loading ? "md:grid-cols-3" : ""
+                        }`}
                     >
                         {loading ? (
                             <div className="w-full h-full bg-gray-900 bg-opacity-80 flex items-center justify-center z-50">
@@ -290,7 +298,7 @@ const SubmitCoinForm = () => {
                             <>
                                 {/* Left Section: Logo Upload */}
                                 <div className="md:col-span-1 flex flex-col items-center">
-                                    <div className="flex flex-col bg-gray-800 p-6 rounded-lg w-full">
+                                    <div className="flex flex-col bg-gray-800 p-4 sm:p-6 rounded-lg w-full">
                                         <Typography
                                             variant="body1"
                                             className="text-white mb-4"
@@ -345,7 +353,7 @@ const SubmitCoinForm = () => {
                                 {/* Right Section: Form Fields */}
                                 <div className="md:col-span-2">
                                     <div className="space-y-6">
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                             <FormControl fullWidth>
                                                 <Typography
                                                     variant="body2"
@@ -409,7 +417,8 @@ const SubmitCoinForm = () => {
                                                 />
                                             </FormControl>
                                         </div>
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                             <FormControl fullWidth>
                                                 <Typography
                                                     variant="body2"
@@ -451,6 +460,7 @@ const SubmitCoinForm = () => {
                                                 />
                                             </FormControl>
                                         </div>
+
                                         <FormControl fullWidth>
                                             <Typography
                                                 variant="body2"
@@ -474,6 +484,7 @@ const SubmitCoinForm = () => {
                                                 }}
                                             />
                                         </FormControl>
+
                                         <div>
                                             <Typography
                                                 variant="body2"
@@ -548,10 +559,10 @@ const SubmitCoinForm = () => {
                                                     />
                                                 </div>
 
-                                                <div className="mb4">
+                                                <div className="mb-4">
                                                     <Typography
                                                         variant="body2"
-                                                        className="text-white mb2 flex items-center"
+                                                        className="text-white mb-2 flex items-center"
                                                     >
                                                         Presale (Pinksale,
                                                         PumpFun, Moonshot etc.)
@@ -560,7 +571,6 @@ const SubmitCoinForm = () => {
                                                             "presaleUrl"
                                                         )}
                                                     </Typography>
-
                                                     <TextField
                                                         fullWidth
                                                         name="presaleUrl"
@@ -568,10 +578,10 @@ const SubmitCoinForm = () => {
                                                             formData.presaleUrl
                                                         }
                                                         onChange={handleChange}
-                                                        className="bg-gray800"
+                                                        className="bg-gray-800"
                                                         InputProps={{
-                                                            classNames:
-                                                                "textwhite",
+                                                            className:
+                                                                "text-white",
                                                         }}
                                                     />
                                                 </div>
@@ -585,22 +595,22 @@ const SubmitCoinForm = () => {
                 )}
 
                 {activeStep === 1 && (
-                    <div className="grid grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
                         {/* Left Section: Logo Display */}
-                        <div className="col-span-1 flex flex-col items-center">
+                        <div className="flex justify-center md:col-span-1">
                             <div className="bg-gray-800 p-4 rounded-full transition-transform duration-300 hover:scale-105">
                                 <Image
                                     height={30}
                                     width={30}
                                     src={URL.createObjectURL(selectedFile)}
                                     alt="Tron Logo"
-                                    className="w-40 h-40 rounded-full"
+                                    className="w-32 h-32 md:w-40 md:h-40 rounded-full"
                                 />
                             </div>
                         </div>
 
                         {/* Right Section: Links */}
-                        <div className="col-span-2">
+                        <div className="md:col-span-2">
                             <div className="space-y-4">
                                 {[
                                     "website",
@@ -638,21 +648,19 @@ const SubmitCoinForm = () => {
                 )}
 
                 {activeStep === 2 && (
-                    <div className="bg-gray-900 text-white p-6 rounded-lg shadow-lg">
-                        <div className="flex items-center mb-4">
-                            <div className="bg-red-600 rounded-full w-12 h-12 flex items-center justify-center mr-4">
+                    <div className="bg-gray-900 text-white p-4 md:p-6 rounded-lg shadow-lg">
+                        <div className="flex flex-col md:flex-row items-center mb-4">
+                            <div className="bg-red-600 rounded-full w-12 h-12 flex items-center justify-center mb-4 md:mb-0 md:mr-4">
                                 <Image
                                     className="w-8 h-8"
                                     src={URL.createObjectURL(selectedFile)}
                                     height={100}
                                     width={100}
                                     alt="coin"
-                                >
-                                    {/* <!-- Add your TRX icon SVG path here --> */}
-                                </Image>
+                                />
                             </div>
-                            <div>
-                                <h2 className="text-xl font-bold">
+                            <div className="text-center md:text-left">
+                                <h2 className="text-lg md:text-xl font-bold">
                                     {formData.name}
                                 </h2>
                                 <p className="text-gray-400">
@@ -665,149 +673,32 @@ const SubmitCoinForm = () => {
                             <p className="text-gray-400">
                                 Contract ({formData.blockchain})
                             </p>
-                            <p className="text-sm truncate">
+                            <p className="text-sm break-all">
                                 {formData.contractAddress}
                             </p>
                         </div>
 
                         <div className="mb-6">
                             <p className="text-gray-400">Description</p>
-                            <p>{formData.description}</p>
+                            <p className="text-sm md:text-base">
+                                {formData.description}
+                            </p>
                         </div>
-
-                        {/* 
-                        <div className="mb-6">
-                            <h3 className="font-bold mb-2">
-                                Choose Your Listing Option:
-                            </h3>
-                            <div className="flex space-x-4">
-                                
-                                <label
-                                    className={`flex items-center cursor-pointer bg-yellow-900 border border-yellow-600 rounded-lg p-4 transition-transform duration-300 ${
-                                        selectedOption === "free"
-                                            ? "bg-yellow-600"
-                                            : ""
-                                    }`}
-                                >
-                                    <input
-                                        type="radio"
-                                        name="listingOption"
-                                        value="free"
-                                        checked={selectedOption === "free"}
-                                        onChange={handleOptionChange}
-                                        className="hidden"
-                                    />
-                                    <span
-                                        className={`mr-2 rounded-full w-4 h-4 border border-yellow-500 ${
-                                            selectedOption === "free"
-                                                ? "bg-yellow-600"
-                                                : ""
-                                        }`}
-                                    ></span>
-                                    Free Listing
-                                </label>
-
-                                <label
-                                    className={`flex items-center cursor-pointer bg-yellow-900 border border-yellow-600 rounded-lg p-4 transition-transform duration-300 ${
-                                        selectedOption === "express"
-                                            ? "bg-yellow-600"
-                                            : ""
-                                    }`}
-                                >
-                                    <input
-                                        type="radio"
-                                        name="listingOption"
-                                        value="express"
-                                        checked={selectedOption === "express"}
-                                        onChange={handleOptionChange}
-                                        className="hidden"
-                                    />
-                                    <span
-                                        className={`mr-2 rounded-full w-4 h-4 border border-yellow-500 ${
-                                            selectedOption === "express"
-                                                ? "bg-yellow-600"
-                                                : ""
-                                        }`}
-                                    ></span>
-                                    Express Listing
-                                </label>
-                            </div>
-                        </div>
-                        
-                        */}
-
-                        {/* Free Listing Details */}
-                        {/* {selectedOption === "free" && (
-                            <div id="free-listing-info" className="mb-6">
-                                <h3 className="font-bold mb-2">
-                                    Free Listing:
-                                </h3>
-                                <p>
-                                    Your review request will be reviewed by our
-                                    review team and will be accepted within 24
-                                    hours at the latest. If you have any
-                                    questions, please feel free to contact us.
-                                </p>
-                            </div>
-                        )} */}
-
-                        {/* Express Listing Details */}
-                        {/* {selectedOption === "express" && (
-                            <div id="express-listing-info" className="mb-6">
-                                <h3 className="font-bold mb-2">
-                                    Express Listing:
-                                </h3>
-                                <p>
-                                    Your token is instantly listed on the
-                                    coinboom.net platform in a few minutes after
-                                    you complete the crypto payment.
-                                </p>
-                                <p className="font-bold mb-2">
-                                    Additional benefits of Express Listing:
-                                </p>
-                                <ul className="list-disc list-inside text-sm">
-                                    <li>
-                                        Your token gets listed instantly,
-                                        skipping the queue. Be seen right away!
-                                    </li>
-                                    <li>
-                                        +500 Votes and 125 Promoted Listings
-                                    </li>
-                                </ul>
-                                <p className="font-bold mt-4 mb-2">
-                                    Multiple Crypto Payment options:
-                                </p>
-                                <ul className="space-y-2">
-                                    <li className="flex items-center">
-                                        <div className="w-4 h-4 bg-blue-500 rounded-full mr-2"></div>
-                                        <span>0.2 BNB</span>
-                                    </li>
-                                    <li className="flex items-center">
-                                        <div className="w-4 h-4 bg-blue-300 rounded-full mr-2"></div>
-                                        <span>0.003 ETH</span>
-                                    </li>
-                                    <li className="flex items-center">
-                                        <div className="w-4 h-4 bg-green-400 rounded-full mr-2"></div>
-                                        <span>0.3 SOL</span>
-                                    </li>
-                                </ul>
-                            </div>
-                        )} */}
                     </div>
                 )}
 
                 {/* Navigation Buttons */}
-                <div className="flex justify-between mt-12">
+                <div className="flex flex-col md:flex-row justify-between mt-12 space-y-4 md:space-y-0 md:space-x-4">
                     <Button
                         disabled={activeStep === 0}
                         onClick={handleBack}
-                        className="bg-gray-700 hover:bg-gray-600 text-white px-6 py-2"
+                        className="bg-gray-700 hover:bg-gray-600 text-white px-6 py-2 w-full md:w-auto"
                     >
                         <span className="text-white">Back</span>
                     </Button>
                     <Button
                         onClick={handleNext}
-                        className="bg-blue-500 hover:bg-blue-600 text-black px-6 py-2"
+                        className="bg-blue-500 hover:bg-blue-600 text-black px-6 py-2 w-full md:w-auto"
                     >
                         {activeStep === steps.length - 1 ? "Finish" : "Next"}
                     </Button>

@@ -7,7 +7,6 @@ import Footer from "../components/Footer";
 import Banner from "../components/Banner";
 import PromoteTable from "../components/PromoteTable";
 
-
 export default function Home() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
@@ -57,20 +56,24 @@ export default function Home() {
                     toggleSidebar={toggleSidebar}
                 />
                 <div
-                    className={`min-h-screen bg-black text-white p-6 pt-20 transition-all duration-300 ${
+                    className={`min-h-screen bg-black text-white p-4 sm:p-6 pt-16 sm:pt-20 transition-all duration-300 ${
                         isSidebarOpen ? "ml-64" : "ml-0"
                     }`}
                 >
                     <Banner />
-                    <h2 className="text-2xl font-bold mb-3">Promoted Coins</h2>
+                    <h2 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-3">
+                        Promoted Coins
+                    </h2>
                     <PromoteTable />
-                    <h2 className="text-2xl font-bold my-4">Trending Coins</h2>
+                    <h2 className="text-xl sm:text-2xl font-bold my-3 sm:my-4">
+                        Trending Coins
+                    </h2>
                     <TrendingNavigation />
                     <CoinsTable coinsData={cryptoStats} />
                 </div>
             </main>
             <div
-                className={` transition-all duration-300 ${
+                className={`transition-all duration-300 ${
                     isSidebarOpen ? "ml-64" : "ml-0"
                 }`}
             >

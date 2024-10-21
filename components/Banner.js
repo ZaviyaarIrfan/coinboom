@@ -12,41 +12,86 @@ const Banner = () => {
         slidesToScroll: 1,
         autoplay: true,
         autoplaySpeed: 3000,
+        responsive: [
+            {
+                breakpoint: 1024,
+                settings: { arrows: true, dots: true },
+            },
+            {
+                breakpoint: 768,
+                settings: { arrows: false, dots: true },
+            },
+        ],
     };
 
-    const banners = [
-        { src: "https://designshifu.com/wp-content/uploads/2022/11/Ad-banner-design-ideas-examples-that-get-the-maximum-clicks-1536x768.jpg", alt: "Banner 1" },
-        { src: "https://designshifu.com/wp-content/uploads/2022/11/Ad-banner-design-ideas-examples-that-get-the-maximum-clicks-1536x768.jpg", alt: "Banner 2" },
-        { src: "https://designshifu.com/wp-content/uploads/2022/11/Ad-banner-design-ideas-examples-that-get-the-maximum-clicks-1536x768.jpg", alt: "Banner 3" },
+    const desktopBanners = [
+        {
+            src: "https://betfury.io/images/pages/main/slider/slide-1@2x.webp",
+            alt: "Desktop Banner 1",
+        },
+        {
+            src: "https://designshifu.com/wp-content/uploads/2022/11/Ad-banner-design-ideas-examples-that-get-the-maximum-clicks-1536x768.jpg",
+            alt: "Desktop Banner 2",
+        },
+    ];
+
+    const mobileBanners = [
+        {
+            src: "/betfury.png",
+            alt: "Mobile Banner 1",
+        },
+        {
+            src: "/faucetPay.png",
+            alt: "Mobile Banner 2",
+        },
+        {
+            src: "/freeBitcoin.jpeg",
+            alt: "Mobile Banner 3",
+        },
     ];
 
     return (
-        <div className="mb-6">
+        <div className="mb-4 sm:mb-6">
             {/* Desktop Slider */}
             <div className="hidden md:block">
-                <Slider {...settings} className="mx-4">
-                    {banners.map((banner, index) => (
-                        <div key={index}>
+                <Slider {...settings} className="mx-2 sm:mx-4">
+                    {desktopBanners.map((banner, index) => (
+                        <div
+                            key={index}
+                            className="relative w-full h-[400px] sm:h-[500px] overflow-hidden"
+                        >
                             <Image
                                 src={banner.src}
                                 alt={banner.alt}
-                                width={800}
-                                height={200}
-                                className="flex justify-center mx-auto"
+                                layout="fill"
+                                objectFit="cover"
+                                className="rounded-lg"
+                                priority={index === 0}
                             />
                         </div>
                     ))}
                 </Slider>
             </div>
-            {/* Mobile Single Image */}
-            <div className="block md:hidden">
-                <Image
-                    src={banners[0].src}
-                    alt={banners[0].alt}
-                    width={1200}
-                    height={300}
-                    className="w-full h-auto"
-                />
+
+            {/* Mobile Slider */}
+            <div className="block md:hidden px-2">
+                <Slider {...settings}>
+                    {mobileBanners.map((banner, index) => (
+                        <div
+                            key={index}
+                            className="relative w-full aspect-[16/9] overflow-hidden"
+                        >
+                            <Image
+                                src={banner.src}
+                                alt={banner.alt}
+                                layout="fill"
+                                objectFit="contain"
+                                className="rounded-lg"
+                                priority={index === 0}
+                            />
+                        </div>
+                    ))}
+                </Slider>
             </div>
         </div>
     );
