@@ -3,77 +3,109 @@ import Coin from "../../../models/Coin";
 import axios from "axios";
 import dayjs from "dayjs"; // For date manipulation
 
-// Helper to fetch stats from CoinMarketCap
-async function getCryptoStatsBySymbols(coinSymbols) {
+// Function to get data from Dexscreener
+async function getCryptoStatsByAddresses(coinAddresses) {
     try {
-        const symbols = coinSymbols.join(",");
-        const url = `https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest`;
-
-        const response = await axios.get(url, {
-            headers: {
-                "X-CMC_PRO_API_KEY": "fad3c46a-34f5-408e-b9cb-720519b3cfad", // Replace with your API key
-            },
-            params: { symbol: symbols, convert: "USD" },
+        const promises = coinAddresses.map(async (address) => {
+            const url = `https://api.dexscreener.com/latest/dex/search?q=${address}`;
+            const response = await axios.get(url);
+            return response.data.pairs.length > 0
+                ? response.data.pairs[0]
+                : null;
         });
 
-        return Object.values(response.data.data);
+        const statsArray = await Promise.all(promises);
+        return statsArray.filter((stat) => stat !== null); // Filter out any null results
     } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching crypto data from Dexscreener:", error);
         return null;
     }
 }
 
-// Helper to calculate coin age
-function isNewCoin(createdAt) {
+// Function to calculate the coin's age
+function calculateCoinAge(createdAt) {
     const now = dayjs();
     const creationDate = dayjs(createdAt);
-    return now.diff(creationDate, "day") < 30; // Returns true if less than 30 days old
+    const ageInDays = now.diff(creationDate, "day");
+
+    if (ageInDays < 30) {
+        return `${ageInDays}d`;
+    } else if (ageInDays < 365) {
+        const months = Math.floor(ageInDays / 30);
+        return `${months}mo`;
+    } else {
+        const years = Math.floor(ageInDays / 365);
+        return `${years}y`;
+    }
 }
 
-// API Handler Logic
 export default async function handler(req, res) {
     await dbConnect();
 
-    if (req.method !== "GET") {
-        return res.status(405).json({ message: "Method not allowed" });
-    }
+    if (req.method === "GET") {
+        try {
+            // Fetch all coins from the database
+            const coins = await Coin.find({blockchain: 'ETH'});
+            const coinAddresses = coins.map((coin) => coin.contractAddress); // Assuming each coin has a contractAddress field
 
-    try {
-        // Query for coins by 'ethereum' and check their creation age
-        const coins = await Coin.find({ blockchain: 'ETH' });
+            if (coinAddresses.length === 0) {
+                return res
+                    .status(404)
+                    .json({ message: "No coins found in the database" });
+            }
 
-        const newCoins = coins.filter((coin) => isNewCoin(coin.createdAt));
-        const coinSymbols = newCoins.map((coin) => coin.symbol.toUpperCase());
+            // Get Dexscreener data for the addresses
+            const stats = await getCryptoStatsByAddresses(coinAddresses);
 
-        if (coinSymbols.length === 0) {
-            return res.status(404).json({ message: "No new coins found" });
-        }
+            // Create a dictionary for quick lookup
+            const dexData = stats
+                ? Object.fromEntries(
+                      stats.map((stat) => [
+                          stat.baseToken.address.toLowerCase(),
+                          stat,
+                      ])
+                  )
+                : {};
 
-        const stats = await getCryptoStatsBySymbols(coinSymbols);
+            // Map through the coins from the database and check if data is available from Dexscreener
+            const coinsData = coins.map((coin) => {
+                const coinDataFromDex =
+                    dexData[coin.contractAddress.toLowerCase()];
 
-        if (stats) {
-            const result = stats.map((stat) => {
-                const coin = newCoins.find(
-                    (c) => c.symbol.toUpperCase() === stat.symbol
-                );
+                console.log(coinDataFromDex)    
 
+                // If data is found from Dexscreener, use it; otherwise, use the data from the database
                 return {
-                    ...stat,
-                    image: `https://s2.coinmarketcap.com/static/img/coins/64x64/${stat.id}.png`,
-                    age: coin
-                        ? `${dayjs().diff(coin.createdAt, "day")}d`
-                        : "--",
+                    symbol: coin.symbol,
+                    name: coin.name,
+                    slug: coin.slug,
+                    volume_24h: coinDataFromDex?.volume?.h24 || 0,
+                    price: coinDataFromDex?.priceUsd || "Presale",
+                    percent_change_1h:
+                        coinDataFromDex?.priceChange?.h1 || "Presale",
+                    percent_change_6h:
+                        coinDataFromDex?.priceChange?.h6 || "Presale",
+                    percent_change_24h: coinDataFromDex?.priceChange?.h24
+                        ? (coinDataFromDex.priceChange.h24 / 7).toFixed(2)
+                        : "Presale", // Assuming 7-day change is not directly available
+                    market_cap: coinDataFromDex?.marketCap,
+                    age: calculateCoinAge(coinDataFromDex.pairCreatedAt),
+                    lp: coinDataFromDex.liquidity.usd,
+                    isPromote: coin.isPromote,
+                    txn: coinDataFromDex.txns.h24.buys + coinDataFromDex.txns.h24.sells,
+                    image: coinDataFromDex?.info?.imageUrl || coin?.imageUrl,
                 };
             });
 
-            return res.status(200).json(result);
-        } else {
-            return res
-                .status(500)
-                .json({ error: "Failed to fetch coin stats" });
+            // Filter for coins with age less than 30 days
+            const newCoins = coinsData.filter((coin) => coin.age.endsWith("d"));
+
+            return res.status(200).json(newCoins);
+        } catch (error) {
+            console.error("Error querying database:", error);
+            return res.status(500).json({ error: "Error querying database" });
         }
-    } catch (error) {
-        console.error("Error querying database:", error);
-        return res.status(500).json({ error: "Database query failed" });
+    } else {
+        res.status(405).json({ message: "Method not allowed" });
     }
 }

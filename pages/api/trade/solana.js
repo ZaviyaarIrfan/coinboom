@@ -3,33 +3,21 @@ import Coin from "../../../models/Coin";
 import axios from "axios";
 import dayjs from "dayjs"; // Use dayjs for date manipulation
 
-// Function to get CoinMarketCap data
-async function getCryptoStatsBySymbols(coinSymbols) {
+// Function to get data from Dexscreener
+async function getCryptoStatsByAddresses(coinAddresses) {
     try {
-        const symbols = coinSymbols.join(",");
-
-        const url = `https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest`;
-
-        const response = await axios.get(url, {
-            headers: {
-                "X-CMC_PRO_API_KEY": "fad3c46a-34f5-408e-b9cb-720519b3cfad",
-            },
-            params: {
-                symbol: symbols,
-                convert: "USD",
-            },
+        const promises = coinAddresses.map(async (address) => {
+            const url = `https://api.dexscreener.com/latest/dex/search?q=${address}`;
+            const response = await axios.get(url);
+            return response.data.pairs.length > 0
+                ? response.data.pairs[0]
+                : null;
         });
 
-        const data = response.data.data;
-
-        // Process the response to extract key stats for each coin
-        const statsArray = Object.keys(data).map((key) => ({
-            ...data[key],
-        }));
-
-        return statsArray;
+        const statsArray = await Promise.all(promises);
+        return statsArray.filter((stat) => stat !== null); // Filter out any null results
     } catch (error) {
-        console.error("Error fetching crypto data from CoinMarketCap:", error);
+        console.error("Error fetching crypto data from Dexscreener:", error);
         return null;
     }
 }
@@ -56,43 +44,62 @@ export default async function handler(req, res) {
 
     if (req.method === "GET") {
         try {
-            const coins = await Coin.find({ blockchain: 'SOL' });
-            const coinSymbols = coins.map((coin) => coin.symbol.toUpperCase());
+            const coins = await Coin.find({ blockchain: "SOL" });
+            const coinAddresses = coins.map((coin) => coin.contractAddress);
 
-            if (coinSymbols.length === 0) {
+            if (coinAddresses.length === 0) {
                 return res
                     .status(404)
                     .json({ message: "No coins found in the database" });
             }
 
-            const stats = await getCryptoStatsBySymbols(coinSymbols);
+            const stats = await getCryptoStatsByAddresses(coinAddresses);
 
-            if (stats) {
-                // Add coin age and image URL
-                const statsWithAge = stats.map((stat) => {
-                    const coin = coins.find(
-                        (c) => c.symbol.toUpperCase() === stat.symbol
-                    );
+            // Create a dictionary for quick lookup
+            const dexData = stats
+                ? Object.fromEntries(
+                      stats.map((stat) => [
+                          stat.baseToken.address.toLowerCase(),
+                          stat,
+                      ])
+                  )
+                : {};
 
-                    return {
-                        ...stat,
-                        isPromote: coin?.isPromote || false,
-                        image: `https://s2.coinmarketcap.com/static/img/coins/64x64/${stat.id}.png`,
-                        age: coin ? calculateCoinAge(coin.createdAt) : "--",
-                    };
-                });
+            // Map through the coins from the database and check if data is available from Dexscreener
+            const coinsData = coins.map((coin) => {
+                const coinDataFromDex =
+                    dexData[coin.contractAddress.toLowerCase()];
 
-                // Sort coins by 24-hour trading volume in descending order
-                const mostTradedCoins = statsWithAge.sort(
-                    (a, b) => b.quote.USD.volume_24h - a.quote.USD.volume_24h
-                );
+                console.log(coinDataFromDex);
 
-                return res.status(200).json(mostTradedCoins);
-            } else {
-                return res
-                    .status(500)
-                    .json({ error: "Error fetching stats from CoinMarketCap" });
-            }
+                // If data is found from Dexscreener, use it; otherwise, use the data from the database
+                return {
+                    symbol: coin.symbol,
+                    name: coin.name,
+                    slug: coin.slug,
+                    volume_24h: coinDataFromDex?.volume?.h24 || 0,
+                    price: coinDataFromDex?.priceUsd || "Presale",
+                    percent_change_1h:
+                        coinDataFromDex?.priceChange?.h1 || "Presale",
+                    percent_change_6h:
+                        coinDataFromDex?.priceChange?.h6 || "Presale",
+                    percent_change_24h: coinDataFromDex?.priceChange?.h24
+                        ? (coinDataFromDex.priceChange.h24 / 7).toFixed(2)
+                        : "Presale", // Assuming 7-day change is not directly available
+                    market_cap: coinDataFromDex?.marketCap,
+                    age: calculateCoinAge(coinDataFromDex.pairCreatedAt),
+                    lp: coinDataFromDex.liquidity.usd,
+                    isPromote: coin.isPromote,
+                    txn: coinDataFromDex.txns.h24.buys + coinDataFromDex.txns.h24.sells,
+                    image: coinDataFromDex?.info?.imageUrl || coin?.imageUrl,
+                };
+            });
+
+            const mostTraded = coinsData.sort(
+                (a, b) => b.volume_24h - a.volume_24h
+            );
+
+            return res.status(200).json(mostTraded);
         } catch (error) {
             console.error("Error querying database:", error);
             return res.status(500).json({ error: "Error querying database" });

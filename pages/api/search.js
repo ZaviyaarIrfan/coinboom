@@ -27,8 +27,7 @@ export default async function handler(req, res) {
         if (!coins || coins.length === 0) {
             return res.status(200).json([]);
         }
-
-        console.log(coins);
+        
         // Map the data to return only relevant information
         const results = coins.map((coin) => ({
             id: coin.name.toLowerCase().split(" ").join("-"),

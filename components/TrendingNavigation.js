@@ -18,29 +18,32 @@ const TrendingNavigation = () => {
 
     const NetworkIcons = () => (
         <div className="flex items-center space-x-2">
-            <Link
-                href={`${currentPath}/binance`}
-                className="bg-gray-700 p-1 rounded"
-            >
-                <Image src={binanceIcon} height={18} width={18} alt="binance" />
-            </Link>
-            <Link
-                href={`${currentPath}/ethereum`}
-                className="bg-gray-700 p-1 rounded"
-            >
-                <Image
-                    src={ethereumIcon}
-                    height={18}
-                    width={18}
-                    alt="ethereum"
-                />
-            </Link>
-            <Link
-                href={`${currentPath}/solana`}
-                className="bg-gray-700 p-1 rounded"
-            >
-                <Image src={solanaIcon} height={18} width={18} alt="solana" />
-            </Link>
+            {["binance", "ethereum", "solana"].map((network) => {
+                // If the current path contains any network, replace it with the clicked one
+                const basePath = currentPath.replace(/\/(binance|ethereum|solana)/, "");
+                const href = `${basePath}/${network}`;
+
+                return (
+                    <Link
+                        key={network}
+                        href={href}
+                        className="bg-gray-700 p-1 rounded"
+                    >
+                        <Image
+                            src={
+                                network === "binance"
+                                    ? binanceIcon
+                                    : network === "ethereum"
+                                    ? ethereumIcon
+                                    : solanaIcon
+                            }
+                            height={18}
+                            width={18}
+                            alt={network}
+                        />
+                    </Link>
+                );
+            })}
         </div>
     );
 
@@ -49,12 +52,17 @@ const TrendingNavigation = () => {
     return (
         <div className="bg-gray-900 text-white p-1 rounded-md mb-4">
             <div className="flex space-x-4">
-                {["trending", "hot", "new", "gainers", "watchlist"].map(
+                {["trending", "hot", "new", "gainers"].map(
                     (tab) => (
-                        <Link key={tab} href={`/${tab == 'hot' ? 'trade' : tab}`}>
+                        <Link
+                            key={tab}
+                            href={`/${tab == "hot" ? "trade" : tab}`}
+                        >
                             <div
                                 className={`flex items-center space-x-2 px-2 py-1 rounded-md ${
-                                    currentPath.includes(`/${tab == 'hot' ? 'trade' : tab}`)
+                                    currentPath.includes(
+                                        `/${tab == "hot" ? "trade" : tab}`
+                                    )
                                         ? "bg-blue-500 text-black"
                                         : ""
                                 }`}
@@ -69,7 +77,9 @@ const TrendingNavigation = () => {
                                 <span className="font-bold capitalize">
                                     {tab}
                                 </span>
-                                {currentPath.includes(`/${tab == 'hot' ? 'trade' : tab}`) && <NetworkIcons />}
+                                {currentPath.includes(
+                                    `/${tab == "hot" ? "trade" : tab}`
+                                ) && <NetworkIcons />}
                             </div>
                         </Link>
                     )

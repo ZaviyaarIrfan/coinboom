@@ -26,16 +26,6 @@ const formatVolume = (volume) => {
     return num > 1000 ? `${(num / 1000).toFixed(1)}k` : num.toString();
 };
 
-// Function to get the color for change percentage
-const getChangeColor = (change) => {
-    if (change.includes && change.includes("-")) {
-        return "text-red-500";
-    } else if (change === "--") {
-        return "text-gray-500";
-    }
-    return "text-green-500";
-};
-
 export default function CoinsTable({ coinsData }) {
     // State for pagination
     const [currentPage, setCurrentPage] = useState(1);
@@ -70,7 +60,7 @@ export default function CoinsTable({ coinsData }) {
                                 Age
                             </TableCell>
                             <TableCell className="text-white font-bold text-[0.95rem] py-1">
-                                TXN
+                                TXN 24h
                             </TableCell>
                             <TableCell className="text-white font-bold text-[0.95rem] py-1">
                                 Volume
@@ -127,78 +117,92 @@ export default function CoinsTable({ coinsData }) {
                                     </Link>
                                 </TableCell>
                                 <TableCell className="text-white">
-                                    {coin?.quote?.USD?.price
-                                        ? "$" +
-                                          parseFloat(coin.quote.USD.price)
-                                              .toFixed(5)
-                                              .replace(/\.?0+$/, "")
+                                    {coin?.price
+                                        ? coin.price.toString().toLowerCase() ==
+                                          "presale"
+                                            ? coin.price
+                                            : "$" +
+                                              parseFloat(coin.price)
+                                                  .toFixed(5)
+                                                  .replace(/\.?0+$/, "")
                                         : "--"}
                                 </TableCell>
                                 <TableCell className="text-white">
                                     {coin.age || "--"}
                                 </TableCell>
                                 <TableCell className="text-white">
-                                    {"--"} {/* TXN not provided */}
+                                    {coin.txn || "--"} 
                                 </TableCell>
                                 <TableCell className="text-white">
-                                    {coin?.quote?.USD?.volume_24h
-                                        ? "$" +
-                                          formatVolume(
-                                              coin?.quote?.USD?.volume_24h
-                                          )
-                                        : "--"}
+                                    {coin?.volume_24h == 0
+                                        ? "$0"
+                                        : "$" + formatVolume(coin?.volume_24h)}
                                 </TableCell>
                                 <TableCell
                                     className={clsx(
-                                        coin?.quote?.USD?.percent_change_1h >= 0
+                                        typeof coin?.percent_change_1h ==
+                                            "number" &&
+                                            coin?.percent_change_1h >= 0
                                             ? "text-green-500"
                                             : "text-red-500"
                                     )}
                                 >
-                                    {coin?.quote?.USD?.percent_change_1h
-                                        ? coin?.quote?.USD?.percent_change_1h.toFixed(
-                                              2
-                                          ) + "%"
+                                    {coin?.percent_change_1h
+                                        ? coin?.percent_change_1h
+                                              .toString()
+                                              .toLowerCase() == "presale"
+                                            ? coin?.percent_change_1h
+                                            : coin?.percent_change_1h.toFixed(
+                                                  2
+                                              ) + "%"
                                         : "--"}
                                 </TableCell>
 
                                 <TableCell
                                     className={clsx(
-                                        coin?.quote?.USD?.percent_change_1h >= 0
+                                        typeof coin?.percent_change_6h ==
+                                            "number" &&
+                                            coin?.percent_change_6h >= 0
                                             ? "text-green-500"
                                             : "text-red-500"
                                     )}
                                 >
-                                    {coin?.quote?.USD?.percent_change_24h
-                                        ? coin?.quote?.USD?.percent_change_24h.toFixed(
-                                              2
-                                          ) + "%"
+                                    {coin?.percent_change_6h
+                                        ? coin?.percent_change_6h
+                                              .toString()
+                                              .toLowerCase() == "presale"
+                                            ? coin?.percent_change_6h
+                                            : coin?.percent_change_6h.toFixed(
+                                                  2
+                                              ) + "%"
                                         : "--"}
                                 </TableCell>
 
                                 <TableCell
                                     className={clsx(
-                                        coin?.quote?.USD?.percent_change_1h >= 0
+                                        typeof coin?.percent_change_24h ==
+                                            "number" &&
+                                            coin?.percent_change_24h >= 0
                                             ? "text-green-500"
                                             : "text-red-500"
                                     )}
                                 >
-                                    {coin?.quote?.USD?.percent_change_7d
-                                        ? coin?.quote?.USD?.percent_change_7d.toFixed(
-                                              2
-                                          ) + "%"
+                                    {coin?.percent_change_24h
+                                        ? coin?.percent_change_24h
+                                              .toString()
+                                              .toLowerCase() == "presale"
+                                            ? coin?.percent_change_24h
+                                            : coin?.percent_change_24h + "%"
                                         : "--"}
                                 </TableCell>
                                 <TableCell className="text-white">
-                                    {"--"}
+                                    {coin?.lp || coin?.lp == 0
+                                        ? "$" + formatVolume(coin?.lp)
+                                        : "--"}
                                 </TableCell>
                                 <TableCell className="text-white">
-                                    {coin?.quote?.USD?.market_cap ||
-                                    coin?.quote?.USD?.market_cap == 0
-                                        ? "$" +
-                                          formatVolume(
-                                              coin?.quote?.USD?.market_cap
-                                          )
+                                    {coin?.market_cap || coin?.market_cap == 0
+                                        ? "$" + formatVolume(coin?.market_cap)
                                         : "--"}
                                 </TableCell>
                             </TableRow>

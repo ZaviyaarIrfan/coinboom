@@ -12,13 +12,12 @@ export default function Home() {
     const [cryptoStats, setCryptoStats] = useState([]);
 
     const fetchCryptoStats = async () => {
-        try {
+        try {   
             const response = await fetch("/api/new");
             const data = await response.json();
 
             if (response.ok) {
                 setCryptoStats(data);
-                console.log("Crypto Stats:", data);
             } else {
                 console.error("Error fetching crypto stats:", data.error);
             }
