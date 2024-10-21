@@ -40,6 +40,11 @@ const PromoteCoinForm = () => {
     const [selectedPackage, setSelectedPackage] = useState(
         PACKAGE_OPTIONS.BB[0]
     );
+    function generateDateNDaysAfter(n) {
+        const today = new Date(); // Get today's date
+        today.setDate(today.getDate() + n); // Add n days to today's date
+        return today.toISOString().split('T')[0]; // Return in YYYY-MM-DD format
+      }
     const [paymentCurrency] = useState("BB");
     const [isPaymentVisible, setIsPaymentVisible] = useState(false);
     const [qrLoaded, setQrLoaded] = useState(false);
@@ -115,6 +120,7 @@ const PromoteCoinForm = () => {
             const updatedToken = {
                 ...selectedToken,
                 isPromote: true,
+                promoteTime: generateDateNDaysAfter(selectedPackage.day)
             };
             await axios.put(`/api/coins?id=${selectedToken._id}`, updatedToken);
         } catch (error) {
