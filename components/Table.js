@@ -59,6 +59,7 @@ export default function CoinsTable({ coinsData }) {
                         <TableContainer
                             component={Paper}
                             className="bg-black text-white"
+                            sx={{color: 'white'}}
                         >
                             <Table>
                                 <TableHead>
