@@ -1,4 +1,4 @@
-import dbConnect from '../../utils/dbConnect'; // Database connection utility
+import dbConnect from '../../lib/mongodb'; // Database connection utility
 import Coin from '../../models/Coin'; // Mongoose Coin model
 
 // Connect to the database
