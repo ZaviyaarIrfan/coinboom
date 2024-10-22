@@ -50,7 +50,7 @@ export default async function handler(req, res) {
             if (coinAddresses.length === 0) {
                 return res
                     .status(200)
-                    .json({ message: "No coins found in the database" });
+                    .json(coinAddresses);
             }
 
             const stats = await getCryptoStatsByAddresses(coinAddresses);

@@ -84,7 +84,7 @@ export default function PromoteTable() {
         setCurrentPage(value);
     };
 
-    const isLoading = !currentCoins || currentCoins.length === 0;
+    const isLoading = !currentCoins;
 
     return (
         <>
