@@ -108,9 +108,9 @@ export default function Navbar({ isSidebarOpen, toggleSidebar }) {
                         className="text-blue-500 text-xl sm:text-2xl mr-2 sm:mr-4 cursor-pointer"
                         onClick={toggleSidebar}
                     />
-                    <h1 className="text-blue-500 text-xl sm:text-2xl font-bold">
+                    <Link href={'/'} className="text-blue-500 text-xl sm:text-2xl font-bold">
                         Bob<span className="text-white">an</span>
-                    </h1>
+                    </Link>
                 </div>
 
                 {/* Search Bar */}
