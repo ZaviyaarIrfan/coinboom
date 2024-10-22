@@ -53,7 +53,7 @@ export default function PromoteTable() {
         try {
             const response = await fetch("/api/get-all-stats-1");
             const data = await response.json();
-            const filteredData = data.filter((coin) => coin.isPromote && isFutureDate(coin.promoteTime));
+            const filteredData = data && data.filter((coin) => coin.isPromote && isFutureDate(coin.promoteTime));
 
             if (response.ok) {
                 setcoinsData(filteredData);
