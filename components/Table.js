@@ -182,8 +182,8 @@ export default function CoinsTable({ coinsData }) {
                                                         "number" &&
                                                         coin?.percent_change_1h >=
                                                             0
-                                                        ? "text-green-500"
-                                                        : "text-red-500"
+                                                        ? "text-green-500 !important"
+                                                        : "text-red-500 !important"
                                                 )}
                                             >
                                                 {coin?.percent_change_1h
@@ -204,8 +204,8 @@ export default function CoinsTable({ coinsData }) {
                                                         "number" &&
                                                         coin?.percent_change_6h >=
                                                             0
-                                                        ? "text-green-500"
-                                                        : "text-red-500"
+                                                        ? "text-green-500 !important"
+                                                        : "text-red-500 !important"
                                                 )}
                                             >
                                                 {coin?.percent_change_6h
@@ -226,8 +226,8 @@ export default function CoinsTable({ coinsData }) {
                                                         "number" &&
                                                         coin?.percent_change_24h >=
                                                             0
-                                                        ? "text-green-500"
-                                                        : "text-red-500"
+                                                        ? "text-green-500 !important"
+                                                        : "text-red-500 !important"
                                                 )}
                                             >
                                                 {coin?.percent_change_24h
