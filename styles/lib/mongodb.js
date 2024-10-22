@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 // const MONGODB_URI = 'mongodb+srv://aza-e-hussain:cz9Am1Y4VJHrf8ZY@cluster0.oakgoec.mongodb.net/localmetalrecyclerscontact';
-const MONGODB_URI = "mongodb+srv://admin:MqMkFqgVYNnTHkLS@cluster0.y643c.mongodb.net/boban";
+const MONGODB_URI = process.env.MONGODB_URI;
 
 if (!MONGODB_URI) {
     throw new Error(

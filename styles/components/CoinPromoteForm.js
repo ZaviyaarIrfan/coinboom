@@ -136,7 +136,7 @@ const PromoteCoinForm = () => {
                 isPromote: true,
                 promoteTime: generateDateNDaysAfter(selectedPackage.day)
             };
-            await axios.put(`https://y-henna-beta.vercel.app/api/coins?id=${selectedToken._id}`, updatedToken);
+            await axios.put(`/api/coins?id=${selectedToken._id}`, updatedToken);
         } catch (error) {
             toast.error(error);
             console.log(error);
