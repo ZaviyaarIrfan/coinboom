@@ -1,5 +1,5 @@
-import dbConnect from '../../../lib/mongodb'; // Your MongoDB connection utility
-import Coin from '../../../models/Coin'; // Your Coin model
+import dbConnect from '../../lib/mongodb'; // Your MongoDB connection utility
+import Coin from '../../models/Coin'; // Your Coin model
 
 export default async function handler(req, res) {
     await dbConnect();

@@ -1,6 +1,6 @@
-import dbConnect from '../../../lib/mongodb';
-import Coin from '../../../models/Coin';
-import { storage } from '../../../firebaseConfig';
+import dbConnect from '../../lib/mongodb';
+import Coin from '../../models/Coin';
+import { storage } from '../../firebaseConfig';
 import multer from 'multer';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 

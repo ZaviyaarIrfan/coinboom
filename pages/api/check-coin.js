@@ -1,5 +1,5 @@
-import dbConnect from '../../../lib/mongodb';
-import Coin from '../../../models/Coin';
+import dbConnect from '../../lib/mongodb';
+import Coin from '../../models/Coin';
 
 export default async function handler(req, res) {
     const { address } = req.query;

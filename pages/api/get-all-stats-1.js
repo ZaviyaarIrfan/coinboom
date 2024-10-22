@@ -1,5 +1,5 @@
-import dbConnect from "../../../lib/mongodb";
-import Coin from "../../../models/Coin";
+import dbConnect from "../../lib/mongodb";
+import Coin from "../../models/Coin";
 import axios from "axios";
 import dayjs from "dayjs"; // Use dayjs for date manipulation
 
@@ -70,7 +70,7 @@ export default async function handler(req, res) {
                 const coinDataFromDex =
                     dexData[coin.contractAddress.toLowerCase()];
 
-                if (coin.isPresale && coin.isPresale.toLowerCase() != 'no') {
+                if (coin.isPresale && coin.isPresale.toLowerCase() != "no") {
                     return {
                         symbol: coin.symbol,
                         name: coin.name,
@@ -113,11 +113,7 @@ export default async function handler(req, res) {
                 };
             });
 
-            const dailyGainers = coinsData.sort(
-                (a, b) => b.percent_change_24h - a.percent_change_24h
-            );
-
-            return res.status(200).json(dailyGainers);
+            return res.status(200).json(coinsData);
         } catch (error) {
             console.error("Error querying database:", error);
             return res.status(500).json({ error: "Error querying database" });

@@ -1,7 +1,7 @@
-import dbConnect from "../../../../lib/mongodb";
-import Coin from "../../../../models/Coin";
+import dbConnect from "../../../lib/mongodb";
+import Coin from "../../../models/Coin";
 import axios from "axios";
-import dayjs from "dayjs"; // Use dayjs for date manipulation
+import dayjs from "dayjs"; // For date manipulation
 
 // Function to get data from Dexscreener
 async function getCryptoStatsByAddresses(coinAddresses) {
@@ -44,8 +44,9 @@ export default async function handler(req, res) {
 
     if (req.method === "GET") {
         try {
-            const coins = await Coin.find({ blockchain: "ETH" });
-            const coinAddresses = coins.map((coin) => coin.contractAddress);
+            // Fetch all coins from the database
+            const coins = await Coin.find({ blockchain: "arbitrum" });
+            const coinAddresses = coins.map((coin) => coin.contractAddress); // Assuming each coin has a contractAddress field
 
             if (coinAddresses.length === 0) {
                 return res
@@ -53,6 +54,7 @@ export default async function handler(req, res) {
                     .json(coinAddresses);
             }
 
+            // Get Dexscreener data for the addresses
             const stats = await getCryptoStatsByAddresses(coinAddresses);
 
             // Create a dictionary for quick lookup
@@ -112,12 +114,10 @@ export default async function handler(req, res) {
                     image: coinDataFromDex?.info?.imageUrl || coin?.imageUrl,
                 };
             });
+            // Filter for coins with age less than 30 days
+            const newCoins = coinsData.filter((coin) => coin.age.endsWith("d"));
 
-            const mostTraded = coinsData.sort(
-                (a, b) => b.volume_24h - a.volume_24h
-            );
-
-            return res.status(200).json(mostTraded);
+            return res.status(200).json(newCoins);
         } catch (error) {
             console.error("Error querying database:", error);
             return res.status(500).json({ error: "Error querying database" });

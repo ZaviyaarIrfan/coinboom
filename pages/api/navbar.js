@@ -1,5 +1,5 @@
 import axios from "axios";
-import dbConnect from "../../../lib/mongodb";
+import dbConnect from "../../lib/mongodb";
 
 export default async function handler(req, res) {
     await dbConnect();

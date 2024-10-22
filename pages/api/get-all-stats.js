@@ -1,5 +1,5 @@
-import dbConnect from "../../../lib/mongodb"; 
-import Coin from "../../../models/Coin"; 
+import dbConnect from "../../lib/mongodb"; 
+import Coin from "../../models/Coin"; 
 import axios from "axios";
 import dayjs from "dayjs"; // Use dayjs for date manipulation
 

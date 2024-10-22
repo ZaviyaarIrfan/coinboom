@@ -1,7 +1,7 @@
-import dbConnect from "../../../../lib/mongodb";
-import Coin from "../../../../models/Coin";
+import dbConnect from "../../lib/mongodb";
+import Coin from "../../models/Coin";
 import axios from "axios";
-import dayjs from "dayjs"; // For date manipulation
+import dayjs from "dayjs";
 
 // Function to get data from Dexscreener
 async function getCryptoStatsByAddresses(coinAddresses) {
@@ -45,7 +45,7 @@ export default async function handler(req, res) {
     if (req.method === "GET") {
         try {
             // Fetch all coins from the database
-            const coins = await Coin.find({ blockchain: "arbitrum" });
+            const coins = await Coin.find({});
             const coinAddresses = coins.map((coin) => coin.contractAddress); // Assuming each coin has a contractAddress field
 
             if (coinAddresses.length === 0) {
@@ -114,6 +114,7 @@ export default async function handler(req, res) {
                     image: coinDataFromDex?.info?.imageUrl || coin?.imageUrl,
                 };
             });
+
             // Filter for coins with age less than 30 days
             const newCoins = coinsData.filter((coin) => coin.age.endsWith("d"));
 

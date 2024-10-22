@@ -1,5 +1,5 @@
-import dbConnect from "../../../../lib/mongodb";
-import Coin from "../../../../models/Coin";
+import dbConnect from "../../../lib/mongodb";
+import Coin from "../../../models/Coin";
 import axios from "axios";
 import dayjs from "dayjs"; // Use dayjs for date manipulation
 
@@ -113,11 +113,11 @@ export default async function handler(req, res) {
                 };
             });
 
-            const trending = coinsData.sort(
-                (a, b) => b.percent_change_1h - a.percent_change_1h
+            const mostTraded = coinsData.sort(
+                (a, b) => b.volume_24h - a.volume_24h
             );
 
-            return res.status(200).json(trending);
+            return res.status(200).json(mostTraded);
         } catch (error) {
             console.error("Error querying database:", error);
             return res.status(500).json({ error: "Error querying database" });
