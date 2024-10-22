@@ -199,7 +199,7 @@ export default function Home() {
     return (
         <>
             <Head>
-                <title>{coinData.name} | CoinBoom</title>
+                <title>{coinData.name} | Boban</title>
                 <meta
                     name="description"
                     content={`Details for ${coinData.name}`}

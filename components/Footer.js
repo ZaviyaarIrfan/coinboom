@@ -153,7 +153,7 @@ const Footer = () => {
                 {/* Bottom Section */}
                 <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t border-gray-700 flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
                     <p className="text-xs sm:text-sm text-gray-400">
-                        2021-2024© Coinboom
+                        2021-2024© Boban
                     </p>
 
                     <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0">
