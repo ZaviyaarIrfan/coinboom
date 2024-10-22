@@ -8,7 +8,7 @@ import {
     TableRow,
     Paper,
     Button,
-    CircularProgress
+    CircularProgress,
 } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
@@ -32,28 +32,31 @@ export default function PromoteTable() {
 
     function isFutureDate(dateString) {
         if (!dateString) {
-          return false; // Return false if input is null or empty
+            return false; // Return false if input is null or empty
         }
-      
+
         const inputDate = new Date(dateString);
         const today = new Date();
-      
+
         if (isNaN(inputDate)) {
-          return false; // Return false if the input is not a valid date
+            return false; // Return false if the input is not a valid date
         }
-      
+
         // Set today's time to midnight to ignore time differences
         today.setHours(0, 0, 0, 0);
-        
+
         return inputDate > today; // Return true if input date is in the future, otherwise false
-      }
-      
+    }
 
     const fetchCryptoStats = async () => {
         try {
             const response = await fetch("/api/get-all-stats-1");
             const data = await response.json();
-            const filteredData = data && data.filter((coin) => coin.isPromote && isFutureDate(coin.promoteTime));
+            const filteredData =
+                data &&
+                data.filter(
+                    (coin) => coin.isPromote && isFutureDate(coin.promoteTime)
+                );
 
             if (response.ok) {
                 setcoinsData(filteredData);
@@ -101,7 +104,7 @@ export default function PromoteTable() {
                         <TableContainer
                             component={Paper}
                             className="bg-black"
-                            sx={{color: 'white'}}
+                            sx={{ color: "white" }}
                         >
                             <Table>
                                 <TableHead>
@@ -109,34 +112,64 @@ export default function PromoteTable() {
                                         className="bg-[#404040]"
                                         sx={{ color: "white !important" }}
                                     >
-                                        <TableCell sx={{color: 'white !important'}} className=" font-bold text-[0.95rem] py-[0.6rem]">
+                                        <TableCell
+                                            sx={{ color: "white !important" }}
+                                            className=" font-bold text-[0.95rem] py-[0.6rem]"
+                                        >
                                             Coin
                                         </TableCell>
-                                        <TableCell sx={{color: 'white !important'}} className=" font-bold text-[0.95rem] py-1">
+                                        <TableCell
+                                            sx={{ color: "white !important" }}
+                                            className=" font-bold text-[0.95rem] py-1"
+                                        >
                                             Price
                                         </TableCell>
-                                        <TableCell sx={{color: 'white !important'}} className=" font-bold text-[0.95rem] py-1">
+                                        <TableCell
+                                            sx={{ color: "white !important" }}
+                                            className=" font-bold text-[0.95rem] py-1"
+                                        >
                                             Age
                                         </TableCell>
-                                        <TableCell sx={{color: 'white !important'}} className=" font-bold text-[0.95rem] py-1">
+                                        <TableCell
+                                            sx={{ color: "white !important" }}
+                                            className=" font-bold text-[0.95rem] py-1"
+                                        >
                                             TXN 24h
                                         </TableCell>
-                                        <TableCell sx={{color: 'white !important'}} className=" font-bold text-[0.95rem] py-1">
+                                        <TableCell
+                                            sx={{ color: "white !important" }}
+                                            className=" font-bold text-[0.95rem] py-1"
+                                        >
                                             Volume
                                         </TableCell>
-                                        <TableCell sx={{color: 'white !important'}} className=" font-bold text-[0.95rem] py-1">
+                                        <TableCell
+                                            sx={{ color: "white !important" }}
+                                            className=" font-bold text-[0.95rem] py-1"
+                                        >
                                             1h
                                         </TableCell>
-                                        <TableCell sx={{color: 'white !important'}} className=" font-bold text-[0.95rem] py-1">
+                                        <TableCell
+                                            sx={{ color: "white !important" }}
+                                            className=" font-bold text-[0.95rem] py-1"
+                                        >
                                             24h
                                         </TableCell>
-                                        <TableCell sx={{color: 'white !important'}} className=" font-bold text-[0.95rem] py-1">
+                                        <TableCell
+                                            sx={{ color: "white !important" }}
+                                            className=" font-bold text-[0.95rem] py-1"
+                                        >
                                             7d
                                         </TableCell>
-                                        <TableCell sx={{color: 'white !important'}} className=" font-bold text-[0.95rem] py-1">
+                                        <TableCell
+                                            sx={{ color: "white !important" }}
+                                            className=" font-bold text-[0.95rem] py-1"
+                                        >
                                             LP
                                         </TableCell>
-                                        <TableCell sx={{color: 'white !important'}} className=" font-bold text-[0.95rem] py-1">
+                                        <TableCell
+                                            sx={{ color: "white !important" }}
+                                            className=" font-bold text-[0.95rem] py-1"
+                                        >
                                             MCap
                                         </TableCell>
                                     </TableRow>
@@ -151,7 +184,12 @@ export default function PromoteTable() {
                                                     : "bg-[#2a2a2a]"
                                             }`}
                                         >
-                                            <TableCell sx={{color: 'white !important'}} className="font-semibold py-1">
+                                            <TableCell
+                                                sx={{
+                                                    color: "white !important",
+                                                }}
+                                                className="font-semibold py-1"
+                                            >
                                                 <Link
                                                     href={`/coin/${coin.slug}`}
                                                 >
@@ -188,7 +226,11 @@ export default function PromoteTable() {
                                                     </div>
                                                 </Link>
                                             </TableCell>
-                                            <TableCell sx={{color: 'white !important'}}>
+                                            <TableCell
+                                                sx={{
+                                                    color: "white !important",
+                                                }}
+                                            >
                                                 {coin?.price
                                                     ? coin.price
                                                           .toString()
@@ -204,13 +246,25 @@ export default function PromoteTable() {
                                                               )
                                                     : "--"}
                                             </TableCell>
-                                            <TableCell sx={{color: 'white !important'}}>
+                                            <TableCell
+                                                sx={{
+                                                    color: "white !important",
+                                                }}
+                                            >
                                                 {coin.age || "--"}
                                             </TableCell>
-                                            <TableCell sx={{color: 'white !important'}}>
+                                            <TableCell
+                                                sx={{
+                                                    color: "white !important",
+                                                }}
+                                            >
                                                 {coin.txn || "--"}
                                             </TableCell>
-                                            <TableCell sx={{color: 'white !important'}}>
+                                            <TableCell
+                                                sx={{
+                                                    color: "white !important",
+                                                }}
+                                            >
                                                 {coin?.volume_24h == 0
                                                     ? "$0"
                                                     : "$" +
@@ -219,17 +273,19 @@ export default function PromoteTable() {
                                                       )}
                                             </TableCell>
                                             <TableCell
-      className={clsx({
-        "MuiTypography-root": true,
-    })}
-    sx={{
-        color:
-            typeof coin?.percent_change_1h === "number" &&
-            coin?.percent_change_1h >= 0
-                ? "green"
-                : "red",
-        "!important": true,
-    }}
+                                                className={clsx({
+                                                    "MuiTypography-root": true,
+                                                })}
+                                                sx={{
+                                                    color:
+                                                        typeof coin?.percent_change_1h ===
+                                                            "number" &&
+                                                        coin?.percent_change_1h >=
+                                                            0
+                                                            ? "green"
+                                                            : "red",
+                                                    "!important": true,
+                                                }}
                                             >
                                                 {coin?.percent_change_1h
                                                     ? coin?.percent_change_1h
@@ -244,14 +300,19 @@ export default function PromoteTable() {
                                             </TableCell>
 
                                             <TableCell
-                                                className={clsx(
-                                                    typeof coin?.percent_change_6h ==
-                                                        "number" &&
+                                                className={clsx({
+                                                    "MuiTypography-root": true,
+                                                })}
+                                                sx={{
+                                                    color:
+                                                        typeof coin?.percent_change_6h ===
+                                                            "number" &&
                                                         coin?.percent_change_6h >=
                                                             0
-                                                        ? "text-green-500 !important"
-                                                        : "text-red-500 !important"
-                                                )}
+                                                            ? "green"
+                                                            : "red",
+                                                    "!important": true,
+                                                }}
                                             >
                                                 {coin?.percent_change_6h
                                                     ? coin?.percent_change_6h
@@ -266,14 +327,19 @@ export default function PromoteTable() {
                                             </TableCell>
 
                                             <TableCell
-                                                className={clsx(
-                                                    typeof coin?.percent_change_24h ==
-                                                        "number" &&
+                                                className={clsx({
+                                                    "MuiTypography-root": true,
+                                                })}
+                                                sx={{
+                                                    color:
+                                                        typeof coin?.percent_change_24h ===
+                                                            "number" &&
                                                         coin?.percent_change_24h >=
                                                             0
-                                                        ? "text-green-500 !important"
-                                                        : "text-red-500 !important"
-                                                )}
+                                                            ? "green"
+                                                            : "red",
+                                                    "!important": true,
+                                                }}
                                             >
                                                 {coin?.percent_change_24h
                                                     ? coin?.percent_change_24h
@@ -285,13 +351,21 @@ export default function PromoteTable() {
                                                           "%"
                                                     : "--"}
                                             </TableCell>
-                                            <TableCell sx={{color: 'white !important'}}>
+                                            <TableCell
+                                                sx={{
+                                                    color: "white !important",
+                                                }}
+                                            >
                                                 {coin?.lp || coin?.lp == 0
                                                     ? "$" +
                                                       formatVolume(coin?.lp)
                                                     : "--"}
                                             </TableCell>
-                                            <TableCell sx={{color: 'white !important'}}>
+                                            <TableCell
+                                                sx={{
+                                                    color: "white !important",
+                                                }}
+                                            >
                                                 {coin?.market_cap ||
                                                 coin?.market_cap == 0
                                                     ? "$" +

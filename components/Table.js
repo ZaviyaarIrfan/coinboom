@@ -255,14 +255,19 @@ export default function CoinsTable({ coinsData }) {
                                             </TableCell>
 
                                             <TableCell
-                                                className={clsx(
-                                                    typeof coin?.percent_change_6h ==
-                                                        "number" &&
+                                                className={clsx({
+                                                    "MuiTypography-root": true,
+                                                })}
+                                                sx={{
+                                                    color:
+                                                        typeof coin?.percent_change_6h ===
+                                                            "number" &&
                                                         coin?.percent_change_6h >=
                                                             0
-                                                        ? "text-green-500 !important"
-                                                        : "text-red-500 !important"
-                                                )}
+                                                            ? "green"
+                                                            : "red",
+                                                    "!important": true,
+                                                }}
                                             >
                                                 {coin?.percent_change_6h
                                                     ? coin?.percent_change_6h
@@ -277,14 +282,19 @@ export default function CoinsTable({ coinsData }) {
                                             </TableCell>
 
                                             <TableCell
-                                                className={clsx(
-                                                    typeof coin?.percent_change_24h ==
-                                                        "number" &&
+                                                className={clsx({
+                                                    "MuiTypography-root": true,
+                                                })}
+                                                sx={{
+                                                    color:
+                                                        typeof coin?.percent_change_24h ===
+                                                            "number" &&
                                                         coin?.percent_change_24h >=
                                                             0
-                                                        ? "text-green-500 !important"
-                                                        : "text-red-500 !important"
-                                                )}
+                                                            ? "green"
+                                                            : "red",
+                                                    "!important": true,
+                                                }}
                                             >
                                                 {coin?.percent_change_24h
                                                     ? coin?.percent_change_24h
