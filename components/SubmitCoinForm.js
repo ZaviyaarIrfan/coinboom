@@ -19,6 +19,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import Image from "next/image";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useRouter } from "next/navigation";
 
 const steps = ["Project Information", "Links", "Listing"];
 
@@ -27,6 +28,7 @@ const SubmitCoinForm = () => {
     const [selectedOption, setSelectedOption] = useState("");
     const [selectedFile, setSelectedFile] = useState(null);
     const [loading, setLoading] = useState(false);
+    const router = useRouter()
 
     const [formData, setFormData] = useState({
         blockchain: "BSC",
@@ -218,6 +220,7 @@ const SubmitCoinForm = () => {
 
             if (res.ok) {
                 console.log("Form submitted successfully:", data);
+                router.push('/')
                 // Optionally, reset form fields or provide user feedback
             } else {
                 console.error(
