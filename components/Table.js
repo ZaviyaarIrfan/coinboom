@@ -58,7 +58,7 @@ export default function CoinsTable({ coinsData }) {
                     <div className="hidden md:block">
                         <TableContainer
                             component={Paper}
-                            className="bg-black text-white"
+                            className="bg-black"
                             sx={{color: 'white'}}
                         >
                             <Table>
@@ -67,34 +67,34 @@ export default function CoinsTable({ coinsData }) {
                                         className="bg-[#404040]"
                                         sx={{ color: "white" }}
                                     >
-                                        <TableCell className="text-white font-bold text-[0.95rem] py-[0.6rem]">
+                                        <TableCell sx={{color: 'white'}} className=" font-bold text-[0.95rem] py-[0.6rem]">
                                             Coin
                                         </TableCell>
-                                        <TableCell className="text-white font-bold text-[0.95rem] py-1">
+                                        <TableCell sx={{color: 'white'}} className=" font-bold text-[0.95rem] py-1">
                                             Price
                                         </TableCell>
-                                        <TableCell className="text-white font-bold text-[0.95rem] py-1">
+                                        <TableCell sx={{color: 'white'}} className=" font-bold text-[0.95rem] py-1">
                                             Age
                                         </TableCell>
-                                        <TableCell className="text-white font-bold text-[0.95rem] py-1">
+                                        <TableCell sx={{color: 'white'}} className=" font-bold text-[0.95rem] py-1">
                                             TXN 24h
                                         </TableCell>
-                                        <TableCell className="text-white font-bold text-[0.95rem] py-1">
+                                        <TableCell sx={{color: 'white'}} className=" font-bold text-[0.95rem] py-1">
                                             Volume
                                         </TableCell>
-                                        <TableCell className="text-white font-bold text-[0.95rem] py-1">
+                                        <TableCell sx={{color: 'white'}} className=" font-bold text-[0.95rem] py-1">
                                             1h
                                         </TableCell>
-                                        <TableCell className="text-white font-bold text-[0.95rem] py-1">
+                                        <TableCell sx={{color: 'white'}} className=" font-bold text-[0.95rem] py-1">
                                             24h
                                         </TableCell>
-                                        <TableCell className="text-white font-bold text-[0.95rem] py-1">
+                                        <TableCell sx={{color: 'white'}} className=" font-bold text-[0.95rem] py-1">
                                             7d
                                         </TableCell>
-                                        <TableCell className="text-white font-bold text-[0.95rem] py-1">
+                                        <TableCell sx={{color: 'white'}} className=" font-bold text-[0.95rem] py-1">
                                             LP
                                         </TableCell>
-                                        <TableCell className="text-white font-bold text-[0.95rem] py-1">
+                                        <TableCell sx={{color: 'white'}} className=" font-bold text-[0.95rem] py-1">
                                             MCap
                                         </TableCell>
                                     </TableRow>
@@ -109,7 +109,7 @@ export default function CoinsTable({ coinsData }) {
                                                     : "bg-[#2a2a2a]"
                                             }`}
                                         >
-                                            <TableCell className="text-white font-semibold py-1">
+                                            <TableCell sx={{color: 'white'}} className="font-semibold py-1">
                                                 <Link
                                                     href={`/coin/${coin.slug}`}
                                                 >
@@ -146,7 +146,7 @@ export default function CoinsTable({ coinsData }) {
                                                     </div>
                                                 </Link>
                                             </TableCell>
-                                            <TableCell className="text-white">
+                                            <TableCell sx={{color: 'white'}}>
                                                 {coin?.price
                                                     ? coin.price
                                                           .toString()
@@ -162,13 +162,13 @@ export default function CoinsTable({ coinsData }) {
                                                               )
                                                     : "--"}
                                             </TableCell>
-                                            <TableCell className="text-white">
+                                            <TableCell sx={{color: 'white'}}>
                                                 {coin.age || "--"}
                                             </TableCell>
-                                            <TableCell className="text-white">
+                                            <TableCell sx={{color: 'white'}}>
                                                 {coin.txn || "--"}
                                             </TableCell>
-                                            <TableCell className="text-white">
+                                            <TableCell sx={{color: 'white'}}>
                                                 {coin?.volume_24h == 0
                                                     ? "$0"
                                                     : "$" +
@@ -240,13 +240,13 @@ export default function CoinsTable({ coinsData }) {
                                                           "%"
                                                     : "--"}
                                             </TableCell>
-                                            <TableCell className="text-white">
+                                            <TableCell sx={{color: 'white'}}>
                                                 {coin?.lp || coin?.lp == 0
                                                     ? "$" +
                                                       formatVolume(coin?.lp)
                                                     : "--"}
                                             </TableCell>
-                                            <TableCell className="text-white">
+                                            <TableCell sx={{color: 'white'}}>
                                                 {coin?.market_cap ||
                                                 coin?.market_cap == 0
                                                     ? "$" +
