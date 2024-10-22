@@ -325,7 +325,14 @@ export default function Home() {
                             </div>
                         ) : (
                             <iframe
-                                src={`https://dexscreener.com/${coinData.blockchain.toLowerCase()}/${
+                                src={`https://dexscreener.com/${
+                                    coinData.blockchain.toLowerCase() == "eth"
+                                        ? "ethereum"
+                                        : coinData.blockchain.toLowerCase() ==
+                                          "sol"
+                                        ? "solana"
+                                        : coinData.blockchain.toLowerCase()
+                                }/${
                                     coinData.contractAddress
                                 }?embed=1&theme=dark`}
                                 width="100%"
