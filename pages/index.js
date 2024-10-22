@@ -8,7 +8,7 @@ import Banner from "../components/Banner";
 import PromoteTable from "../components/PromoteTable";
 
 export default function Home() {
-    const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     const [cryptoStats, setCryptoStats] = useState([]);
 

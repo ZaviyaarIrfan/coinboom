@@ -5,7 +5,7 @@ import SubmitCoinForm from "../components/SubmitCoinForm";
 import Footer from "../components/Footer";
 
 export default function Home() {
-    const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);

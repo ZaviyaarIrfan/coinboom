@@ -29,7 +29,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function Home() {
-    const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const tokenAddress = "0xcA8e8d244f0d219a6Fc9e4793C635cEA98d0399C";
 
     const toggleSidebar = () => {

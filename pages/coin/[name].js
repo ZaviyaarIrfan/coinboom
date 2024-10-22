@@ -25,7 +25,7 @@ export default function Home() {
     const [error, setError] = useState(null);
     const router = useRouter();
     const { name } = router.query; // Get the coin name from the URL
-    const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
     const [formData, setFormData] = useState({
         logoFile: null,
