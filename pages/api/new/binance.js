@@ -50,7 +50,7 @@ export default async function handler(req, res) {
 
             if (coinAddresses.length === 0) {
                 return res
-                    .status(404)
+                    .status(200)
                     .json({ message: "No coins found in the database" });
             }
 

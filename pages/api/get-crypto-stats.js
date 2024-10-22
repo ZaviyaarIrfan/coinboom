@@ -43,7 +43,7 @@ export default async function handler(req, res) {
 
            
             if (coinNames.length === 0) {
-                return res.status(404).json({ message: 'No coins found for the specified blockchain' });
+                return res.status(200).json({ message: 'No coins found for the specified blockchain' });
             }
 
             // Call the function to get crypto stats
