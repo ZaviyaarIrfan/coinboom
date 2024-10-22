@@ -219,14 +219,17 @@ export default function PromoteTable() {
                                                       )}
                                             </TableCell>
                                             <TableCell
-                                                className={clsx(
-                                                    typeof coin?.percent_change_1h ==
-                                                        "number" &&
-                                                        coin?.percent_change_1h >=
-                                                            0
-                                                        ? "text-green-500 !important"
-                                                        : "text-red-500 !important"
-                                                )}
+      className={clsx({
+        "MuiTypography-root": true,
+    })}
+    sx={{
+        color:
+            typeof coin?.percent_change_1h === "number" &&
+            coin?.percent_change_1h >= 0
+                ? "green"
+                : "red",
+        "!important": true,
+    }}
                                             >
                                                 {coin?.percent_change_1h
                                                     ? coin?.percent_change_1h

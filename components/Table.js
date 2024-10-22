@@ -228,14 +228,19 @@ export default function CoinsTable({ coinsData }) {
                                                       )}
                                             </TableCell>
                                             <TableCell
-                                                className={clsx(
-                                                    typeof coin?.percent_change_1h ==
-                                                        "number" &&
+                                                className={clsx({
+                                                    "MuiTypography-root": true,
+                                                })}
+                                                sx={{
+                                                    color:
+                                                        typeof coin?.percent_change_1h ===
+                                                            "number" &&
                                                         coin?.percent_change_1h >=
                                                             0
-                                                        ? "text-green-500 !important"
-                                                        : "text-red-500 !important"
-                                                )}
+                                                            ? "green"
+                                                            : "red",
+                                                    "!important": true,
+                                                }}
                                             >
                                                 {coin?.percent_change_1h
                                                     ? coin?.percent_change_1h
