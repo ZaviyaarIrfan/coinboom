@@ -16,10 +16,10 @@ import "react-toastify/dist/ReactToastify.css";
 // Move constants outside component
 const PACKAGE_OPTIONS = {
     BB: [
-        { value: "200000", label: "1 day promoted", day: 1 },
-        { value: "350000", label: "3 days promoted", day: 3 },
-        { value: "500000", label: "7 days promoted", day: 7 },
-    ],
+        { value: "200000", label: "1 day promoted", day: 1 ,vote:"500"},
+        { value: "350000", label: "3 days promoted", day: 3 , vote:"1500"},
+        { value: "500000", label: "7 days promoted", day: 7 , vote:"3500"},
+    ], 
 };
 
 // Create reusable InfoCard component
@@ -276,7 +276,7 @@ const PromoteCoinForm = () => {
                                     }}
                                 />
                             }
-                            label={`${pkg.value} BB - ${pkg.label}`}
+                            label={`${pkg.value} BB - ${pkg.label} + ${pkg.vote}`}
                             sx={{
                                 "& .MuiFormControlLabel-label": {
                                     fontWeight: "bold",
@@ -300,6 +300,9 @@ const PromoteCoinForm = () => {
                     </p>
                     <p>
                         Price: <strong>{selectedPackage.value} BB</strong>
+                    </p>
+                    <p>
+                        Votes: <strong>{selectedPackage.value} </strong>
                     </p>
                 </div>
             </div>
