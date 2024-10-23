@@ -363,7 +363,7 @@ const SubmitCoinForm = () => {
                                             <FormControl fullWidth>
                                                 <Typography
                                                     variant="body2"
-                                                    className="text-white mb-2 flex items-center"
+                                                    className="!text-white mb-2 flex items-center"
                                                 >
                                                     Blockchain
                                                     {renderFieldStatus(
@@ -373,9 +373,11 @@ const SubmitCoinForm = () => {
                                                 <Select
                                                     value={formData.blockchain}
                                                     name="blockchain"
+                                                    style={{color:"white"}}
+
                                                     onChange={handleChange}
                                                     displayEmpty
-                                                    className="bg-gray-800 text-white border border-gray-700 rounded-md"
+                                                    className="bg-gray-800 !text-white border border-gray-700 rounded-md"
                                                 >
                                                     <MenuItem value="BSC">
                                                         Binance Smart Chain
@@ -402,7 +404,9 @@ const SubmitCoinForm = () => {
                                             <FormControl fullWidth>
                                                 <Typography
                                                     variant="body2"
-                                                    className="text-white mb-2 flex items-center"
+                                                    style={{color:"white"}}
+
+                                                    className="!text-white mb-2 flex items-center"
                                                 >
                                                     Contract Address
                                                     {renderFieldStatus(
@@ -411,6 +415,8 @@ const SubmitCoinForm = () => {
                                                 </Typography>
                                                 <TextField
                                                     fullWidth
+                                                    style={{color:"white"}}
+
                                                     name="contractAddress"
                                                     value={
                                                         formData.contractAddress
@@ -435,10 +441,11 @@ const SubmitCoinForm = () => {
                                                 </Typography>
                                                 <TextField
                                                     fullWidth
+                                                    style={{color:"white"}}
                                                     name="name"
                                                     value={formData.name}
                                                     onChange={handleChange}
-                                                    className="bg-gray-800"
+                                                    className="bg-gray-800 !text-white"
                                                     InputProps={{
                                                         className: "text-white",
                                                     }}
@@ -478,6 +485,8 @@ const SubmitCoinForm = () => {
                                                 )}
                                             </Typography>
                                             <TextField
+                                                style={{color:"white"}}
+
                                                 fullWidth
                                                 name="description"
                                                 value={formData.description}
@@ -626,9 +635,11 @@ const SubmitCoinForm = () => {
                                     "facebook",
                                     "reddit",
                                     "linktree",
+                                    "Tiktok"
                                 ].map((field) => (
                                     <TextField
                                         key={field}
+                                        style={ { color: "white" }}
                                         fullWidth
                                         label={`${
                                             field.charAt(0).toUpperCase() +

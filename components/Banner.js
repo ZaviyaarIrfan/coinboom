@@ -5,6 +5,7 @@ import Link from "next/link";
 
 const Banner = () => {
     const settings = {
+        
         dots: true,
         infinite: true,
         speed: 500,
@@ -43,15 +44,15 @@ const Banner = () => {
     ];
 
     return (
-        <div className="mb-4 sm:mb-6">
+        <div className="mb-4 sm:mb-6 ">
             {/* Desktop Slider */}
             <div className="hidden md:block">
-                <Slider {...settings} className="mx-2 sm:mx-4">
+                <Slider {...settings} className="mx-2 sm:mx-4 h-[180px]">
                     {banners.map((banner, index) => (
                         <Link
                             href={banner.link}
                             key={index}
-                            className="relative w-full h-[300px] overflow-hidden"
+                            className="relative w-full h-[180px] overflow-hidden"
                         >
                             <Image
                                 src={banner.src}
