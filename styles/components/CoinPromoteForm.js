@@ -302,7 +302,7 @@ const PromoteCoinForm = () => {
                         Price: <strong>{selectedPackage.value} BB</strong>
                     </p>
                     <p>
-                        Votes: <strong>{selectedPackage.value} </strong>
+                        Votes: <strong>{selectedPackage.vote} </strong>
                     </p>
                 </div>
             </div>
