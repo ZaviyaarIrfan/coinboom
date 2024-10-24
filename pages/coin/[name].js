@@ -245,6 +245,10 @@ export default function Home() {
                                             <Typography
                                                 variant="h4"
                                                 gutterBottom
+                                                sx={{fontSize: {
+                                                    xs: '25px',
+                                                    sm: '35px'
+                                                }}}
                                                 className="text-xl sm:text-2xl"
                                             >
                                                 {coinData.name} (
@@ -254,6 +258,10 @@ export default function Home() {
                                                 <Typography
                                                     variant="body1"
                                                     className="text-[0.7rem] sm:text-base mr-2"
+                                                    sx={{fontSize: {
+                                                        xs: '10px',
+                                                        sm: '22px'
+                                                    }}}
                                                 >
                                                     {coinData.contractAddress}
                                                 </Typography>
@@ -264,6 +272,7 @@ export default function Home() {
                                                         }
                                                         color="primary"
                                                         size="small"
+                                                        
                                                     >
                                                         <ContentCopyIcon />
                                                     </IconButton>
