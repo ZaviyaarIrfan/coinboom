@@ -2,22 +2,14 @@ import React, { useState } from "react";
 import {
     Box,
     Button,
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    DialogActions,
-    Typography,
     IconButton,
 } from "@mui/material";
 import FlashOnIcon from "@mui/icons-material/FlashOn"; // Lightning icon for boost
-import CloseIcon from "@mui/icons-material/Close"; // Close icon for modal
-import Image from "next/image";
-import catsonImage from "../images/catson.png"; // Image for the icon
 import { useRouter } from "next/navigation";
 import {
-    WhatshotOutlined,
-    RocketLaunchOutlined,
-    FlagOutlined,
+    RocketLaunch,
+    Whatshot,
+    Flag,
 } from "@mui/icons-material";
 
 const ActionsCard = () => {
@@ -100,9 +92,9 @@ const ActionsCard = () => {
         }}
     >
         {[
-            { icon: <RocketLaunchOutlined />, label: "rocket" },
-            { icon: <WhatshotOutlined />, label: "fire" },
-            { icon: <FlagOutlined />, label: "flag" }
+            { icon: <RocketLaunch />, label: "rocket" },
+            { icon: <Whatshot />, label: "fire" },
+            { icon: <Flag />, label: "flag" }
         ].map((item) => (
             <IconButton
                 key={item.label}
