@@ -262,6 +262,23 @@ const SubmitCoinForm = () => {
         return <span className="text-red-500 ml-2 text-sm">Required</span>;
     };
 
+    const whiteTextFieldStyle = {
+        '& .MuiInputBase-input': {
+            color: 'white',
+        },
+        '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+                borderColor: 'rgb(75, 85, 99)',
+            },
+            '&:hover fieldset': {
+                borderColor: 'rgb(107, 114, 128)',
+            },
+            '&.Mui-focused fieldset': {
+                borderColor: '#3B82F6',
+            },
+        },
+    };
+
     return (
         <div className="bg-gray-900 text-white p-4 md:p-8 rounded-lg shadow-lg">
             <ToastContainer />
@@ -425,7 +442,7 @@ const SubmitCoinForm = () => {
                                                     value={
                                                         formData.contractAddress
                                                     }
-                                                    sx={{color: 'white !important'}}
+                                                    sx={whiteTextFieldStyle}
                                                     onChange={handleChange}
                                                     className="bg-gray-800"
                                                     InputProps={{
@@ -449,7 +466,7 @@ const SubmitCoinForm = () => {
                                                     name="name"
                                                     value={formData.name}
                                                     onChange={handleChange}
-                                                    sx={{color: 'white !important'}}
+                                                    sx={whiteTextFieldStyle}
                                                     className="bg-gray-800"
                                                     InputProps={{
                                                         className: "text-white",
@@ -473,7 +490,7 @@ const SubmitCoinForm = () => {
                                                     value={formData.symbol}
                                                     onChange={handleChange}
                                                     className="bg-gray-800"
-                                                    sx={{color: 'white !important'}}
+                                                    sx={whiteTextFieldStyle}
                                                     InputProps={{
                                                         className: "text-white",
                                                     }}
@@ -500,7 +517,7 @@ const SubmitCoinForm = () => {
                                                 multiline
                                                 rows={4}
                                                 className="bg-gray-800"
-                                                sx={{color: 'white !important'}}
+                                                sx={whiteTextFieldStyle}
                                                 InputProps={{
                                                     className: "text-white",
                                                 }}
@@ -540,7 +557,7 @@ const SubmitCoinForm = () => {
                                                     }
                                                     label="Yes"
                                                     className="text-white"
-                                                    sx={{color: 'white !important'}}
+                                                    sx={whiteTextFieldStyle}
                                                 />
                                                 <FormControlLabel
                                                     value="No"
@@ -582,7 +599,6 @@ const SubmitCoinForm = () => {
                                                             formData.launchDate
                                                         }
                                                         onChange={handleChange}
-                                                        sx={{color: 'white !important'}}
                                                         className="w-full bg-gray-800 text-white border border-gray-700 rounded-md p-2"
                                                     />
                                                 </div>
@@ -611,7 +627,7 @@ const SubmitCoinForm = () => {
                                                             className:
                                                                 "text-white",
                                                         }}
-                                                        sx={{color: 'white !important'}}
+                                                        sx={whiteTextFieldStyle}
                                                     />
                                                 </div>
                                             </>
@@ -666,10 +682,10 @@ const SubmitCoinForm = () => {
                                             className: "text-gray-400",
                                         }}
                                         InputProps={{
-                                            style: { color: "white" },
+                                            style: { color: "white !important" },
                                             placeholder: `Enter your ${field} link`,
                                         }}
-                                        sx={{color: 'white !important'}}
+                                        sx={whiteTextFieldStyle}
                                     />
                                 ))}
                             </div>
