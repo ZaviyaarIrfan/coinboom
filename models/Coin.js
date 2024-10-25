@@ -38,7 +38,25 @@ const CoinSchema = new mongoose.Schema({
     promoteTime:{
         type: Date,
         default: null,
-    }
+    },
+    rocket: {
+        type: Number,
+        default: 0,
+    },
+    fire: {
+        type: Number,
+        default: 0,
+    },
+    flag: {
+        type: Number,
+        default: 0,
+    },
+    voters: [
+        {
+            ip: String,
+            voteType: String,
+        }
+    ]
 }, {
     timestamps: true, 
 });

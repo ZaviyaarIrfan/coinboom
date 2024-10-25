@@ -284,7 +284,7 @@ export default function Home() {
                             </Grid>
                             {/* Right Sidebar */}
                             <Grid item xs={12} md={4}>
-                                <ActionsCard />
+                                <ActionsCard coinId={coinData._id} initialRocket={coinData.rocket} initialFire={coinData.fire} initialFlag={coinData.flag}/>
                             </Grid>
                         </Grid>
                     </div>
