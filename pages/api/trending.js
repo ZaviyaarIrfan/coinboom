@@ -1,26 +1,13 @@
 import dbConnect from "../../lib/mongodb";
 import Coin from "../../models/Coin";
 import axios from "axios";
-import dayjs from "dayjs"; // Use dayjs for date manipulation
+import dayjs from "dayjs";
+import { createClient } from "redis";
 
-// Function to get data from Dexscreener
-async function getCryptoStatsByAddresses(coinAddresses) {
-    try {
-        const promises = coinAddresses.map(async (address) => {
-            const url = `https://api.dexscreener.com/latest/dex/search?q=${address}`;
-            const response = await axios.get(url);
-            return response.data.pairs.length > 0
-                ? response.data.pairs[0]
-                : null;
-        });
-
-        const statsArray = await Promise.all(promises);
-        return statsArray.filter((stat) => stat !== null); // Filter out any null results
-    } catch (error) {
-        console.error("Error fetching crypto data from Dexscreener:", error);
-        return null;
-    }
-}
+const redisClient = new Redis({
+    url: "https://selected-cod-45220.upstash.io",
+    token: process.env.REDIS_PASSWORD,
+});
 
 // Function to calculate the coin's age
 function calculateCoinAge(createdAt) {
@@ -39,85 +26,138 @@ function calculateCoinAge(createdAt) {
     }
 }
 
+// Function to fetch data for one address and update the cache
+async function fetchDataForAddress(address) {
+    const url = `https://api.dexscreener.com/latest/dex/search?q=${address}`;
+    const response = await axios.get(url);
+    const data =
+        response.data.pairs?.length > 0 ? response.data.pairs[0] : null;
+
+    // Cache result with a 10-minute expiration (adjust as needed)
+    if (data) {
+        await redisClient.setex(address, 600, JSON.stringify(data));
+    }
+    return data;
+}
+
+async function getCryptoStatsByAddresses(coinAddresses) {
+    const statsArray = [];
+    const fetchPromises = [];
+
+    for (const address of coinAddresses) {
+        if (!address) continue; // Skip invalid addresses
+
+        try {
+            const cachedData = await redisClient.get(address);
+            if (cachedData) {
+                statsArray.push(JSON.parse(cachedData));
+            } else {
+                // Background fetch for missing addresses
+                fetchPromises.push(
+                    fetchDataForAddress(address).then((data) => {
+                        if (data) statsArray.push(data);
+                    })
+                );
+            }
+        } catch (error) {
+            console.error(`Error processing address ${address}:`, error);
+        }
+    }
+
+    // Start background fetching without blocking
+    Promise.all(fetchPromises).catch((err) =>
+        console.error("Error fetching missing data:", err)
+    );
+
+    return statsArray; // Return immediately with cached data
+}
+
 export default async function handler(req, res) {
     await dbConnect();
 
     if (req.method === "GET") {
         try {
-            const coins = await Coin.find({});
+            const coins = (await Coin.find({})) || [];
             const coinAddresses = coins.map((coin) => coin.contractAddress);
 
             if (coinAddresses.length === 0) {
-                return res
-                    .status(200)
-                    .json(coinAddresses);
+                return res.status(200).json([]);
             }
 
             const stats = await getCryptoStatsByAddresses(coinAddresses);
 
-            // Create a dictionary for quick lookup
-            const dexData = stats
-                ? Object.fromEntries(
-                      stats.map((stat) => [
-                          stat.baseToken.address.toLowerCase(),
-                          stat,
-                      ])
-                  )
-                : {};
+            const dexData = Object.fromEntries(
+                stats.map((stat) => [
+                    stat.baseToken?.address?.toLowerCase(),
+                    stat,
+                ])
+            );
 
-            // Map through the coins from the database and check if data is available from Dexscreener
             const coinsData = coins.map((coin) => {
-                const coinDataFromDex =
-                    dexData[coin.contractAddress.toLowerCase()];
+                const coinAddress = coin.contractAddress?.toLowerCase();
+                const coinDataFromDex = dexData[coinAddress] || null;
 
-                if (coin.isPresale && coin.isPresale.toLowerCase() != 'no') {
+                const baseCoinData = {
+                    symbol: coin.symbol,
+                    name: coin.name,
+                    slug: coin.slug,
+                    rocket: coin.rocket || 0, // Assuming 'rocket' is a number
+                    fire: coin.fire || 0, // Assuming 'fire' is a number
+                    flag: coin.flag || 0, // Assuming 'flag' is a number
+                    createdAt: coin.createdAt || new Date(), // Assuming createdAt is a Date object
+                    volume_24h: coinDataFromDex?.volume?.h24 || 0,
+                    market_cap: coinDataFromDex?.marketCap || null,
+                    age: coinDataFromDex?.pairCreatedAt
+                        ? calculateCoinAge(coinDataFromDex.pairCreatedAt)
+                        : "N/A",
+                    lp: coinDataFromDex?.liquidity?.usd || null,
+                    isPromote: coin.isPromote,
+                    txn: coinDataFromDex?.txns?.h24
+                        ? coinDataFromDex.txns.h24.buys +
+                          coinDataFromDex.txns.h24.sells
+                        : 0,
+                    image: coinDataFromDex?.info?.imageUrl || coin?.imageUrl,
+                };
+
+                if (coin.isPresale && coin.isPresale.toLowerCase() !== "no") {
                     return {
-                        symbol: coin.symbol,
-                        name: coin.name,
-                        slug: coin.slug,
-                        volume_24h: coinDataFromDex?.volume?.h24 || 0,
+                        ...baseCoinData,
                         price: "Presale",
                         percent_change_1h: "Presale",
                         percent_change_6h: "Presale",
                         percent_change_24h: "Presale",
-                        market_cap: coinDataFromDex?.marketCap,
-                        age: calculateCoinAge(coinDataFromDex.pairCreatedAt),
-                        lp: coinDataFromDex.liquidity.usd,
-                        isPromote: coin.isPromote,
-                        txn:
-                            coinDataFromDex.txns.h24.buys +
-                            coinDataFromDex.txns.h24.sells,
-                        image:
-                            coinDataFromDex?.info?.imageUrl || coin?.imageUrl,
                     };
                 }
 
-                // If data is found from Dexscreener, use it; otherwise, use the data from the database
                 return {
-                    symbol: coin.symbol,
-                    name: coin.name,
-                    slug: coin.slug,
-                    volume_24h: coinDataFromDex?.volume?.h24 || 0,
-                    price: coinDataFromDex?.priceUsd,
-                    percent_change_1h: coinDataFromDex?.priceChange?.h1,
-                    percent_change_6h: coinDataFromDex?.priceChange?.h6,
-                    percent_change_24h: coinDataFromDex?.priceChange?.h24,
-                    market_cap: coinDataFromDex?.marketCap,
-                    age: calculateCoinAge(coinDataFromDex.pairCreatedAt),
-                    lp: coinDataFromDex.liquidity.usd,
-                    isPromote: coin.isPromote,
-                    txn:
-                        coinDataFromDex.txns.h24.buys +
-                        coinDataFromDex.txns.h24.sells,
-                    image: coinDataFromDex?.info?.imageUrl || coin?.imageUrl,
+                    ...baseCoinData,
+                    price: coinDataFromDex?.priceUsd || null,
+                    percent_change_1h: coinDataFromDex?.priceChange?.h1 || 0,
+                    percent_change_6h: coinDataFromDex?.priceChange?.h6 || 0,
+                    percent_change_24h: coinDataFromDex?.priceChange?.h24 || 0,
                 };
             });
 
-            const mostTraded = coinsData.sort(
+            // Sort the coins based on 'rocket', 'fire', 'flag', and 'createdAt' (latest first)
+            const sortedCoinsData = coinsData.sort((a, b) => {
+                if (b.rocket !== a.rocket) {
+                    return b.rocket - a.rocket;
+                }
+                if (b.fire !== a.fire) {
+                    return b.fire - a.fire;
+                }
+                if (b.flag !== a.flag) {
+                    return b.flag - a.flag;
+                }
+                // Sort by latest date (createdAt) if 'rocket', 'fire', and 'flag' are equal
+                return new Date(b.createdAt) - new Date(a.createdAt);
+            });
+
+            const trending = sortedCoinsData.sort(
                 (a, b) => b.percent_change_1h - a.percent_change_1h
             );
 
-            return res.status(200).json(mostTraded);
+            return res.status(200).json(trending);
         } catch (error) {
             console.error("Error querying database:", error);
             return res.status(500).json({ error: "Error querying database" });
@@ -126,3 +166,4 @@ export default async function handler(req, res) {
         res.status(405).json({ message: "Method not allowed" });
     }
 }
+

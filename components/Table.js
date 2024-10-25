@@ -35,7 +35,7 @@ export default function CoinsTable({ coinsData }) {
     // Calculate the range of items for the current page
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentCoins = coinsData.slice(indexOfFirstItem, indexOfLastItem);
+    const currentCoins = coinsData && coinsData?.slice(indexOfFirstItem, indexOfLastItem);
 
     // Handle page change
     const handlePageChange = (event, value) => {
@@ -149,12 +149,12 @@ export default function CoinsTable({ coinsData }) {
                                                     href={`/coin/${coin.slug}`}
                                                 >
                                                     <div className="flex space-x-2 items-center">
-                                                        <Image
+                                                        {coin.image && <Image
                                                             src={coin.image}
                                                             height={25}
                                                             width={25}
                                                             alt={coin.name}
-                                                        />
+                                                        />}
                                                         <div className="flex flex-col space-y-1">
                                                             <span>
                                                                 {coin.name}
@@ -350,13 +350,13 @@ export default function CoinsTable({ coinsData }) {
                             >
                                 {/* Coin Header */}
                                 <div className="flex items-center space-x-3 mb-2">
-                                    <Image
+                                    {coin.image && <Image
                                         src={coin.image}
                                         height={32}
                                         width={32}
                                         alt={coin.name}
                                         className="rounded-full"
-                                    />
+                                    />}
                                     <div>
                                         <div className="font-semibold text-white">
                                             {coin.name}

@@ -232,13 +232,13 @@ export default function Home() {
                                     <Box className="flex flex-col md:flex-row items-start md:items-center mb-4">
                                         {/* Coin Icon */}
                                         <Box className="mr-0 md:mr-2 mb-4 md:mb-0">
-                                            <Image
+                                            {coinData.imageUrl && <Image
                                                 src={coinData.imageUrl}
                                                 alt="Coin Icon"
                                                 width={70}
                                                 height={70}
                                                 className="rounded-full"
-                                            />
+                                            />}
                                         </Box>
                                         {/* Coin Name and Contract */}
                                         <Box>

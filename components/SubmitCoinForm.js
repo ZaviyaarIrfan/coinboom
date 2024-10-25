@@ -263,18 +263,18 @@ const SubmitCoinForm = () => {
     };
 
     const whiteTextFieldStyle = {
-        '& .MuiInputBase-input': {
-            color: 'white',
+        "& .MuiInputBase-input": {
+            color: "white",
         },
-        '& .MuiOutlinedInput-root': {
-            '& fieldset': {
-                borderColor: 'rgb(75, 85, 99)',
+        "& .MuiOutlinedInput-root": {
+            "& fieldset": {
+                borderColor: "rgb(75, 85, 99)",
             },
-            '&:hover fieldset': {
-                borderColor: 'rgb(107, 114, 128)',
+            "&:hover fieldset": {
+                borderColor: "rgb(107, 114, 128)",
             },
-            '&.Mui-focused fieldset': {
-                borderColor: '#3B82F6',
+            "&.Mui-focused fieldset": {
+                borderColor: "#3B82F6",
             },
         },
     };
@@ -476,7 +476,9 @@ const SubmitCoinForm = () => {
                                             <FormControl fullWidth>
                                                 <Typography
                                                     variant="body2"
-                                                    sx={{color: 'white !important'}}
+                                                    sx={{
+                                                        color: "white !important",
+                                                    }}
                                                     className="text-white mb-2 flex items-center"
                                                 >
                                                     Symbol
@@ -502,7 +504,9 @@ const SubmitCoinForm = () => {
                                             <Typography
                                                 variant="body2"
                                                 className="text-white mb-2 flex items-center"
-                                                sx={{color: 'white !important'}}
+                                                sx={{
+                                                    color: "white !important",
+                                                }}
                                             >
                                                 Description
                                                 {renderFieldStatus(
@@ -528,7 +532,9 @@ const SubmitCoinForm = () => {
                                             <Typography
                                                 variant="body2"
                                                 className="text-white mb-2 flex items-center"
-                                                sx={{color: 'white !important'}}
+                                                sx={{
+                                                    color: "white !important",
+                                                }}
                                             >
                                                 Is this a
                                                 Presale/PumpFun/Moonshot
@@ -540,7 +546,6 @@ const SubmitCoinForm = () => {
                                                 name="isPresale"
                                                 value={formData.isPresale}
                                                 onChange={handleChange}
-                                                
                                             >
                                                 <FormControlLabel
                                                     value="Yes"
@@ -573,7 +578,9 @@ const SubmitCoinForm = () => {
                                                         />
                                                     }
                                                     label="No"
-                                                    sx={{color: 'white !important'}}
+                                                    sx={{
+                                                        color: "white !important",
+                                                    }}
                                                     className="text-white"
                                                 />
                                             </RadioGroup>
@@ -585,7 +592,9 @@ const SubmitCoinForm = () => {
                                                     <Typography
                                                         variant="body2"
                                                         className="text-white mb-2 flex items-center"
-                                                        sx={{color: 'white !important'}}
+                                                        sx={{
+                                                            color: "white !important",
+                                                        }}
                                                     >
                                                         Launch Date
                                                         {renderFieldStatus(
@@ -643,7 +652,7 @@ const SubmitCoinForm = () => {
                     <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
                         {/* Left Section: Logo Display */}
                         <div className="flex justify-center md:col-span-1">
-                            <div className="bg-gray-800 p-4 rounded-full transition-transform duration-300 hover:scale-105">
+                            <div className="bg-gray-800 h-32 rounded-full transition-transform duration-300 hover:scale-105">
                                 <Image
                                     height={30}
                                     width={30}
@@ -682,7 +691,9 @@ const SubmitCoinForm = () => {
                                             className: "text-gray-400",
                                         }}
                                         InputProps={{
-                                            style: { color: "white !important" },
+                                            style: {
+                                                color: "white !important",
+                                            },
                                             placeholder: `Enter your ${field} link`,
                                         }}
                                         sx={whiteTextFieldStyle}
@@ -726,7 +737,10 @@ const SubmitCoinForm = () => {
 
                         <div className="mb-6">
                             <p className="text-gray-400">Description</p>
-                            <p className="text-sm md:text-base" sx={{color: 'white !important'}}>
+                            <p
+                                className="text-sm md:text-base"
+                                sx={{ color: "white !important" }}
+                            >
                                 {formData.description}
                             </p>
                         </div>
@@ -750,7 +764,7 @@ const SubmitCoinForm = () => {
                             <CircularProgress
                                 size={24}
                                 className="text-white"
-                                sx={{color: 'white !important'}}
+                                sx={{ color: "white !important" }}
                             />
                         ) : activeStep === steps.length - 1 ? (
                             "Finish"

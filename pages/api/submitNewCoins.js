@@ -11,12 +11,12 @@ async function fetchNewCoins() {
         "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?sort=date_added&sort_dir=desc",
         {
             headers: {
-                'X-CMC_PRO_API_KEY': 'fad3c46a-34f5-408e-b9cb-720519b3cfad',
-                'Accept': 'application/json',
-            }
+                "X-CMC_PRO_API_KEY": "fad3c46a-34f5-408e-b9cb-720519b3cfad",
+                Accept: "application/json",
+            },
         }
     );
-    return data.data
+    return data.data;
 }
 
 export default async function handler(req, res) {
@@ -37,13 +37,7 @@ export default async function handler(req, res) {
             const existingCoin = await Coin.findOne({ slug: coin.slug });
             if (existingCoin) continue;
 
-            // Upload image to Firebase (optional, you can skip if using CoinGecko image URL)
-            // const storageRef = ref(storage, `images/${slug}.png`);
-            // const response = await axios.get(imageUrl, {
-            //     responseType: "arraybuffer",
-            // });
-            // await uploadBytes(storageRef, Buffer.from(response.data));
-            // const uploadedImageUrl = await getDownloadURL(storageRef);
+            if (!coin.platform?.token_address) continue;
 
             // Save coin data to MongoDB
             const newCoin = new Coin({

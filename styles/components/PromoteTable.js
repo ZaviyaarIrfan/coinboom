@@ -194,12 +194,14 @@ export default function PromoteTable() {
                                                     href={`/coin/${coin.slug}`}
                                                 >
                                                     <div className="flex space-x-2 items-center">
-                                                        <Image
-                                                            src={coin.image}
-                                                            height={25}
-                                                            width={25}
-                                                            alt={coin.name}
-                                                        />
+                                                        {coin.image && (
+                                                            <Image
+                                                                src={coin.image}
+                                                                height={25}
+                                                                width={25}
+                                                                alt={coin.name}
+                                                            />
+                                                        )}
                                                         <div className="flex flex-col space-y-1">
                                                             <span>
                                                                 {coin.name}
@@ -395,13 +397,14 @@ export default function PromoteTable() {
                             >
                                 {/* Coin Header */}
                                 <div className="flex items-center space-x-3 mb-2">
-                                    <Image
-                                        src={coin.image}
-                                        height={32}
-                                        width={32}
-                                        alt={coin.name}
-                                        className="rounded-full"
-                                    />
+                                    {coin.image && (
+                                        <Image
+                                            src={coin.image}
+                                            height={25}
+                                            width={25}
+                                            alt={coin.name}
+                                        />
+                                    )}
                                     <div>
                                         <div className="font-semibold text-white">
                                             {coin.name}
