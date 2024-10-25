@@ -40,6 +40,10 @@ export default async function handler(req, res) {
             const newCoin = new Coin({
                 name: coin.name,
                 symbol: coin.symbol,
+                blockchain:
+                    coin.platform.symbol == "BNB"
+                        ? "BSC"
+                        : coin.platform.symbol,
                 slug: coin.slug,
                 description: coin.description || "No description available.",
                 isPresale: "No",
