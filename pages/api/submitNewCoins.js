@@ -1,14 +1,11 @@
 import dbConnect from "../../lib/mongodb";
 import Coin from "../../models/Coin";
-import { storage } from "../../firebaseConfig";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import axios from "axios";
-import dayjs from "dayjs";
 
 // Function to get newer coins from CoinGecko
 async function fetchNewCoins() {
     const { data } = await axios.get(
-        "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?sort=date_added&sort_dir=desc",
+        "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?sort=date_added&sort_dir=desc&limit=20",
         {
             headers: {
                 "X-CMC_PRO_API_KEY": "fad3c46a-34f5-408e-b9cb-720519b3cfad",
