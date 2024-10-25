@@ -1,7 +1,7 @@
 import dbConnect from "../../lib/mongodb";
 import Coin from "../../models/Coin";
 import axios from "axios";
-import { createClient } from "redis";
+import { Redis } from "@upstash/redis";
 import dayjs from "dayjs";
 
 const redisClient = new Redis({

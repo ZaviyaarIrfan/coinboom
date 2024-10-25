@@ -3,7 +3,7 @@ import Coin from "../../../models/Coin";
 import axios from "axios";
 import dayjs from "dayjs"; // For date manipulation
 
-import { createClient } from "redis";
+import { Redis } from "@upstash/redis";
 
 const redisClient = new Redis({
     url: "https://selected-cod-45220.upstash.io",
