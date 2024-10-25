@@ -3,6 +3,7 @@ import { FaSearch, FaBars } from "react-icons/fa";
 import Sidebar from "./Sidebar";
 import axios from "axios";
 import Link from "next/link";
+import { CircularProgress } from "@mui/material";
 
 export default function Navbar({ isSidebarOpen, toggleSidebar }) {
     const [search, setSearch] = useState("");
@@ -108,7 +109,10 @@ export default function Navbar({ isSidebarOpen, toggleSidebar }) {
                         className="text-blue-500 text-xl sm:text-2xl mr-2 sm:mr-4 cursor-pointer"
                         onClick={toggleSidebar}
                     />
-                    <Link href={'/'} className="text-blue-500 text-xl sm:text-2xl font-bold">
+                    <Link
+                        href={"/"}
+                        className="text-blue-500 text-xl sm:text-2xl font-bold"
+                    >
                         Bob<span className="text-white">an</span>
                     </Link>
                 </div>
@@ -147,22 +151,29 @@ export default function Navbar({ isSidebarOpen, toggleSidebar }) {
                     >
                         <div className="bg-gray-800 text-white rounded-md px-3 py-1">
                             <span className="text-blue-500">BNB</span>{" "}
-                            <span
-                                className={`${
-                                    bnbData?.quote?.USD?.percent_change_24h >= 0
-                                        ? "text-green-500"
-                                        : "text-red-500"
-                                }`}
-                            >
-                                {bnbData?.quote?.USD?.percent_change_24h.toFixed(
-                                    2
-                                )}
-                                %
-                            </span>
-                            <br />
-                            <span>
-                                ${bnbData?.quote?.USD?.price.toFixed(2)}
-                            </span>
+                            {bnbData?.quote?.USD ? (
+                                <>
+                                    <span
+                                        className={`${
+                                            bnbData.quote.USD
+                                                .percent_change_24h >= 0
+                                                ? "text-green-500"
+                                                : "text-red-500"
+                                        }`}
+                                    >
+                                        {bnbData.quote.USD.percent_change_24h.toFixed(
+                                            2
+                                        )}
+                                        %
+                                    </span>
+                                    <br />
+                                    <span>
+                                        ${bnbData.quote.USD.price.toFixed(2)}
+                                    </span>
+                                </>
+                            ) : (
+                                <CircularProgress size={16} color="inherit" />
+                            )}
                         </div>
                     </Link>
                     <Link
@@ -171,22 +182,29 @@ export default function Navbar({ isSidebarOpen, toggleSidebar }) {
                     >
                         <div className="bg-gray-800 text-white rounded-md px-3 py-1">
                             <span className="text-blue-500">ETH</span>{" "}
-                            <span
-                                className={`${
-                                    ethData?.quote?.USD?.percent_change_24h >= 0
-                                        ? "text-green-500"
-                                        : "text-red-500"
-                                }`}
-                            >
-                                {ethData?.quote?.USD?.percent_change_24h.toFixed(
-                                    2
-                                )}
-                                %
-                            </span>
-                            <br />
-                            <span>
-                                ${ethData?.quote?.USD?.price.toFixed(2)}
-                            </span>
+                            {ethData?.quote?.USD ? (
+                                <>
+                                    <span
+                                        className={`${
+                                            ethData.quote.USD
+                                                .percent_change_24h >= 0
+                                                ? "text-green-500"
+                                                : "text-red-500"
+                                        }`}
+                                    >
+                                        {ethData.quote.USD.percent_change_24h.toFixed(
+                                            2
+                                        )}
+                                        %
+                                    </span>
+                                    <br />
+                                    <span>
+                                        ${ethData.quote.USD.price.toFixed(2)}
+                                    </span>
+                                </>
+                            ) : (
+                                <CircularProgress size={16} color="inherit" />
+                            )}
                         </div>
                     </Link>
                     <Link
@@ -195,22 +213,29 @@ export default function Navbar({ isSidebarOpen, toggleSidebar }) {
                     >
                         <div className="bg-gray-800 text-white rounded-md px-3 py-1">
                             <span className="text-blue-500">SOL</span>{" "}
-                            <span
-                                className={`${
-                                    solData?.quote?.USD?.percent_change_24h >= 0
-                                        ? "text-green-500"
-                                        : "text-red-500"
-                                }`}
-                            >
-                                {solData?.quote?.USD?.percent_change_24h.toFixed(
-                                    2
-                                )}
-                                %
-                            </span>
-                            <br />
-                            <span>
-                                ${solData?.quote?.USD?.price.toFixed(2)}
-                            </span>
+                            {solData?.quote?.USD ? (
+                                <>
+                                    <span
+                                        className={`${
+                                            solData.quote.USD
+                                                .percent_change_24h >= 0
+                                                ? "text-green-500"
+                                                : "text-red-500"
+                                        }`}
+                                    >
+                                        {solData.quote.USD.percent_change_24h.toFixed(
+                                            2
+                                        )}
+                                        %
+                                    </span>
+                                    <br />
+                                    <span>
+                                        ${solData.quote.USD.price.toFixed(2)}
+                                    </span>
+                                </>
+                            ) : (
+                                <CircularProgress size={16} color="inherit" />
+                            )}
                         </div>
                     </Link>
                 </div>
@@ -223,16 +248,22 @@ export default function Navbar({ isSidebarOpen, toggleSidebar }) {
                         className="bg-gray-800 text-white rounded-md px-2 py-1 text-xs"
                     >
                         <span className="text-blue-500">BNB</span>{" "}
-                        <span
-                            className={`${
-                                bnbData?.quote?.USD?.percent_change_24h >= 0
-                                    ? "text-green-500"
-                                    : "text-red-500"
-                            }`}
-                        >
-                            {bnbData?.quote?.USD?.percent_change_24h.toFixed(1)}
-                            %
-                        </span>
+                        {bnbData?.quote?.USD ? (
+                            <span
+                                className={`${
+                                    bnbData.quote.USD.percent_change_24h >= 0
+                                        ? "text-green-500"
+                                        : "text-red-500"
+                                }`}
+                            >
+                                {bnbData.quote.USD.percent_change_24h.toFixed(
+                                    1
+                                )}
+                                %
+                            </span>
+                        ) : (
+                            <CircularProgress size={12} color="inherit" />
+                        )}
                     </Link>
                 </div>
             </nav>
