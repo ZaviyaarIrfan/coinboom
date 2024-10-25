@@ -42,7 +42,7 @@ export default function CoinsTable({ coinsData }) {
         setCurrentPage(value);
     };
 
-    const isLoading = !currentCoins;
+    const isLoading = !currentCoins || currentCoins.length == 0;
 
     return (
         <>
