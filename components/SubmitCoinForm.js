@@ -30,7 +30,6 @@ const SubmitCoinForm = () => {
     const [loading, setLoading] = useState(false);
     const router = useRouter();
     const [isSubmitting, setIsSubmitting] = useState(false);
-    
 
     const [formData, setFormData] = useState({
         blockchain: "BSC",
@@ -380,6 +379,9 @@ const SubmitCoinForm = () => {
                                                     name="blockchain"
                                                     onChange={handleChange}
                                                     displayEmpty
+                                                    sx={{
+                                                        color: "white !important",
+                                                    }}
                                                     className="bg-gray-800 text-white border border-gray-700 rounded-md"
                                                 >
                                                     <MenuItem value="BSC">
@@ -407,6 +409,9 @@ const SubmitCoinForm = () => {
                                             <FormControl fullWidth>
                                                 <Typography
                                                     variant="body2"
+                                                    sx={{
+                                                        color: "white !important",
+                                                    }}
                                                     className="text-white mb-2 flex items-center"
                                                 >
                                                     Contract Address
@@ -420,6 +425,7 @@ const SubmitCoinForm = () => {
                                                     value={
                                                         formData.contractAddress
                                                     }
+                                                    sx={{color: 'white !important'}}
                                                     onChange={handleChange}
                                                     className="bg-gray-800"
                                                     InputProps={{
@@ -443,6 +449,7 @@ const SubmitCoinForm = () => {
                                                     name="name"
                                                     value={formData.name}
                                                     onChange={handleChange}
+                                                    sx={{color: 'white !important'}}
                                                     className="bg-gray-800"
                                                     InputProps={{
                                                         className: "text-white",
@@ -452,6 +459,7 @@ const SubmitCoinForm = () => {
                                             <FormControl fullWidth>
                                                 <Typography
                                                     variant="body2"
+                                                    sx={{color: 'white !important'}}
                                                     className="text-white mb-2 flex items-center"
                                                 >
                                                     Symbol
@@ -465,6 +473,7 @@ const SubmitCoinForm = () => {
                                                     value={formData.symbol}
                                                     onChange={handleChange}
                                                     className="bg-gray-800"
+                                                    sx={{color: 'white !important'}}
                                                     InputProps={{
                                                         className: "text-white",
                                                     }}
@@ -476,6 +485,7 @@ const SubmitCoinForm = () => {
                                             <Typography
                                                 variant="body2"
                                                 className="text-white mb-2 flex items-center"
+                                                sx={{color: 'white !important'}}
                                             >
                                                 Description
                                                 {renderFieldStatus(
@@ -490,6 +500,7 @@ const SubmitCoinForm = () => {
                                                 multiline
                                                 rows={4}
                                                 className="bg-gray-800"
+                                                sx={{color: 'white !important'}}
                                                 InputProps={{
                                                     className: "text-white",
                                                 }}
@@ -500,6 +511,7 @@ const SubmitCoinForm = () => {
                                             <Typography
                                                 variant="body2"
                                                 className="text-white mb-2 flex items-center"
+                                                sx={{color: 'white !important'}}
                                             >
                                                 Is this a
                                                 Presale/PumpFun/Moonshot
@@ -511,6 +523,7 @@ const SubmitCoinForm = () => {
                                                 name="isPresale"
                                                 value={formData.isPresale}
                                                 onChange={handleChange}
+                                                
                                             >
                                                 <FormControlLabel
                                                     value="Yes"
@@ -527,6 +540,7 @@ const SubmitCoinForm = () => {
                                                     }
                                                     label="Yes"
                                                     className="text-white"
+                                                    sx={{color: 'white !important'}}
                                                 />
                                                 <FormControlLabel
                                                     value="No"
@@ -542,6 +556,7 @@ const SubmitCoinForm = () => {
                                                         />
                                                     }
                                                     label="No"
+                                                    sx={{color: 'white !important'}}
                                                     className="text-white"
                                                 />
                                             </RadioGroup>
@@ -553,6 +568,7 @@ const SubmitCoinForm = () => {
                                                     <Typography
                                                         variant="body2"
                                                         className="text-white mb-2 flex items-center"
+                                                        sx={{color: 'white !important'}}
                                                     >
                                                         Launch Date
                                                         {renderFieldStatus(
@@ -566,6 +582,7 @@ const SubmitCoinForm = () => {
                                                             formData.launchDate
                                                         }
                                                         onChange={handleChange}
+                                                        sx={{color: 'white !important'}}
                                                         className="w-full bg-gray-800 text-white border border-gray-700 rounded-md p-2"
                                                     />
                                                 </div>
@@ -594,6 +611,7 @@ const SubmitCoinForm = () => {
                                                             className:
                                                                 "text-white",
                                                         }}
+                                                        sx={{color: 'white !important'}}
                                                     />
                                                 </div>
                                             </>
@@ -651,6 +669,7 @@ const SubmitCoinForm = () => {
                                             style: { color: "white" },
                                             placeholder: `Enter your ${field} link`,
                                         }}
+                                        sx={{color: 'white !important'}}
                                     />
                                 ))}
                             </div>
@@ -691,7 +710,7 @@ const SubmitCoinForm = () => {
 
                         <div className="mb-6">
                             <p className="text-gray-400">Description</p>
-                            <p className="text-sm md:text-base">
+                            <p className="text-sm md:text-base" sx={{color: 'white !important'}}>
                                 {formData.description}
                             </p>
                         </div>
@@ -715,6 +734,7 @@ const SubmitCoinForm = () => {
                             <CircularProgress
                                 size={24}
                                 className="text-white"
+                                sx={{color: 'white !important'}}
                             />
                         ) : activeStep === steps.length - 1 ? (
                             "Finish"
