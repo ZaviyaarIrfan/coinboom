@@ -5,7 +5,7 @@ import axios from "axios";
 // Function to get newer coins from CoinGecko
 async function fetchNewCoins() {
     const { data } = await axios.get(
-        "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?sort=date_added&sort_dir=desc&limit=20",
+        "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?sort=date_added&sort_dir=desc&limit=10",
         {
             headers: {
                 "X-CMC_PRO_API_KEY": "fad3c46a-34f5-408e-b9cb-720519b3cfad",
