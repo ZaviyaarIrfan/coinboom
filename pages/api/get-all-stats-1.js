@@ -48,9 +48,7 @@ export default async function handler(req, res) {
             const coinAddresses = coins.map((coin) => coin.contractAddress);
 
             if (coinAddresses.length === 0) {
-                return res
-                    .status(200)
-                    .json(coinAddresses);
+                return res.status(200).json(coinAddresses);
             }
 
             const stats = await getCryptoStatsByAddresses(coinAddresses);
@@ -59,7 +57,8 @@ export default async function handler(req, res) {
             const dexData = stats
                 ? Object.fromEntries(
                       stats.map((stat) => [
-                          stat.baseToken.address.toLowerCase(),
+                          stat.baseToken?.address &&
+                              stat.baseToken?.address?.toLowerCase(),
                           stat,
                       ])
                   )
@@ -69,6 +68,8 @@ export default async function handler(req, res) {
             const coinsData = coins.map((coin) => {
                 const coinDataFromDex =
                     dexData[coin.contractAddress.toLowerCase()];
+
+                console.log(coinDataFromDex);
 
                 if (coin.isPresale && coin.isPresale.toLowerCase() != "no") {
                     return {

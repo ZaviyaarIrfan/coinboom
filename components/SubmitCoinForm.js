@@ -28,7 +28,9 @@ const SubmitCoinForm = () => {
     const [selectedOption, setSelectedOption] = useState("");
     const [selectedFile, setSelectedFile] = useState(null);
     const [loading, setLoading] = useState(false);
-    const router = useRouter()
+    const router = useRouter();
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    
 
     const [formData, setFormData] = useState({
         blockchain: "BSC",
@@ -193,6 +195,7 @@ const SubmitCoinForm = () => {
     };
 
     const handleSubmit = async () => {
+        setIsSubmitting(true);
         // Create a new FormData object
         const formDataToSubmit = new FormData();
 
@@ -220,7 +223,7 @@ const SubmitCoinForm = () => {
 
             if (res.ok) {
                 console.log("Form submitted successfully:", data);
-                router.push('/')
+                router.push("/");
                 // Optionally, reset form fields or provide user feedback
             } else {
                 console.error(
@@ -231,6 +234,8 @@ const SubmitCoinForm = () => {
             }
         } catch (error) {
             console.error("Network error:", error); // Catch network errors
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -260,7 +265,7 @@ const SubmitCoinForm = () => {
 
     return (
         <div className="bg-gray-900 text-white p-4 md:p-8 rounded-lg shadow-lg">
-            <ToastContainer/>
+            <ToastContainer />
             <Typography
                 variant="h4"
                 className="text-blue-500 font-bold text-center mb-6 md:mb-8"
@@ -706,7 +711,16 @@ const SubmitCoinForm = () => {
                         onClick={handleNext}
                         className="bg-blue-500 hover:bg-blue-600 text-black px-6 py-2 w-full md:w-auto"
                     >
-                        {activeStep === steps.length - 1 ? "Finish" : "Next"}
+                        {isSubmitting ? (
+                            <CircularProgress
+                                size={24}
+                                className="text-white"
+                            />
+                        ) : activeStep === steps.length - 1 ? (
+                            "Finish"
+                        ) : (
+                            "Next"
+                        )}
                     </Button>
                 </div>
             </div>

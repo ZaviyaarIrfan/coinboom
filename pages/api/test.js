@@ -1,161 +1,91 @@
-import dbConnect from "../../lib/mongodb";
-import Coin from "../../models/Coin";
-import axios from "axios";
-import dayjs from "dayjs"; // Use dayjs for date manipulation
+import axios from 'axios';
+import cron from 'node-cron';
+import FormData from 'form-data';
 
-// Function to get data from CoinGecko
-async function getCoinsFromCoinGecko() {
+// Fetch recently added coins from CoinGecko
+async function fetchNewCoinsFromCoinGecko() {
     try {
         const response = await axios.get(
-            "https://api.coingecko.com/api/v3/coins/markets",
+            'https://api.coingecko.com/api/v3/coins/markets', 
             {
                 params: {
-                    vs_currency: "usd",
-                    order: "market_cap_desc",
-                    per_page: 50, // You can adjust this number to get more coins
+                    vs_currency: 'usd', 
+                    order: 'market_cap_asc', // Get lower market cap coins, usually newer
+                    per_page: 10, // Fetch 10 coins, adjust as needed
                     page: 1,
                     sparkline: false,
+                    price_change_percentage: '24h',
                 },
             }
         );
-        return response.data || [];
+
+        // Filter coins that have been listed recently (less than 30 days)
+        const newCoins = response.data.filter(coin => {
+            const daysSinceListed = (new Date() - new Date(coin.genesis_date)) / (1000 * 60 * 60 * 24);
+            return daysSinceListed < 30; // Only include coins listed in the last 30 days
+        });
+
+        return newCoins;
     } catch (error) {
-        console.error("Error fetching coins from CoinGecko:", error);
+        console.error('Error fetching coins from CoinGecko:', error);
         return [];
     }
 }
 
-// Function to fetch data from Dexscreener for given contract addresses
-async function getCryptoStatsByAddresses(coinAddresses) {
+// Function to submit a new coin to your existing API
+async function submitNewCoin(coinData) {
     try {
-        const promises = coinAddresses.map(async (address) => {
-            const url = `https://api.dexscreener.com/latest/dex/search?q=${address}`;
-            const response = await axios.get(url);
-            return response.data.pairs.length > 0
-                ? response.data.pairs[0]
-                : null;
-        });
+        const { id, name, symbol, description, image } = coinData;
+        const launchDate = new Date().toISOString();
 
-        const statsArray = await Promise.all(promises);
-        return statsArray.filter((stat) => stat !== null); // Filter out any null results
+        // Fetch the image as a Buffer
+        const imageBuffer = await axios
+            .get(image, { responseType: 'arraybuffer' })
+            .then(res => Buffer.from(res.data, 'binary'));
+
+        // Create a form-data object for the request
+        const form = new FormData();
+        form.append('image', imageBuffer, `${symbol}.jpg`);
+        form.append('blockchain', 'Ethereum'); // Update as needed
+        form.append('contractAddress', '0xExampleAddress123'); // Example address
+        form.append('name', name);
+        form.append('symbol', symbol);
+        form.append('description', description || 'Newly added coin from CoinGecko.');
+        form.append('isPresale', 'No');
+        form.append('launchDate', launchDate);
+        form.append('presaleUrl', `https://coingecko.com/en/coins/${id}`);
+
+        // Submit the coin to your API
+        const response = await axios.post(
+            'http://localhost:3000/api/your-api-endpoint', // Update your actual endpoint
+            form,
+            { headers: { ...form.getHeaders() } }
+        );
+
+        console.log(`Coin submitted successfully: ${name}`);
     } catch (error) {
-        console.error("Error fetching crypto data from Dexscreener:", error);
-        return null;
+        console.error('Error submitting coin:', error);
     }
 }
 
-// Calculate the age of a coin
-function calculateCoinAge(createdAt) {
-    const now = dayjs();
-    const creationDate = dayjs(createdAt);
-    const ageInDays = now.diff(creationDate, "day");
+// Fetch coins and submit them every 10 days
+async function fetchAndSubmitCoins() {
+    console.log('Fetching new coins...');
+    const coins = await fetchNewCoinsFromCoinGecko();
+    console.log(`Fetched ${coins.length} new coins from CoinGecko.`);
 
-    if (ageInDays < 30) {
-        return `${ageInDays}d`;
-    } else if (ageInDays < 365) {
-        const months = Math.floor(ageInDays / 30);
-        return `${months}mo`;
-    } else {
-        const years = Math.floor(ageInDays / 365);
-        return `${years}y`;
+    for (const coin of coins) {
+        await submitNewCoin(coin);
     }
 }
 
-export default async function handler(req, res) {
-    await dbConnect();
+// Schedule the task to run every 10 days at 12:00 PM
+cron.schedule('0 12 */10 * *', () => {
+    console.log('Running scheduled coin submission task...');
+    fetchAndSubmitCoins();
+}, {
+    timezone: 'UTC'
+});
 
-    if (req.method === "GET") {
-        try {
-            // Fetch coins from your database
-            const coins = await Coin.find({});
-            const coinAddresses = coins.map((coin) => coin.contractAddress.toLowerCase());
-
-            // Fetch external coins from CoinGecko
-            const externalCoins = await getCoinsFromCoinGecko();
-
-            // Get contract addresses from CoinGecko coins for Dexscreener querying
-            const externalCoinAddresses = externalCoins
-                .map((coin) => coin.contract_address?.toLowerCase())
-                .filter(Boolean); // Filter out any null or undefined values
-
-            // Fetch Dexscreener data for all coins (both from DB and CoinGecko)
-            const allCoinAddresses = [...coinAddresses, ...externalCoinAddresses];
-            const stats = await getCryptoStatsByAddresses(allCoinAddresses);
-
-            // Create a dictionary for quick lookup
-            const dexData = stats
-                ? Object.fromEntries(
-                      stats.map((stat) => [
-                          stat.baseToken.address.toLowerCase(),
-                          stat,
-                      ])
-                  )
-                : {};
-
-            // Merge database coins and external CoinGecko coins
-            const coinsData = coins.map((coin) => {
-                const coinDataFromDex =
-                    dexData[coin.contractAddress.toLowerCase()];
-
-                return {
-                    symbol: coin.symbol,
-                    name: coin.name,
-                    slug: coin.slug,
-                    volume_24h: coinDataFromDex?.volume?.h24 || 0,
-                    price: coinDataFromDex?.priceUsd || "N/A",
-                    percent_change_1h: coinDataFromDex?.priceChange?.h1 || 0,
-                    percent_change_6h: coinDataFromDex?.priceChange?.h6 || 0,
-                    percent_change_24h: coinDataFromDex?.priceChange?.h24 || 0,
-                    market_cap: coinDataFromDex?.marketCap || 0,
-                    age: calculateCoinAge(coinDataFromDex?.pairCreatedAt),
-                    lp: coinDataFromDex?.liquidity?.usd || 0,
-                    isPromote: coin.isPromote,
-                    votes: coin.votes || 0,
-                    txn:
-                        (coinDataFromDex?.txns?.h24?.buys || 0) +
-                        (coinDataFromDex?.txns?.h24?.sells || 0),
-                    image: coinDataFromDex?.info?.imageUrl || coin.imageUrl,
-                    isExternal: false, // Database coin
-                };
-            });
-
-            // Add external CoinGecko coins that are not in the database
-            externalCoins.forEach((extCoin) => {
-                const coinAddress = extCoin.contract_address?.toLowerCase();
-                if (coinAddress && !coinAddresses.includes(coinAddress)) {
-                    const coinDataFromDex = dexData[coinAddress];
-
-                    coinsData.push({
-                        symbol: extCoin.symbol,
-                        name: extCoin.name,
-                        slug: extCoin.id,
-                        volume_24h: coinDataFromDex?.volume?.h24 || 0,
-                        price: extCoin.current_price || "N/A",
-                        percent_change_1h: coinDataFromDex?.priceChange?.h1 || 0,
-                        percent_change_6h: coinDataFromDex?.priceChange?.h6 || 0,
-                        percent_change_24h: coinDataFromDex?.priceChange?.h24 || 0,
-                        market_cap: extCoin.market_cap || 0,
-                        age: coinDataFromDex?.pairCreatedAt
-                            ? calculateCoinAge(coinDataFromDex.pairCreatedAt)
-                            : "N/A",
-                        lp: coinDataFromDex?.liquidity?.usd || "N/A",
-                        isPromote: false, // Default value for external coins
-                        votes: 0, // Default value for external coins
-                        txn:
-                            (coinDataFromDex?.txns?.h24?.buys || 0) +
-                            (coinDataFromDex?.txns?.h24?.sells || 0),
-                        image: extCoin.image || "",
-                        isExternal: true, // Mark as external coin
-                    });
-                }
-            });
-
-            return res.status(200).json(coinsData);
-        } catch (error) {
-            console.error("Error querying database:", error);
-            return res.status(500).json({ error: "Error querying database" });
-        }
-    } else {
-        res.status(405).json({ message: "Method not allowed" });
-    }
-}
+// Start the script immediately
+fetchAndSubmitCoins();
