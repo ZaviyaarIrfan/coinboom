@@ -14,11 +14,12 @@ export default function Home() {
 
     const fetchCryptoStats = async () => {
         try {
-            const response = await fetch("https://coinboom.vercel.app/api/get-all-stats-1");
+            const response = await fetch("/api/get-all-stats-1");
             const data = await response.json();
 
             if (response.ok) {
                 setCryptoStats(data);
+                console.log("Crypto Stats:", data);
             } else {
                 console.error("Error fetching crypto stats:", data.error);
             }
