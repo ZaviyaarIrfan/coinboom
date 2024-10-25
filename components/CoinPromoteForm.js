@@ -16,9 +16,9 @@ import "react-toastify/dist/ReactToastify.css";
 // Move constants outside component
 const PACKAGE_OPTIONS = {
     BB: [
-        { value: "200000", label: "1 day promoted", day: 1 },
-        { value: "350000", label: "3 days promoted", day: 3 },
-        { value: "500000", label: "7 days promoted", day: 7 },
+        { value: "200000", label: "1 day promoted", day: 1, rocket: 500 },
+        { value: "350000", label: "3 days promoted", day: 3, rocket: 1500 },
+        { value: "500000", label: "7 days promoted", day: 7, rocket: 3500 },
     ],
 };
 
@@ -43,8 +43,8 @@ const PromoteCoinForm = () => {
     function generateDateNDaysAfter(n) {
         const today = new Date(); // Get today's date
         today.setDate(today.getDate() + n); // Add n days to today's date
-        return today.toISOString().split('T')[0]; // Return in YYYY-MM-DD format
-      }
+        return today.toISOString().split("T")[0]; // Return in YYYY-MM-DD format
+    }
     const [paymentCurrency] = useState("BB");
     const [isPaymentVisible, setIsPaymentVisible] = useState(false);
     const [qrLoaded, setQrLoaded] = useState(false);
@@ -108,7 +108,7 @@ const PromoteCoinForm = () => {
                         await promoteCoin();
                         return true; // Payment was successful
                     } else {
-                        toast.error("Transaction is not confirmed yet.")
+                        toast.error("Transaction is not confirmed yet.");
                         console.log("Transaction is not confirmed yet.");
                     }
                 } else {
@@ -134,9 +134,13 @@ const PromoteCoinForm = () => {
             const updatedToken = {
                 ...selectedToken,
                 isPromote: true,
-                promoteTime: generateDateNDaysAfter(selectedPackage.day)
+                promoteTime: generateDateNDaysAfter(selectedPackage.day),
+                rocket: selectedToken.rocket + selectedPackage.rocket,
             };
-            await axios.put(`https://y-henna-beta.vercel.app/api/coins?id=${selectedToken._id}`, updatedToken);
+            await axios.put(
+                `https://y-henna-beta.vercel.app/api/coins?id=${selectedToken._id}`,
+                updatedToken
+            );
         } catch (error) {
             toast.error(error);
             console.log(error);
@@ -296,7 +300,7 @@ const PromoteCoinForm = () => {
                         Service: <strong>{selectedPackage.label}</strong>
                     </p>
                     <p>
-                        Days: <strong>{selectedPackage.day}</strong>
+                        Days: <strong>{selectedPackage.day} + {selectedPackage.rocket} votes</strong>
                     </p>
                     <p>
                         Price: <strong>{selectedPackage.value} BB</strong>
