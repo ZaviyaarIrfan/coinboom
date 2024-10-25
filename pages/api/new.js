@@ -50,7 +50,7 @@ async function getCryptoStatsByAddresses(coinAddresses) {
         try {
             const cachedData = await redisClient.get(address);
             if (cachedData) {
-                statsArray.push(JSON.parse(cachedData));
+                statsArray.push(cachedData);
             } else {
                 // Background fetch for missing addresses
                 fetchPromises.push(
@@ -153,10 +153,7 @@ export default async function handler(req, res) {
                 return new Date(b.createdAt) - new Date(a.createdAt);
             });
             
-            // Filter for coins with age less than 30 days
-            const newCoins = sortedCoinsData.filter((coin) => coin.age.endsWith("d"));
-
-            return res.status(200).json(newCoins);
+            return res.status(200).json(sortedCoinsData);
         } catch (error) {
             console.error("Error querying database:", error);
             return res.status(500).json({ error: "Error querying database" });

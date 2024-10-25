@@ -50,7 +50,7 @@ async function getCryptoStatsByAddresses(coinAddresses) {
         try {
             const cachedData = await redisClient.get(address);
             if (cachedData) {
-                statsArray.push(JSON.parse(cachedData));
+                statsArray.push(cachedData);
             } else {
                 // Background fetch for missing addresses
                 fetchPromises.push(

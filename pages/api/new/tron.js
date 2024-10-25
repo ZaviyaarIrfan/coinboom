@@ -51,7 +51,7 @@ async function getCryptoStatsByAddresses(coinAddresses) {
         try {
             const cachedData = await redisClient.get(address);
             if (cachedData) {
-                statsArray.push(JSON.parse(cachedData));
+                statsArray.push(cachedData);
             } else {
                 // Background fetch for missing addresses
                 fetchPromises.push(
@@ -155,9 +155,7 @@ export default async function handler(req, res) {
             });
 
             // Filter for coins with age less than 30 days
-            const newCoins = sortedCoinsData.filter((coin) =>
-                coin.age.endsWith("d")
-            );
+            const newCoins = sortedCoinsData
 
             return res.status(200).json(newCoins);
         } catch (error) {

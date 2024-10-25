@@ -280,7 +280,7 @@ const PromoteCoinForm = () => {
                                     }}
                                 />
                             }
-                            label={`${pkg.value} BB - ${pkg.label}`}
+                            label={`${pkg.value} BB - ${pkg.label} + ${pkg.rocket} votes`}
                             sx={{
                                 "& .MuiFormControlLabel-label": {
                                     fontWeight: "bold",
