@@ -20,6 +20,7 @@ export default async function handler(req, res) {
             $or: [
                 { name: { $regex: query, $options: "i" } },
                 { symbol: { $regex: query, $options: "i" } },
+                { contractAddress: { $regex: query, $options: "i" } },
             ],
         }).limit(10); // Limit the results to 10 items
 
