@@ -118,6 +118,7 @@ export default async function handler(req, res) {
                           coinDataFromDex.txns.h24.sells
                         : 0,
                     image: coinDataFromDex?.info?.imageUrl || coin?.imageUrl,
+                    promoteTime: coin.promoteTime,
                 };
 
                 if (coin.isPresale && coin.isPresale.toLowerCase() !== "no") {
