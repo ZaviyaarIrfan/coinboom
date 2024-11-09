@@ -56,7 +56,7 @@ export default async function handler(req, res) {
                 coin.name.toLowerCase().replace(/\s+/g, "-")
             ); 
 
-            if (coinNames.length === 0) {
+            if (coinNames?.length === 0) {
                 return res
                     .status(200)
                     .json({
